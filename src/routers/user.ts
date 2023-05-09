@@ -1,13 +1,11 @@
 import express from 'express';
-import './db/mongoose.js';
 import { User } from '../models/user.js';
 
-const app = express();
-const port = 3000;
+export const userRouter = express.Router(); 
 
-app.use(express.json());
+userRouter.use(express.json());
 
-app.post('/users', (req, res) => {
+userRouter.post('/users', (req, res) => {
   const user = new User(req.body);
   user.save().then(() => {
     res.status(201).send(user);
