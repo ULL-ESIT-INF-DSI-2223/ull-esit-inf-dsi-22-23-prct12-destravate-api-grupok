@@ -22,7 +22,7 @@ const userSchema = new Schema<TrackInterface>({
   },
   name: {
     type: String,
-    required: false,
+    required: true,
     trim: true,
   },
   startCoordinates: {
@@ -47,11 +47,11 @@ const userSchema = new Schema<TrackInterface>({
   },
   length: {
     type: Number,
-    required: false,
+    required: true,
   },
   grade: {
     type: Number,
-    required: false,
+    required: true,
   },
   users: {
     type: [Number],
@@ -60,7 +60,7 @@ const userSchema = new Schema<TrackInterface>({
   activities: {
     type : String, 
     enum : Object.values(Activity),
-    required: false,
+    required: true,
   },
   rating: {
     type: Number,
