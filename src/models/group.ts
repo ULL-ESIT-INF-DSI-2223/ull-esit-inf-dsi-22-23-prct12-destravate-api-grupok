@@ -1,5 +1,4 @@
 import { Document, Schema, model } from 'mongoose';
-import { Activity } from '../enums/activityEnum.js';
 import { TrainingStatisticsInterface } from '../interfaces/trainingStatistics.js';
 
 export interface GroupInterface extends Document {
