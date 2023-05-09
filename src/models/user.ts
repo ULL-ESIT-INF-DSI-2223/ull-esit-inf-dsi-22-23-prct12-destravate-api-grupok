@@ -6,7 +6,7 @@ import { TrainingStatisticsInterface } from '../interfaces/trainingStatistics.js
 export interface UserDocumentInterface extends Document {
   userID: number;
   name: string;
-  activities: Activity[];
+  activities: Activity;
   friends: number[];
   groups: number[][]; // [groupID, userID]
   trainingStatistics: TrainingStatisticsInterface;
@@ -27,9 +27,9 @@ const userSchema = new Schema<UserDocumentInterface>({
     trim: true,
   },
   activities: {
-    type: [String],
+    type: String,
     enum: Object.values(Activity),
-    required: false,
+    required: true,
   },    
   friends: {
     type: [Number],
