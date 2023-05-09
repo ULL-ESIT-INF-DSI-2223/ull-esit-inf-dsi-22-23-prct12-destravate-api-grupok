@@ -7,7 +7,7 @@ export interface UserDocumentInterface extends Document {
   name: string;
   activities: Activity;
   friends: number[];
-  groups: number[][]; // [groupID, userID]
+  groups: number[]
   trainingStatistics: TrainingStatisticsInterface;
   favouriteTracks: number[];
   activeChallenges: number[]; 
