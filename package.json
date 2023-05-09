@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
+    "build": "tsc",
     "dev": "tsc-watch --onSuccess \"env-cmd -f ./config/dev.env node dist/index.js\"",
     "start": "node dist/index.js",
     "test": "env-cmd -f ./config/test.env mocha --exit",
@@ -27,6 +28,7 @@
     "@types/express": "^4.17.17",
     "@types/mocha": "^10.0.1",
     "@types/supertest": "^2.0.12",
+    "@types/validator": "^13.7.15",
     "@typescript-eslint/eslint-plugin": "^5.51.0",
     "@typescript-eslint/parser": "^5.51.0",
     "c8": "^7.13.0",
@@ -44,7 +46,7 @@
   },
   "dependencies": {
     "express": "^4.18.2",
-    "mongodb": "^5.3.0",
+    "validator": "^13.9.0",
     "mongoose": "^7.1.0"
   }
 }
