@@ -14,7 +14,7 @@ export interface TrackInterface extends Document {
   rating: number;
 }
 
-const userSchema = new Schema<TrackInterface>({
+const trackSchema = new Schema<TrackInterface>({
   ID: {
     type: Number,
     required: true,
@@ -68,4 +68,4 @@ const userSchema = new Schema<TrackInterface>({
   },
 });
 
-export const User = model<UserDocumentInterface>('User', userSchema);
+export const Track = model<TrackInterface>('Track', trackSchema);
