@@ -5,13 +5,15 @@ export const userRouter = express.Router();
 
 userRouter.use(express.json());
 
-userRouter.post('/users', (req, res) => {
+userRouter.post('/users', async (req, res) => {
   const user = new User(req.body);
-  user.save().then(() => {
+
+  try {
+    await user.save()
     res.status(201).send(user);
-  }).catch((err) => {
+  } catch(err) {
     res.status(400).send(err);
-  });
+  }
 });
 
 
