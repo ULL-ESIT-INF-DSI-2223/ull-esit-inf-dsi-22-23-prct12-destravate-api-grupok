@@ -21,6 +21,12 @@ const challengeSchema = new Schema<ChallengeDocumentInterface>({
   length: {
     type: Number,
     required: true,
+    validate: {
+      validator: function(val: number) {
+        return val > 0;
+      },
+      message: props => `Invalid length: ${props.value}`
+    }
   },
   users: {
     type: [Schema.Types.ObjectId],
