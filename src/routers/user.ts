@@ -6,7 +6,6 @@ export const userRouter = express.Router();
 userRouter.use(express.json());
 
 userRouter.post("/users", async (req, res) => {
-  const user = new User(req.body);
   try {
     const lastUser = await User.findOne({}, {}, { sort: { userID: -1 } });
     const lastUserID = lastUser ? lastUser.userID : 0;
@@ -16,7 +15,7 @@ userRouter.post("/users", async (req, res) => {
       ...req.body,
     });
 
-    await user.save();;
+    await user.save();
     return res.status(201).send(user);
   } catch (err) {
     return res.status(400).send(err);

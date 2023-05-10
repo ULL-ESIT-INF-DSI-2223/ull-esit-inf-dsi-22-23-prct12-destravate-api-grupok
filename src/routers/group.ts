@@ -44,3 +44,5 @@ groupRouter.get("/groups/:id", async (req, res) => {
   }
   res.send(group);
 });
+
+// TODO: patch y delete
