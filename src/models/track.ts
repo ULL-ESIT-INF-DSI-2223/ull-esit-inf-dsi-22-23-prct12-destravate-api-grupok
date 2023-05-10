@@ -1,6 +1,6 @@
-import { Document, Schema, model } from "mongoose";
-import { Activity } from "../enums/activityEnum.js";
-import { Coordinates } from "../interfaces/coordinatesInterface.js";
+import { Document, Schema, model } from 'mongoose';
+import { Activity } from '../enums/activityEnum.js';
+import { Coordinates } from '../interfaces/coordinatesInterface.js';
 
 export interface TrackDocumentInterface extends Document {
   ID: number;
