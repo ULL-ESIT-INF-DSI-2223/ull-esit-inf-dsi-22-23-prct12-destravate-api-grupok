@@ -1,18 +1,17 @@
-import { Document, Schema, model } from 'mongoose';
-import { Activity } from '../enums/activityEnum.js';
-import { TrackDocumentInterface } from './track.js';
-import { TrainingStatisticsInterface } from '../interfaces/trainingStatistics.js';
+import { Document, Schema, model } from "mongoose";
+import { Activity } from "../enums/activityEnum.js";
+import { TrainingStatisticsInterface } from "../interfaces/trainingStatistics.js";
 
 export interface UserDocumentInterface extends Document {
   userID: number;
   name: string;
   activities: Activity;
   friends: number[];
-  groups: number[]
+  groups: number[];
   trainingStatistics: TrainingStatisticsInterface;
   favouriteTracks: number[];
-  activeChallenges: number[]; 
-  tracksHistory: [TrackDocumentInterface, string];
+  activeChallenges: number[];
+  tracksHistory: [number, string][];
 }
 
 const userSchema = new Schema<UserDocumentInterface>({
@@ -31,7 +30,7 @@ const userSchema = new Schema<UserDocumentInterface>({
     type: String,
     enum: Object.values(Activity),
     required: true,
-  },    
+  },
   friends: {
     type: [Number],
     default: [],
@@ -43,16 +42,26 @@ const userSchema = new Schema<UserDocumentInterface>({
   trainingStatistics: {
     type: Object,
     validate: {
-      validator: function(val: TrainingStatisticsInterface) {
-        const isWeekValid = val.week && typeof val.week.km === "number" && typeof val.week.elevationGain === "number";
-        const isMonthValid = val.month && typeof val.month.km === "number" && typeof val.month.elevationGain === "number";
-        const isYearValid = val.year && typeof val.year.km === "number" && typeof val.year.elevationGain === "number";
+      validator: function (val: TrainingStatisticsInterface) {
+        const isWeekValid =
+          val.week &&
+          typeof val.week.km === "number" &&
+          typeof val.week.elevationGain === "number";
+        const isMonthValid =
+          val.month &&
+          typeof val.month.km === "number" &&
+          typeof val.month.elevationGain === "number";
+        const isYearValid =
+          val.year &&
+          typeof val.year.km === "number" &&
+          typeof val.year.elevationGain === "number";
         return isWeekValid && isMonthValid && isYearValid;
       },
-      message: props => `Invalid training statistics: ${JSON.stringify(props.value)}`
+      message: (props) =>
+        `Invalid training statistics: ${JSON.stringify(props.value)}`,
     },
     required: true,
-  },  
+  },
   favouriteTracks: {
     type: [Number],
     default: [],
@@ -76,9 +85,9 @@ const userSchema = new Schema<UserDocumentInterface>({
     default: [],
   },
   tracksHistory: {
-    type: [Schema.Types.ObjectId, String],
+    type: [[Number, String]],
     default: [],
   },
 });
 
-export const User = model<UserDocumentInterface>('User', userSchema);
+export const User = model<UserDocumentInterface>("User", userSchema);
