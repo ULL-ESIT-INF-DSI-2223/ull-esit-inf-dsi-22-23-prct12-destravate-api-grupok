@@ -102,7 +102,7 @@ challengeRouter.patch("/challenges/:id", async (req, res) => {
     return res.status(400).send({ error: "Invalid updates!" });
   }
   try {
-    const challenge = await Challenge.findByIdAndUpdate({ challengeID }, req.body, {
+    const challenge = await Challenge.findByIdAndUpdate(challengeID, req.body, {
       new: true,
       runValidators: true,
     });
