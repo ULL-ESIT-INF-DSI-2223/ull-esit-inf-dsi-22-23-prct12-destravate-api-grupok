@@ -1,2 +1,3 @@
 #levantar servidor mongodb:  sudo /home/usuario/mongodb/bin/mongod --dbpath /home/usuario/mongodb-data/
-#levantar servidor express: npm run start (de momento)
+#levantar servidor express: npm run start
+#peticiones http: http://localhost:3000/
