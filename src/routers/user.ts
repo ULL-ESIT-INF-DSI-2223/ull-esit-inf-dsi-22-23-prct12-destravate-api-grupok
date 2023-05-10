@@ -5,17 +5,10 @@ export const userRouter = express.Router();
 
 userRouter.use(express.json());
 
-userRouter.post("/users", async (req, res) => {
+userRouter.post('/users', async (req, res) => {
+  const user = new User(req.body);
   try {
-    const lastUser = await User.findOne({}, {}, { sort: { userID: -1 } });
-    const lastUserID = lastUser ? lastUser.userID : 0;
-
-    const user = new User({
-      userID: lastUserID + 1,
-      ...req.body,
-    });
-
-    await user.save();
+    await user.save()
     return res.status(201).send(user);
   } catch (err) {
     return res.status(400).send(err);
@@ -45,7 +38,7 @@ userRouter.get("/users/:id", async (req, res) => {
     let user;
     if (userID) {
       // Find a user by userID
-      user = await User.findOne({ userID });
+      user = await User.findById(userID);
     }
     if (!user) {
       return res.status(404).send();
@@ -109,7 +102,7 @@ userRouter.patch("/users/:id", async (req, res) => {
     return res.status(400).send({ error: "Invalid updates!" });
   }
   try {
-    const user = await User.findOneAndUpdate({ userID }, req.body, {
+    const user = await User.findByIdAndUpdate({ userID }, req.body, {
       new: true,
       runValidators: true,
     });
