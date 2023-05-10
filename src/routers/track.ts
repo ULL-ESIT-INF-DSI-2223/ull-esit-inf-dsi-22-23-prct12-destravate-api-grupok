@@ -46,3 +46,34 @@ trackRouter.get('/tracks/:id', async (req, res) => {
 });
 
 
+/**
+ * Patch para actualizar un track en específico mediante ID
+ */
+trackRouter.patch('/tracks/:id', async (req, res) => {
+  const updates = Object.keys(req.body);
+  const allowedUpdates = ['name', 'startCoordinates', 'endCoordinates', 'length', 'grade', 'users', 'activities', 'rating'];
+  const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
+
+  if (!isValidOperation) {
+    res.status(400).send({ error: 'Invalid updates' });
+  }
+
+  if (updates.length === 0) {
+    res.status(400).send({ error: 'No updates' });
+  }
+
+  try {
+    const track = await Track.findOneAndUpdate({ ID: req.params.id }, req.body, { new: true, runValidators: true });
+    if (!track) {
+      res.status(404).send();
+    }
+    res.send(track);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
+
+
+
+
