@@ -7,7 +7,6 @@ userRouter.use(express.json());
 
 userRouter.post('/users', async (req, res) => {
   const user = new User(req.body);
-
   try {
     await user.save()
     res.status(201).send(user);
@@ -16,5 +15,5 @@ userRouter.post('/users', async (req, res) => {
   }
 });
 
-
+// userRouter.get('/users', async (_, res) => {
   
