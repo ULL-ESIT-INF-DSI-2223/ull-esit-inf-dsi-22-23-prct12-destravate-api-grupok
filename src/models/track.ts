@@ -24,6 +24,7 @@ const trackSchema = new Schema<TrackInterface>({
     type: String,
     required: true,
     trim: true,
+    unique: true,
   },
   startCoordinates: {
     type: Object,
