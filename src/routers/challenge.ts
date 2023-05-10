@@ -47,3 +47,5 @@ challengeRouter.get("/challenges/:id", async (req, res) => {
   }
   res.send(challenge);
 });
+
+// TODO: patch y delete
