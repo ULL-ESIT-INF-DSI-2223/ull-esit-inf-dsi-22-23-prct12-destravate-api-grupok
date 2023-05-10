@@ -23,7 +23,7 @@ const userSchema = new Schema<UserDocumentInterface>({
   },
   name: {
     type: String,
-    required: false,
+    required: true,
     trim: true,
   },
   activities: {

@@ -9,9 +9,9 @@ userRouter.post('/users', async (req, res) => {
   const user = new User(req.body);
   try {
     await user.save()
-    res.status(201).send(user);
+    return res.status(201).send(user);
   } catch(err) {
-    res.status(400).send(err);
+    return res.status(400).send(err);
   }
 });
 
@@ -26,9 +26,9 @@ userRouter.get('/users', async (req, res) => {
       // Find all users
       users = await User.find();
     }
-    res.status(200).send(users);
+    return res.status(200).send(users);
   } catch (err) {
-    res.status(500).send();
+    return res.status(500).send();
   }
 });
 
@@ -41,11 +41,11 @@ userRouter.get('/users/:id', async (req, res) => {
       user = await User.findOne({ userID });
     } 
     if (!user) {
-      res.status(404).send();
+      return res.status(404).send();
     }
-    res.send(user);
+    return res.send(user);
   } catch (err) {
-    res.status(500).send();
+    return res.status(500).send();
   }
 });
 
@@ -56,17 +56,16 @@ userRouter.patch('/users', async (req, res) => {
   const allowedUpdates = ['name', 'activities', 'friends', 'groups', 'favoriteTracks', 'activeChallenges', 'tracksHistory'];
   const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
   if (!isValidOperation) {
-    res.status(400).send({error: 'Invalid updates!'});
+    return res.status(400).send({error: 'Invalid updates!'});
   }
   try {
-    await User.findOneAndUpdate({ name }, req.body, { new: true, runValidators: true }).then((user) => {
-      if (!user) {
-        res.status(404).send();
-      }
-      res.status(200).send(user);
-    });
+    const user = await User.findOneAndUpdate({ name }, req.body, { new: true, runValidators: true });
+    if (!user) {
+      return res.status(404).send();
+    }
+    return res.status(200).send(user);
   } catch (err) {
-    res.status(400).send(err);
+    return res.status(400).send(err);
   }
 });
 
@@ -77,16 +76,15 @@ userRouter.patch('/users/:id', async (req, res) => {
   const allowedUpdates = ['name', 'activities', 'friends', 'groups', 'favoriteTracks', 'activeChallenges', 'tracksHistory'];
   const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
   if (!isValidOperation) {
-    res.status(400).send({error: 'Invalid updates!'});
+    return res.status(400).send({error: 'Invalid updates!'});
   }
   try {
-    await User.findOneAndUpdate({ userID }, req.body, { new: true, runValidators: true }).then((user) => {
-      if (!user) {
-        res.status(404).send();
-      }
-      res.status(200).send(user);
-    });
+    const user = await User.findOneAndUpdate({ userID }, req.body, { new: true, runValidators: true });
+    if (!user) {
+      return res.status(404).send();
+    }
+    return res.status(200).send(user);
   } catch (err) {
-    res.status(400).send(err);
+    return res.status(400).send(err);
   }
 });
