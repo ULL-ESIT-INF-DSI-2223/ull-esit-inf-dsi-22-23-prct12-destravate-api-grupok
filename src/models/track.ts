@@ -1,12 +1,11 @@
 import { Document, Schema, model } from 'mongoose';
 import { Activity } from '../enums/activityEnum.js';
-import { Coordinates } from '../interfaces/coordinatesInterface.js';
 import { UserDocumentInterface } from './user.js';
 
 export interface TrackDocumentInterface extends Document {
   name: string;
-  startCoordinates: Coordinates; // [lat, long]
-  endCoordinates: Coordinates; // [lat, long]
+  startCoordinates: [number, number]; // [lat, long]
+  endCoordinates: [number, number]; // [lat, long]
   length: number;
   grade: number;
   users: UserDocumentInterface[];
@@ -22,23 +21,11 @@ const trackSchema = new Schema<TrackDocumentInterface>({
     unique: true,
   },
   startCoordinates: {
-    type: Object,
-    validate: {
-      validator: function(val: Coordinates) {
-        return typeof val.lat === "number" && typeof val.long === "number";
-      },
-      message: props => `Invalid start coordinates: ${JSON.stringify(props.value)}`
-    },
+    type: [Number, Number],
     required: true,
   },
   endCoordinates: {
-    type: Object,
-    validate: {
-      validator: function(val: Coordinates) {
-        return typeof val.lat === "number" && typeof val.long === "number";
-      },
-      message: props => `Invalid end coordinates: ${JSON.stringify(props.value)}`
-    },
+    type: [Number, Number],
     required: true,
   },
   length: {

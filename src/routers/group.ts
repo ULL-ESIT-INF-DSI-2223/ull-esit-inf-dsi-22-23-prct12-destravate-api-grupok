@@ -40,11 +40,7 @@ groupRouter.get("/groups", async (req, res) => {
 groupRouter.get("/groups/:id", async (req, res) => {
   const groupID = req.params.id;
   try {
-    let group;
-    if (groupID) {
-      // Find a group by groupID
-      group = await Group.findById(groupID);
-    }
+    const group = await Group.findById(groupID);
     if (!group) {
       return res.status(404).send();
     }

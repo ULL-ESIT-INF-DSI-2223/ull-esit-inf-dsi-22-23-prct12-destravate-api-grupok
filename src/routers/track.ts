@@ -38,11 +38,16 @@ trackRouter.get("/tracks", async (req, res) => {
  * Get para un track en específico mediante ID
  */
 trackRouter.get("/tracks/:id", async (req, res) => {
-  const track = await Track.findById({ ID: req.params.id });
-  if (!track) {
-    return res.status(404).send();
+  const trackID = req.params.id;
+  try {
+    const track = await Track.findById(trackID);
+    if (!track) {
+      return res.status(404).send();
+    }
+    return res.send(track);
+  } catch (err) {
+    return res.status(500).send();
   }
-  return res.send(track);
 });
 
 /**
@@ -87,6 +92,7 @@ trackRouter.patch("/tracks", async (req, res) => {
  */
 trackRouter.patch("/tracks/:id", async (req, res) => {
   const updates = Object.keys(req.body);
+  const trackID = req.params.id
   const allowedUpdates = [
     "name",
     "startCoordinates",
@@ -111,7 +117,7 @@ trackRouter.patch("/tracks/:id", async (req, res) => {
 
   try {
     const track = await Track.findByIdAndUpdate(
-      { ID: req.params.id },
+      trackID,
       req.body,
       { new: true, runValidators: true }
     );
@@ -145,8 +151,9 @@ trackRouter.delete("/tracks", async (req, res) => {
  * Delete para eliminar un track en específico mediante ID
  */
 trackRouter.delete("/tracks/:id", async (req, res) => {
+  const trackID = req.params.id
   try {
-    const track = await Track.findByIdAndDelete({ ID: req.params.id });
+    const track = await Track.findByIdAndDelete(trackID);
     if (!track) {
       return res.status(404).send();
     }

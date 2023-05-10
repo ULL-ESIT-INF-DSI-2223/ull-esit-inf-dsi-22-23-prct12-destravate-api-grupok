@@ -35,11 +35,7 @@ userRouter.get("/users", async (req, res) => {
 userRouter.get("/users/:id", async (req, res) => {
   const userID = req.params.id;
   try {
-    let user;
-    if (userID) {
-      // Find a user by userID
-      user = await User.findById(userID);
-    }
+    const user = await User.findById(userID);
     if (!user) {
       return res.status(404).send();
     }

@@ -41,11 +41,16 @@ challengeRouter.get("/challenges", async (req, res) => {
  * Get para un challenge en específico
  */
 challengeRouter.get("/challenges/:id", async (req, res) => {
-  const challenge = await Challenge.findOne({ ID: req.params.id });
-  if (!challenge) {
-    res.status(404).send();
+  const challengeID = req.params.id;
+  try {
+    const challenge = await Challenge.findById(challengeID);
+    if (!challenge) {
+      return res.status(404).send();
+    }
+    return res.send(challenge);
+  } catch (err) {
+    return res.status(500).send();
   }
-  res.send(challenge);
 });
 
 challengeRouter.patch("/challenges", async (req, res) => {
@@ -131,8 +136,9 @@ challengeRouter.delete("/challenges", async (req, res) => {
  * Delete para eliminar un track en específico mediante ID
  */
 challengeRouter.delete("/challenges/:id", async (req, res) => {
+  const challengeID = req.params.id;
   try {
-    const challenge = await Challenge.findByIdAndDelete(req.params.id);
+    const challenge = await Challenge.findByIdAndDelete(challengeID);
     if (!challenge) {
       return res.status(404).send();
     }
