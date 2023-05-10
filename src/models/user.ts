@@ -51,8 +51,6 @@ const userSchema = new Schema<UserDocumentInterface>({
   favouriteTracks: {
     type: [Schema.Types.ObjectId],
     default: [],
-<<<<<<< HEAD
-=======
     // validate: {
     //   validator: async function (trackIDs: number[]) {
     //     const Track = model('Track'); // Reemplaza 'Track' con el nombre de tu modelo de rutas
@@ -68,7 +66,6 @@ const userSchema = new Schema<UserDocumentInterface>({
     //   message: 'One or more track IDs do not exist.',
     // },
     // TODO: Verificar que los IDs de ruta existen en la base de datos
->>>>>>> 8229e414253ea552a2b07f4ea41806e989694664
   },
   activeChallenges: {
     type: [Schema.Types.ObjectId],
