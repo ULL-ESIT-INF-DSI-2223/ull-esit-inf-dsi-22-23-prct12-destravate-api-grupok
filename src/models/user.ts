@@ -79,6 +79,7 @@ const userSchema = new Schema<UserDocumentInterface>({
     //   },
     //   message: 'One or more track IDs do not exist.',
     // },
+    // TODO: Verificar que los IDs de ruta existen en la base de datos
   },
   activeChallenges: {
     type: [Number],
