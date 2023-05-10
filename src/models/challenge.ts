@@ -1,21 +1,17 @@
-import { Document, Schema, model } from "mongoose";
-import { Activity } from "../enums/activityEnum.js";
+import { Document, Schema, model } from 'mongoose';
+import { Activity } from '../enums/activityEnum.js';
+import { TrackDocumentInterface } from './track.js';
+import { UserDocumentInterface } from './user.js';
 
-export interface ChallengeInterface extends Document {
-  ID: number;
+export interface ChallengeDocumentInterface extends Document {
   name: string;
-  tracks: number[];
+  tracks: TrackDocumentInterface[];
   activity: Activity;
   length: number;
-  users: number[];
+  users: UserDocumentInterface[];
 }
 
-const challengeSchema = new Schema<ChallengeInterface>({
-  ID: {
-    type: Number,
-    required: true,
-    unique: true,
-  },
+const challengeSchema = new Schema<ChallengeDocumentInterface>({
   name: {
     type: String,
     required: true,
@@ -27,21 +23,19 @@ const challengeSchema = new Schema<ChallengeInterface>({
     required: true,
   },
   users: {
-    type: [Number],
+    type: [Schema.Types.ObjectId],
     required: false,
   },
   tracks: {
-    type: [Number],
+    type: [Schema.Types.ObjectId],
     required: false,
   },
   activity: {
-    type: String,
-    enum: Object.values(Activity),
+    type : String, 
+    enum : Object.values(Activity),
     required: true,
   },
+
 });
 
-export const Challenge = model<ChallengeInterface>(
-  "Challenge",
-  challengeSchema
-);
+export const Challenge = model<ChallengeDocumentInterface>('Challenge', challengeSchema);
