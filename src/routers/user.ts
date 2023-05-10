@@ -15,5 +15,29 @@ userRouter.post('/users', async (req, res) => {
   }
 });
 
-// userRouter.get('/users', async (_, res) => {
+userRouter.get('/users', async (req, res) => {
+  try {
+    const users = await User.find({});
+    res.send(users);
+  } catch (err) {
+    res.status(500).send();
+  }
+});
+
+userRouter.get('/users/:id', async (req, res) => {
+  const userID = req.params.id;
+  try {
+    let user;
+    if (userID) {
+      // Find a user by userID
+      user = await User.findOne({ userID });
+    } 
+    if (!user) {
+      res.status(404).send();
+    }
+    res.send(user);
+  } catch (err) {
+    res.status(500).send();
+  }
+});
   
