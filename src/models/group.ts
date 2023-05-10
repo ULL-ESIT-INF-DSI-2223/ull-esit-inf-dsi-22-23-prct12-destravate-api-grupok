@@ -1,5 +1,5 @@
-import { Document, Schema, model } from 'mongoose';
-import { TrainingStatisticsInterface } from '../interfaces/trainingStatistics.js';
+import { Document, Schema, model } from "mongoose";
+import { TrainingStatisticsInterface } from "../interfaces/trainingStatistics.js";
 
 export interface GroupDocumentInterface extends Document {
   ID: number;
@@ -30,12 +30,21 @@ const groupSchema = new Schema<GroupDocumentInterface>({
   groupStatistics: {
     type: Object,
     validate: {
-      validator: function(val: TrainingStatisticsInterface) {
-        const isWeekValid = val.week && typeof val.week.km === "number" && typeof val.week.elevationGain === "number";
-        const isMonthValid = val.month && typeof val.month.km === "number" && typeof val.month.elevationGain === "number";
-        const isYearValid = val.year && typeof val.year.km === "number" && typeof val.year.elevationGain === "number";
+      validator: function (val: TrainingStatisticsInterface) {
+        const isWeekValid =
+          val.week &&
+          typeof val.week.km === "number" &&
+          typeof val.week.elevationGain === "number";
+        const isMonthValid =
+          val.month &&
+          typeof val.month.km === "number" &&
+          typeof val.month.elevationGain === "number";
+        const isYearValid =
+          val.year &&
+          typeof val.year.km === "number" &&
+          typeof val.year.elevationGain === "number";
         return isWeekValid && isMonthValid && isYearValid;
-      }
+      },
     },
     required: false,
   },
@@ -53,4 +62,4 @@ const groupSchema = new Schema<GroupDocumentInterface>({
   },
 });
 
-export const Group = model<GroupDocumentInterface>('Group', groupSchema);
+export const Group = model<GroupDocumentInterface>("Group", groupSchema);

@@ -1,5 +1,5 @@
-import { Document, Schema, model } from 'mongoose';
-import { Activity } from '../enums/activityEnum.js';
+import { Document, Schema, model } from "mongoose";
+import { Activity } from "../enums/activityEnum.js";
 
 export interface ChallengeInterface extends Document {
   ID: number;
@@ -35,11 +35,13 @@ const challengeSchema = new Schema<ChallengeInterface>({
     required: false,
   },
   activity: {
-    type : String, 
-    enum : Object.values(Activity),
+    type: String,
+    enum: Object.values(Activity),
     required: true,
   },
-
 });
 
-export const Challenge = model<ChallengeInterface>('Challenge', challengeSchema);
+export const Challenge = model<ChallengeInterface>(
+  "Challenge",
+  challengeSchema
+);
