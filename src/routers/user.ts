@@ -5,6 +5,9 @@ export const userRouter = express.Router();
 
 userRouter.use(express.json());
 
+/**
+ * Post para crear un usuario
+ */
 userRouter.post('/users', async (req, res) => {
   const user = new User(req.body);
   try {
@@ -15,6 +18,9 @@ userRouter.post('/users', async (req, res) => {
   }
 });
 
+/**
+ * Get para todos los usuarios o para un usuario en específico mediante nombre usando query
+ */
 userRouter.get("/users", async (req, res) => {
   const { name } = req.query;
   try {
@@ -32,6 +38,9 @@ userRouter.get("/users", async (req, res) => {
   }
 });
 
+/**
+ * Get para un usuario en específico mediante ID
+ */
 userRouter.get("/users/:id", async (req, res) => {
   const userID = req.params.id;
   try {
@@ -45,6 +54,9 @@ userRouter.get("/users/:id", async (req, res) => {
   }
 });
 
+/**
+ * Patch para actualizar un usuario en específico mediante query y los datos en el body
+ */
 userRouter.patch("/users", async (req, res) => {
   //actualizar un usaurio por su nombre
   const name = req.query.name;
@@ -78,6 +90,9 @@ userRouter.patch("/users", async (req, res) => {
   }
 });
 
+/**
+ * Patch para actualizar un usuario en específico mediante ID y los datos en el body
+ */
 userRouter.patch("/users/:id", async (req, res) => {
   //actualizar un usaurio por su id
   const userID = req.params.id;

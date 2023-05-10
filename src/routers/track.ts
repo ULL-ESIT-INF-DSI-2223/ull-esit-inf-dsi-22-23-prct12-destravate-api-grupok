@@ -5,6 +5,9 @@ export const trackRouter = express.Router();
 
 trackRouter.use(express.json());
 
+/**
+ * Post para crear un track con los datos en el body
+ */
 trackRouter.post("/tracks", async (req, res) => {
   const track = new Track(req.body);
 
@@ -17,7 +20,7 @@ trackRouter.post("/tracks", async (req, res) => {
 });
 
 /**
- * Get para todos los tracks
+ * Get para todos los tracks o para un track en específico mediante nombre usando query
  */
 trackRouter.get("/tracks", async (req, res) => {
   const filter = req.query.name ? { name: req.query.name.toString() } : {};
@@ -35,7 +38,7 @@ trackRouter.get("/tracks", async (req, res) => {
 });
 
 /**
- * Get para un track en específico mediante ID
+ * Get para un track en específico mediante ID 
  */
 trackRouter.get("/tracks/:id", async (req, res) => {
   const trackID = req.params.id;
@@ -88,7 +91,7 @@ trackRouter.patch("/tracks", async (req, res) => {
 });
 
 /**
- * Patch para actualizar un track en específico mediante ID
+ * Patch para actualizar un track en específico mediante ID y los datos en el body
  */
 trackRouter.patch("/tracks/:id", async (req, res) => {
   const updates = Object.keys(req.body);
@@ -131,7 +134,7 @@ trackRouter.patch("/tracks/:id", async (req, res) => {
 });
 
 /**
- * Delete para eliminar un track en específico mediante query
+ * Delete para eliminar un track en específico mediante el nombre usando query
  */
 trackRouter.delete("/tracks", async (req, res) => {
   const name = req.query.name;

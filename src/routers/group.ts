@@ -5,6 +5,9 @@ export const groupRouter = express.Router();
 
 groupRouter.use(express.json());
 
+/**
+ * Post para crear un grupo, los datos se pasan en el body
+ */
 groupRouter.post("/groups", async (req, res) => {
   const group = new Group(req.body);
 
@@ -17,7 +20,7 @@ groupRouter.post("/groups", async (req, res) => {
 });
 
 /**
- * Get para todos los grupos especificos
+ * Get para todos los grupos o para un grupo en específico mediante nombre usando query
  */
 groupRouter.get("/groups", async (req, res) => {
   const filter = req.query.name ? { name: req.query.name.toString() } : {};
@@ -35,7 +38,7 @@ groupRouter.get("/groups", async (req, res) => {
 });
 
 /**
- * Get para un group en específico
+ * Get para un grupo en específico mediante ID
  */
 groupRouter.get("/groups/:id", async (req, res) => {
   const groupID = req.params.id;
