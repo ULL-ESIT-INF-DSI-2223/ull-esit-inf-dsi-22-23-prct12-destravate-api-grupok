@@ -12,7 +12,7 @@ export interface UserDocumentInterface extends Document {
   trainingStatistics: TrainingStatisticsInterface;
   favouriteTracks: number[];
   activeChallenges: number[]; 
-  tracksHistory: [TrackDocumentInterface, Date];
+  tracksHistory: [TrackDocumentInterface, string];
 }
 
 const userSchema = new Schema<UserDocumentInterface>({
@@ -25,7 +25,6 @@ const userSchema = new Schema<UserDocumentInterface>({
     type: String,
     required: false,
     trim: true,
-    unique: false,
   },
   activities: {
     type: String,
@@ -62,7 +61,7 @@ const userSchema = new Schema<UserDocumentInterface>({
     required: true,
   },
   tracksHistory: {
-    type: [Schema.Types.ObjectId, new Date()],
+    type: [Schema.Types.ObjectId, String],
     required: true,
   },
 });

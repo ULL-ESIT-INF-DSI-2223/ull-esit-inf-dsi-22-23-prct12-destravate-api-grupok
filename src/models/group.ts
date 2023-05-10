@@ -10,7 +10,7 @@ export interface GroupDocumentInterface extends Document {
   groupStatistics: TrainingStatisticsInterface;
   userClasification: number[]; // usuarios ordenados por cantidad de km más el desnivel
   favouriteTracks: number[]; // ordenado de mayor a menor en función del número de veces que se ha hecho la ruta
-  tracksHistory: [TrackDocumentInterface, Date];
+  tracksHistory: [TrackDocumentInterface, string];
 }
 
 const groupSchema = new Schema<GroupDocumentInterface>({
@@ -50,7 +50,7 @@ const groupSchema = new Schema<GroupDocumentInterface>({
     required: true,
   },
   tracksHistory: {
-    type: [Schema.Types.ObjectId, new Date()],
+    type: [Schema.Types.ObjectId, String],
     required: true,
   },
 });
