@@ -5,6 +5,9 @@ export const challengeRouter = express.Router();
 
 challengeRouter.use(express.json());
 
+/**
+ * Get para todos los challenges
+ */
 challengeRouter.post('/challenges', async (req, res) => {
   const challenge = new Challenge(req.body);
   
