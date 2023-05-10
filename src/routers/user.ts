@@ -3,6 +3,9 @@ import { User } from "../models/user.js";
 
 export const userRouter = express.Router();
 
+/**
+ * El body de las peticiones se parsea a JSON por defecto
+ */
 userRouter.use(express.json());
 
 /**

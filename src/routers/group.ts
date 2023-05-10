@@ -3,6 +3,9 @@ import { Group } from "../models/group.js";
 
 export const groupRouter = express.Router();
 
+/**
+ * El body de las peticiones se parsea a JSON por defecto
+ */
 groupRouter.use(express.json());
 
 /**
@@ -53,6 +56,9 @@ groupRouter.get("/groups/:id", async (req, res) => {
   }
 });
 
+/**
+ * Patch para actualizar un grupo en específico mediante el nombre usando query
+ */
 groupRouter.patch("/groups", async (req, res) => {
   //actualizar un usaurio por su nombre
   const name = req.query.name;
@@ -85,6 +91,9 @@ groupRouter.patch("/groups", async (req, res) => {
   }
 });
 
+/**
+ * Patch para actualizar un grupo en específico mediante ID
+ */
 groupRouter.patch("/groups/:id", async (req, res) => {
   //actualizar un usaurio por su id
   const groupID = req.params.id;
@@ -119,7 +128,7 @@ groupRouter.patch("/groups/:id", async (req, res) => {
 });
 
 /**
- * Delete para eliminar un grupo en específico mediante query
+ * Delete para eliminar un grupo en específico mediante nombre usando query
  */
 groupRouter.delete("/groups", async (req, res) => {
   const name = req.query.name;

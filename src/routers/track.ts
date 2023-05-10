@@ -3,6 +3,9 @@ import { Track } from "../models/track.js";
 
 export const trackRouter = express.Router();
 
+/**
+ * El body de las peticiones se parsea a JSON por defecto
+ */
 trackRouter.use(express.json());
 
 /**

@@ -3,10 +3,13 @@ import { Challenge } from "../models/challenge.js";
 
 export const challengeRouter = express.Router();
 
+/**
+ * El body de las peticiones se parsea a JSON por defecto
+ */
 challengeRouter.use(express.json());
 
 /**
- * Get para todos los challenges
+ * Post para crear un challenge, Los datos se pasan en el body
  */
 challengeRouter.post("/challenges", async (req, res) => {
   const challenge = new Challenge(req.body);
@@ -20,7 +23,7 @@ challengeRouter.post("/challenges", async (req, res) => {
 });
 
 /**
- * Get para todos los challenges
+ * Get para todos los challenges o para un challenge en específico mediante nombre usando query
  */
 challengeRouter.get("/challenges", async (req, res) => {
   const filter = req.query.name ? { name: req.query.name.toString() } : {};
@@ -38,7 +41,7 @@ challengeRouter.get("/challenges", async (req, res) => {
 });
 
 /**
- * Get para un challenge en específico
+ * Get para un challenge en específico mediante ID
  */
 challengeRouter.get("/challenges/:id", async (req, res) => {
   const challengeID = req.params.id;
@@ -53,6 +56,9 @@ challengeRouter.get("/challenges/:id", async (req, res) => {
   }
 });
 
+/**
+ * Patch para actualizar un challenge en específico mediante nombre usando query
+ */
 challengeRouter.patch("/challenges", async (req, res) => {
   //actualizar un usaurio por su nombre
   const name = req.query.name;
@@ -84,6 +90,9 @@ challengeRouter.patch("/challenges", async (req, res) => {
   }
 });
 
+/**
+ * Patch para actualizar un challenge en específico mediante ID
+ */
 challengeRouter.patch("/challenges/:id", async (req, res) => {
   //actualizar un usaurio por su id
   const challengeID = req.params.id;
@@ -116,7 +125,7 @@ challengeRouter.patch("/challenges/:id", async (req, res) => {
 });
 
 /**
- * Delete para eliminar un track en específico mediante query
+ * Delete para eliminar un track en específico mediante nombre usando query
  */
 challengeRouter.delete("/challenges", async (req, res) => {
   const name = req.query.name;
