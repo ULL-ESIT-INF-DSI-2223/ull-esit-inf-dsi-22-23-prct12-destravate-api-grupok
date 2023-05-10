@@ -3,3 +3,11 @@
 
 - Editar Typedoc
 - Workflow ignorados (los tiene Aday en su pc)
+
+- levantar servidor mongodb:  sudo /home/usuario/mongodb/bin/mongod --dbpath /home/usuario/mongodb-data/
+- levantar servidor express: npm run dev (de momento)
+
+
+TRABAJO QUE FALTA (CÓDIGO)
+- Ver que hacer con el ranking de group
+- Linkear todo
