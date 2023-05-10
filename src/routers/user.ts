@@ -16,7 +16,7 @@ userRouter.post("/users", async (req, res) => {
       ...req.body,
     });
 
-    await user.save();;
+    await user.save();
     return res.status(201).send(user);
   } catch (err) {
     return res.status(400).send(err);
