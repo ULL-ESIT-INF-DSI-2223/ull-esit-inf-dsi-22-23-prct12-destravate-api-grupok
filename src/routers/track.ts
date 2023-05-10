@@ -10,9 +10,9 @@ trackRouter.post('/tracks', async (req, res) => {
 
   try {
     await track.save()
-    res.status(201).send(track);
+    return res.status(201).send(track);
   } catch(err) {
-    res.status(400).send(err);
+    return res.status(400).send(err);
   }
 });
 
@@ -35,16 +35,38 @@ trackRouter.get('/tracks', async (req, res) => {
 });
 
 /**
- * Get para un track en específico
+ * Get para un track en específico mediante ID
  */
 trackRouter.get('/tracks/:id', async (req, res) => {
   const track = await Track.findOne({ ID: req.params.id });
   if (!track) {
-    res.status(404).send();
+    return res.status(404).send();
   }
-  res.send(track);
+  return res.send(track);
 });
 
+/**
+ * Patch para actualizar un track en específico mediante query
+ */
+trackRouter.patch('/tracks', async (req, res) => {
+  //actualizar un usaurio por su nombre
+  const name = req.query.name;
+  const updates = Object.keys(req.body);
+  const allowedUpdates = ['name', 'startCoordinates', 'endCoordinates', 'length', 'grade', 'users', 'activities', 'rating'];
+  const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
+  if (!isValidOperation) {
+    return res.status(400).send({error: 'Invalid updates!'});
+  }
+  try {
+    const track = await Track.findOneAndUpdate({ name }, req.body, { new: true, runValidators: true });
+    if (!track) {
+      return res.status(404).send();
+    }
+    return res.status(200).send(track);
+  } catch (err) {
+    return res.status(400).send(err);
+  }
+});
 
 /**
  * Patch para actualizar un track en específico mediante ID
@@ -55,21 +77,53 @@ trackRouter.patch('/tracks/:id', async (req, res) => {
   const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
 
   if (!isValidOperation) {
-    res.status(400).send({ error: 'Invalid updates' });
+    return res.status(400).send({ error: 'Invalid updates' });
   }
 
   if (updates.length === 0) {
-    res.status(400).send({ error: 'No updates' });
+    return res.status(400).send({ error: 'No updates' });
   }
 
   try {
     const track = await Track.findOneAndUpdate({ ID: req.params.id }, req.body, { new: true, runValidators: true });
     if (!track) {
-      res.status(404).send();
+      return res.status(404).send();
     }
-    res.send(track);
+    return res.send(track);
   } catch (error) {
-    res.status(400).send(error);
+    return res.status(400).send(error);
+  }
+});
+
+/**
+ * Delete para eliminar un track en específico mediante query
+ */
+trackRouter.delete('/tracks', async (req, res) => {
+  const name = req.query.name;
+
+  try {
+    const track = await Track.findOneAndDelete({ name });
+    if (!track) {
+      return res.status(404).send();
+    }
+    return res.status(200).send(track);
+  } catch (error) {
+    return res.status(400).send(error);
+  }
+});
+
+/**
+ * Delete para eliminar un track en específico mediante ID
+ */
+trackRouter.delete('/tracks/:id', async (req, res) => {
+  try {
+    const track = await Track.findOneAndDelete({ ID: req.params.id });
+    if (!track) {
+      return res.status(404).send();
+    }
+    return res.send(track);
+  } catch (error) {
+    return res.status(500).send(error);
   }
 });
 
