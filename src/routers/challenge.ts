@@ -48,4 +48,96 @@ challengeRouter.get("/challenges/:id", async (req, res) => {
   res.send(challenge);
 });
 
-// TODO: patch y delete
+challengeRouter.patch("/challenges", async (req, res) => {
+  //actualizar un usaurio por su nombre
+  const name = req.query.name;
+  const updates = Object.keys(req.body);
+  const allowedUpdates = [
+    "name",
+    "activities",
+    "tracks",
+    "users",
+    "length",
+  ];
+  const isValidOperation = updates.every((update) =>
+    allowedUpdates.includes(update)
+  );
+  if (!isValidOperation) {
+    return res.status(400).send({ error: "Invalid updates!" });
+  }
+  try {
+    const challenge = await Challenge.findOneAndUpdate({ name }, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!challenge) {
+      return res.status(404).send();
+    }
+    return res.status(200).send(challenge);
+  } catch (err) {
+    return res.status(400).send(err);
+  }
+});
+
+challengeRouter.patch("/challenges/:id", async (req, res) => {
+  //actualizar un usaurio por su id
+  const challengeID = req.params.id;
+  const updates = Object.keys(req.body);
+  const allowedUpdates = [
+    "name",
+    "activities",
+    "tracks",
+    "users",
+    "length",
+  ];
+  const isValidOperation = updates.every((update) =>
+    allowedUpdates.includes(update)
+  );
+  if (!isValidOperation) {
+    return res.status(400).send({ error: "Invalid updates!" });
+  }
+  try {
+    const challenge = await Challenge.findByIdAndUpdate({ challengeID }, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!challenge) {
+      return res.status(404).send();
+    }
+    return res.status(200).send(challenge);
+  } catch (err) {
+    return res.status(400).send(err);
+  }
+});
+
+/**
+ * Delete para eliminar un track en específico mediante query
+ */
+challengeRouter.delete("/challenges", async (req, res) => {
+  const name = req.query.name;
+
+  try {
+    const challenge = await Challenge.findOneAndDelete({ name });
+    if (!challenge) {
+      return res.status(404).send();
+    }
+    return res.status(200).send(challenge);
+  } catch (error) {
+    return res.status(400).send(error);
+  }
+});
+
+/**
+ * Delete para eliminar un track en específico mediante ID
+ */
+challengeRouter.delete("/challenges/:id", async (req, res) => {
+  try {
+    const challenge = await Challenge.findByIdAndDelete(req.params.id);
+    if (!challenge) {
+      return res.status(404).send();
+    }
+    return res.send(challenge);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+});
