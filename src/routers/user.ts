@@ -16,9 +16,17 @@ userRouter.post('/users', async (req, res) => {
 });
 
 userRouter.get('/users', async (req, res) => {
+  const { name } = req.query;
   try {
-    const users = await User.find({});
-    res.send(users);
+    let users;
+    if (name) {
+      // Find all users that match the name
+      users = await User.find({ name });
+    } else {
+      // Find all users
+      users = await User.find();
+    }
+    res.status(200).send(users);
   } catch (err) {
     res.status(500).send();
   }
@@ -40,4 +48,45 @@ userRouter.get('/users/:id', async (req, res) => {
     res.status(500).send();
   }
 });
-  
+
+userRouter.patch('/users', async (req, res) => {
+  //actualizar un usaurio por su nombre
+  const name = req.query.name;
+  const updates = Object.keys(req.body);
+  const allowedUpdates = ['name', 'activities', 'friends', 'groups', 'favoriteTracks', 'activeChallenges', 'tracksHistory'];
+  const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
+  if (!isValidOperation) {
+    res.status(400).send({error: 'Invalid updates!'});
+  }
+  try {
+    await User.findOneAndUpdate({ name }, req.body, { new: true, runValidators: true }).then((user) => {
+      if (!user) {
+        res.status(404).send();
+      }
+      res.status(200).send(user);
+    });
+  } catch (err) {
+    res.status(400).send(err);
+  }
+});
+
+userRouter.patch('/users/:id', async (req, res) => {
+  //actualizar un usaurio por su id
+  const userID = req.params.id;
+  const updates = Object.keys(req.body);
+  const allowedUpdates = ['name', 'activities', 'friends', 'groups', 'favoriteTracks', 'activeChallenges', 'tracksHistory'];
+  const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
+  if (!isValidOperation) {
+    res.status(400).send({error: 'Invalid updates!'});
+  }
+  try {
+    await User.findOneAndUpdate({ userID }, req.body, { new: true, runValidators: true }).then((user) => {
+      if (!user) {
+        res.status(404).send();
+      }
+      res.status(200).send(user);
+    });
+  } catch (err) {
+    res.status(400).send(err);
+  }
+});

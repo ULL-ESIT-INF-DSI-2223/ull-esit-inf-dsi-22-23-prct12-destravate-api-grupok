@@ -33,11 +33,11 @@ const userSchema = new Schema<UserDocumentInterface>({
   },    
   friends: {
     type: [Number],
-    required: true,
+    default: [],
   },
   groups: {
     type: [[Number]],
-    required: true,
+    default: [],
   },
   trainingStatistics: {
     type: Object,
@@ -54,15 +54,15 @@ const userSchema = new Schema<UserDocumentInterface>({
   },  
   favouriteTracks: {
     type: [Number],
-    required: true,
+    default: [],
   },
   activeChallenges: {
     type: [Number],
-    required: true,
+    default: [],
   },
   tracksHistory: {
     type: [Number],
-    required: true,
+    default: [],
   },
 });
 
