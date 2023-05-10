@@ -37,4 +37,4 @@ const challengeSchema = new Schema<ChallengeInterface>({
 
 });
 
-export const challenge = model<ChallengeInterface>('Challenge', challengeSchema);
+export const Challenge = model<ChallengeInterface>('Challenge', challengeSchema);

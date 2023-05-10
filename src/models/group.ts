@@ -48,4 +48,4 @@ const groupSchema = new Schema<GroupInterface>({
   },
 });
 
-export const group = model<GroupInterface>('Group', groupSchema);
+export const Group = model<GroupInterface>('Group', groupSchema);
