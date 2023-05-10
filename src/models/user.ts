@@ -25,6 +25,7 @@ const userSchema = new Schema<UserDocumentInterface>({
     type: String,
     required: false,
     trim: true,
+    unique: false,
   },
   activities: {
     type: String,
