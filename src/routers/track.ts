@@ -22,7 +22,7 @@ trackRouter.get('/tracks', async (req, res) => {
 });
 
 trackRouter.get('/tracks/:id', async (req, res) => {
-  const track = await Track.findById(req.params.id);
+  const track = await Track.findOne({ ID: req.params.id });
   if (!track) {
     res.status(404).send();
   }
