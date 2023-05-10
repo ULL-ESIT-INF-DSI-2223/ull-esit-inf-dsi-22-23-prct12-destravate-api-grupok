@@ -1,13 +1,15 @@
 import { Document, Schema, model } from 'mongoose';
 import { Activity } from '../enums/activityEnum.js';
+import { TrackDocumentInterface } from './track.js';
+import { UserDocumentInterface } from './user.js';
 
 export interface ChallengeInterface extends Document {
   ID: number;
   name: string;
-  tracks: number[];
+  tracks: TrackDocumentInterface[];
   activity: Activity;
   length: number;
-  users: number[];
+  users: UserDocumentInterface[];
 }
 
 const challengeSchema = new Schema<ChallengeInterface>({
@@ -27,7 +29,11 @@ const challengeSchema = new Schema<ChallengeInterface>({
     required: true,
   },
   users: {
-    type: [Number],
+    type: [Schema.Types.ObjectId],
+    required: false,
+  },
+  tracks: {
+    type: [Schema.Types.ObjectId],
     required: false,
   },
   activity: {

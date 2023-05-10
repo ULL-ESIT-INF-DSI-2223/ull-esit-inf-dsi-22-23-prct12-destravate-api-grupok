@@ -1,5 +1,6 @@
 import { Document, Schema, model } from 'mongoose';
 import { Activity } from '../enums/activityEnum.js';
+import { TrackDocumentInterface } from './track.js';
 import { TrainingStatisticsInterface } from '../interfaces/trainingStatistics.js';
 
 export interface UserDocumentInterface extends Document {
@@ -11,7 +12,7 @@ export interface UserDocumentInterface extends Document {
   trainingStatistics: TrainingStatisticsInterface;
   favouriteTracks: number[];
   activeChallenges: number[]; 
-  tracksHistory: number[];
+  tracksHistory: [TrackDocumentInterface, Date];
 }
 
 const userSchema = new Schema<UserDocumentInterface>({
@@ -60,7 +61,7 @@ const userSchema = new Schema<UserDocumentInterface>({
     required: true,
   },
   tracksHistory: {
-    type: [Number],
+    type: [Schema.Types.ObjectId, new Date()],
     required: true,
   },
 });

@@ -1,20 +1,21 @@
 import { Document, Schema, model } from 'mongoose';
 import { Activity } from '../enums/activityEnum.js';
 import { Coordinates } from '../interfaces/coordinatesInterface.js';
+import { UserDocumentInterface } from './user.js';
 
-export interface TrackInterface extends Document {
+export interface TrackDocumentInterface extends Document {
   ID: number;
   name: string;
   startCoordinates: Coordinates; // [lat, long]
   endCoordinates: Coordinates; // [lat, long]
   length: number;
   grade: number;
-  users: number[];
+  users: UserDocumentInterface[];
   activities: Activity;
   rating: number;
 }
 
-const trackSchema = new Schema<TrackInterface>({
+const trackSchema = new Schema<TrackDocumentInterface>({
   ID: {
     type: Number,
     required: true,
@@ -55,7 +56,7 @@ const trackSchema = new Schema<TrackInterface>({
     required: true,
   },
   users: {
-    type: [Number],
+    type: [Schema.Types.ObjectId],
     required: false,
   },
   activities: {
@@ -69,4 +70,4 @@ const trackSchema = new Schema<TrackInterface>({
   },
 });
 
-export const Track = model<TrackInterface>('Track', trackSchema);
+export const Track = model<TrackDocumentInterface>('Track', trackSchema);
