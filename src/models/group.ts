@@ -21,6 +21,7 @@ const groupSchema = new Schema<GroupInterface>({
     type: String,
     required: true,
     trim: true,
+    unique: true,
   },
   members: {
     type: [Number],
