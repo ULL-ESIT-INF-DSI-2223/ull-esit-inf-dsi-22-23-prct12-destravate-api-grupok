@@ -16,11 +16,17 @@ trackRouter.post('/tracks', async (req, res) => {
   }
 });
 
+/**
+ * Get para todos los tracks
+ */
 trackRouter.get('/tracks', async (req, res) => {
   const tracks = await Track.find({});
   res.send(tracks);
 });
 
+/**
+ * Get para un track en específico
+ */
 trackRouter.get('/tracks/:id', async (req, res) => {
   const track = await Track.findOne({ ID: req.params.id });
   if (!track) {
