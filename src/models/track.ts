@@ -31,10 +31,22 @@ const trackSchema = new Schema<TrackDocumentInterface>({
   length: {
     type: Number,
     required: true,
+    validate: {
+      validator: function(val: number) {
+        return val > 0;
+      },
+      message: props => `Invalid length: ${props.value}`
+    }
   },
   grade: {
     type: Number,
     required: true,
+    validate: {
+      validator: function(val: number) {
+        return val >= 0;
+      },
+      message: props => `Invalid grade: ${props.value}`
+    }
   },
   users: {
     type: [[Schema.Types.ObjectId, String]],
