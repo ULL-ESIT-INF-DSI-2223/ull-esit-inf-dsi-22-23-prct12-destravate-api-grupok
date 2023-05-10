@@ -18,13 +18,14 @@ export interface UserDocumentInterface extends Document {
 const userSchema = new Schema<UserDocumentInterface>({
   userID: {
     type: Number,
-    required: true,
+    required: false,
     unique: true,
   },
   name: {
     type: String,
     required: true,
     trim: true,
+    unique: true,
   },
   activities: {
     type: String,
@@ -55,20 +56,20 @@ const userSchema = new Schema<UserDocumentInterface>({
   favouriteTracks: {
     type: [Number],
     default: [],
-    validate: {
-      validator: async function (trackIDs: number[]) {
-        const Track = model('Track'); // Reemplaza 'Track' con el nombre de tu modelo de rutas
-        // Verificar cada ID de ruta
-        for (const trackID of trackIDs) {
-          const track = await Track.findOne({  });
-          if (!track) {
-            return false; // El ID de ruta no existe en la base de datos
-          }
-        }
-        return true; // Todos los IDs de ruta existen en la base de datos
-      },
-      message: 'One or more track IDs do not exist.',
-    },
+    // validate: {
+    //   validator: async function (trackIDs: number[]) {
+    //     const Track = model('Track'); // Reemplaza 'Track' con el nombre de tu modelo de rutas
+    //     // Verificar cada ID de ruta
+    //     for (const trackID of trackIDs) {
+    //       const track = await Track.findOne({  });
+    //       if (!track) {
+    //         return false; // El ID de ruta no existe en la base de datos
+    //       }
+    //     }
+    //     return true; // Todos los IDs de ruta existen en la base de datos
+    //   },
+    //   message: 'One or more track IDs do not exist.',
+    // },
   },
   activeChallenges: {
     type: [Number],
