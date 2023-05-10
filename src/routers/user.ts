@@ -102,10 +102,11 @@ userRouter.patch("/users/:id", async (req, res) => {
     return res.status(400).send({ error: "Invalid updates!" });
   }
   try {
-    const user = await User.findByIdAndUpdate({ userID }, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    const user = await User.findByIdAndUpdate(
+      { userID }, 
+      req.body, 
+      { new: true, runValidators: true, }
+    );
     if (!user) {
       return res.status(404).send();
     }
@@ -116,7 +117,7 @@ userRouter.patch("/users/:id", async (req, res) => {
 });
 
 /**
- * Delete para eliminar un track en específico mediante query
+ * Delete para eliminar un usuario en específico mediante query
  */
 userRouter.delete("/users", async (req, res) => {
   const name = req.query.name;
@@ -133,7 +134,7 @@ userRouter.delete("/users", async (req, res) => {
 });
 
 /**
- * Delete para eliminar un track en específico mediante ID
+ * Delete para eliminar un usuario en específico mediante ID
  */
 userRouter.delete("/users/:id", async (req, res) => {
   try {

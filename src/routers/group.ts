@@ -38,11 +38,115 @@ groupRouter.get("/groups", async (req, res) => {
  * Get para un group en específico
  */
 groupRouter.get("/groups/:id", async (req, res) => {
-  const group = await Group.findOne({ ID: req.params.id });
-  if (!group) {
-    res.status(404).send();
+  const groupID = req.params.id;
+  try {
+    let group;
+    if (groupID) {
+      // Find a group by groupID
+      group = await Group.findById(groupID);
+    }
+    if (!group) {
+      return res.status(404).send();
+    }
+    return res.send(group);
+  } catch (err) {
+    return res.status(500).send();
   }
-  res.send(group);
 });
 
-// TODO: patch y delete
+groupRouter.patch("/groups", async (req, res) => {
+  //actualizar un usaurio por su nombre
+  const name = req.query.name;
+  const updates = Object.keys(req.body);
+  const allowedUpdates = [
+    "name",
+    "members",
+    "groupStatistics",
+    "userClasification",
+    "favouriteTracks",
+    "tracksHistory",
+  ];
+  const isValidOperation = updates.every((update) =>
+    allowedUpdates.includes(update)
+  );
+  if (!isValidOperation) {
+    return res.status(400).send({ error: "Invalid updates!" });
+  }
+  try {
+    const group = await Group.findOneAndUpdate({ name }, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!group) {
+      return res.status(404).send();
+    }
+    return res.status(200).send(group);
+  } catch (err) {
+    return res.status(400).send(err);
+  }
+});
+
+groupRouter.patch("/groups/:id", async (req, res) => {
+  //actualizar un usaurio por su id
+  const groupID = req.params.id;
+  const updates = Object.keys(req.body);
+  const allowedUpdates = [
+    "name",
+    "members",
+    "groupStatistics",
+    "userClasification",
+    "favouriteTracks",
+    "tracksHistory",
+  ];
+  const isValidOperation = updates.every((update) =>
+    allowedUpdates.includes(update)
+  );
+  if (!isValidOperation) {
+    return res.status(400).send({ error: "Invalid updates!" });
+  }
+  try {
+    const group = await Group.findByIdAndUpdate(
+      { groupID }, 
+      req.body, 
+      { new: true, runValidators: true, }
+    );
+    if (!group) {
+      return res.status(404).send();
+    }
+    return res.status(200).send(group);
+  } catch (err) {
+    return res.status(400).send(err);
+  }
+});
+
+/**
+ * Delete para eliminar un grupo en específico mediante query
+ */
+groupRouter.delete("/groups", async (req, res) => {
+  const name = req.query.name;
+
+  try {
+    const group = await Group.findOneAndDelete({ name });
+    if (!group) {
+      return res.status(404).send();
+    }
+    return res.status(200).send(group);
+  } catch (error) {
+    return res.status(400).send(error);
+  }
+});
+
+/**
+ * Delete para eliminar un grupo en específico mediante ID
+ */
+groupRouter.delete("/groups/:id", async (req, res) => {
+  try {
+    const group = await Group.findByIdAndDelete(req.params.id);
+    if (!group) {
+      return res.status(404).send();
+    }
+    return res.send(group);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+});

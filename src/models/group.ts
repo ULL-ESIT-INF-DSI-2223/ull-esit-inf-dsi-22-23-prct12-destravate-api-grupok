@@ -21,7 +21,7 @@ const groupSchema = new Schema<GroupDocumentInterface>({
   },
   members: {
     type: [Schema.Types.ObjectId],
-    required: true,
+    default: [],
   },
   groupStatistics: {
     type: Object,
@@ -37,15 +37,15 @@ const groupSchema = new Schema<GroupDocumentInterface>({
   },
   userClasification: {
     type: [Number],
-    required: true,
+    default: [],
   },
   favouriteTracks: {
     type: [Schema.Types.ObjectId],
-    required: true,
+    default: [],
   },
   tracksHistory: {
     type: [[Schema.Types.ObjectId, String]],
-    required: true,
+    default: [],
   },
 });
 
