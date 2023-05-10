@@ -20,6 +20,7 @@ const challengeSchema = new Schema<ChallengeInterface>({
     type: String,
     required: true,
     trim: true,
+    unique: true,
   },
   length: {
     type: Number,
