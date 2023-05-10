@@ -1,16 +1,14 @@
 import { Document, Schema, model } from 'mongoose';
 import { TrainingStatisticsInterface } from '../interfaces/trainingStatistics.js';
-import { UserDocumentInterface } from './user.js';
-import { TrackDocumentInterface } from './track.js';
 
 export interface GroupDocumentInterface extends Document {
   ID: number;
   name: string;
-  members: UserDocumentInterface[];
+  members: number[];
   groupStatistics: TrainingStatisticsInterface;
   userClasification: number[]; // usuarios ordenados por cantidad de km más el desnivel
   favouriteTracks: number[]; // ordenado de mayor a menor en función del número de veces que se ha hecho la ruta
-  tracksHistory: [TrackDocumentInterface, string];
+  tracksHistory: [number, string][];
 }
 
 const groupSchema = new Schema<GroupDocumentInterface>({
@@ -26,7 +24,7 @@ const groupSchema = new Schema<GroupDocumentInterface>({
     unique: true,
   },
   members: {
-    type: [Schema.Types.ObjectId],
+    type: [Number],
     required: true,
   },
   groupStatistics: {
@@ -50,7 +48,7 @@ const groupSchema = new Schema<GroupDocumentInterface>({
     required: true,
   },
   tracksHistory: {
-    type: [Schema.Types.ObjectId, String],
+    type: [[Number, String]],
     required: true,
   },
 });

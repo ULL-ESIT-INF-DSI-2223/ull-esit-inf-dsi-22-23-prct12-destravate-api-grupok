@@ -10,7 +10,7 @@ export interface TrackDocumentInterface extends Document {
   endCoordinates: Coordinates; // [lat, long]
   length: number;
   grade: number;
-  users: UserDocumentInterface[];
+  users: number[];
   activities: Activity;
   rating: number;
 }
@@ -56,7 +56,7 @@ const trackSchema = new Schema<TrackDocumentInterface>({
     required: true,
   },
   users: {
-    type: [Schema.Types.ObjectId],
+    type: [Number],
     required: false,
   },
   activities: {
