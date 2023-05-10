@@ -114,3 +114,35 @@ userRouter.patch("/users/:id", async (req, res) => {
     return res.status(400).send(err);
   }
 });
+
+/**
+ * Delete para eliminar un track en específico mediante query
+ */
+userRouter.delete("/users", async (req, res) => {
+  const name = req.query.name;
+
+  try {
+    const user = await User.findOneAndDelete({ name });
+    if (!user) {
+      return res.status(404).send();
+    }
+    return res.status(200).send(user);
+  } catch (error) {
+    return res.status(400).send(error);
+  }
+});
+
+/**
+ * Delete para eliminar un track en específico mediante ID
+ */
+userRouter.delete("/users/:id", async (req, res) => {
+  try {
+    const user = await User.findOneAndDelete({ ID: req.params.id });
+    if (!user) {
+      return res.status(404).send();
+    }
+    return res.send(user);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+});
