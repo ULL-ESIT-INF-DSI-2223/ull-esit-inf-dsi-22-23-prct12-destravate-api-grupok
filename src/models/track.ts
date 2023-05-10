@@ -8,7 +8,7 @@ export interface TrackDocumentInterface extends Document {
   endCoordinates: [number, number]; // [lat, long]
   length: number;
   grade: number;
-  users: UserDocumentInterface[];
+  users: [UserDocumentInterface, Date][]; // let birthday: Date = new Date(1990, 2, 15); // 15 de marzo de 1990
   activities: Activity;
   rating: number;
 }
@@ -48,6 +48,12 @@ const trackSchema = new Schema<TrackDocumentInterface>({
   rating: {
     type: Number,
     required: false,
+    validate: {
+      validator: function(val: number) {
+        return val >= 0 && val <= 5;
+      },
+      message: props => `Invalid rating: ${props.value}`
+    }
   },
 });
 
