@@ -16,10 +16,7 @@ trackRouter.post("/tracks", async (req, res) => {
 
   try {
     await track.save();
-    // actualizar los grupos de los que forme parte el usuario
-    for (const groupID of user.groups) {
-      await Group.findByIdAndUpdate(groupID, { $push: { members: user._id }});
-    }
+    
     return res.status(201).send(track);
   } catch (err) {
     return res.status(400).send(err);
