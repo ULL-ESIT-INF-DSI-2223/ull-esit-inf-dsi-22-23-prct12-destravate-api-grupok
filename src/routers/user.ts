@@ -48,12 +48,17 @@ userRouter.get("/users", async (req, res) => {
         { path: "activeChallenges", select: "name"}
       ).populate(
         { path: "favouriteTracks", select: "name"}
-      ).populate(
-        { path: "tracksHistory", select: "name"}
       );
     } else {
       // Find all users
-      users = await User.find().populate({ path: "friends", select: "name"});
+      users = await User.find().populate({ path: "friends", select: "name"}
+      ).populate(
+        { path: "groups", select: "name"}
+      ).populate(
+        { path: "activeChallenges", select: "name"}
+      ).populate(
+        { path: "favouriteTracks", select: "name"}
+      );;
     }
     return res.status(200).send(users);
   } catch (err) {
