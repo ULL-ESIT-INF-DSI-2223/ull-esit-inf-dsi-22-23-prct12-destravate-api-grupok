@@ -23,6 +23,7 @@ const groupSchema = new Schema<GroupDocumentInterface>({
   members: {
     type: [Schema.Types.ObjectId],
     default: [],
+    ref: 'User',
   },
   groupStatistics: {
     type: Object,
