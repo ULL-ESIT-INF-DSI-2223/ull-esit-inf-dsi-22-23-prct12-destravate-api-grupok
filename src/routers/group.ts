@@ -14,8 +14,11 @@ groupRouter.use(express.json());
  */
 groupRouter.post("/groups", async (req, res) => {
   const group = new Group(req.body);
-
   try {
+    // actualizar los grupos de los usuarios que forman parte del grupo
+    for (const userID of group.members) {
+      await User.findByIdAndUpdate(userID, { $push: { groups: group._id }}, { new: true, runValidators: true, });
+    }
     await group.save();
     res.status(201).send(group);
   } catch (err) {
@@ -95,6 +98,13 @@ groupRouter.patch("/groups", async (req, res) => {
     if (!group) {
       return res.status(404).send();
     }
+    // si en el body se ha cambiado members, actualizar los grupos de los usuarios
+    if (updates.includes("members")) {
+      await User.updateMany({ groups: group._id },{ $pull: { groups: group._id }});
+      for(const userID of req.body.members) {
+        await User.findByIdAndUpdate({ userID }, { $push: { groups: group._id }}, { new: true, runValidators: true, });
+      }
+    }
     return res.status(200).send(group);
   } catch (err) {
     return res.status(400).send(err);
@@ -135,7 +145,7 @@ groupRouter.patch("/groups/:id", async (req, res) => {
     if (updates.includes("members")) {
       await User.updateMany({ groups: group._id },{ $pull: { groups: group._id }});
       for(const userID of req.body.members) {
-        await User.findByIdAndUpdate({ userID }, { $push: { groups: group._id }});
+        await User.findByIdAndUpdate({ userID }, { $push: { groups: group._id }}, { new: true, runValidators: true, });
       }
     }
     return res.status(200).send(group);

@@ -19,15 +19,15 @@ userRouter.post('/users', async (req, res) => {
   try {
     // actualizar los grupos de los que forme parte el usuario
     for (const groupID of user.groups) {
-      await Group.findByIdAndUpdate(groupID, { $push: { members: user._id }});
+      await Group.findByIdAndUpdate(groupID, { $push: { members: user._id }}, { new: true, runValidators: true, });
     }
     // actualizar los usuarios de los challenge que tiene activos
     for (const challengeID of user.activeChallenges) {
-      await Challenge.findByIdAndUpdate(challengeID, { $push: { users: user._id }});
+      await Challenge.findByIdAndUpdate(challengeID, { $push: { users: user._id }}, { new: true, runValidators: true, });
     }
     // actualizar los usuarios de las tutas realizadas
     for (const trackID of user.tracksHistory) {
-      await Track.findByIdAndUpdate(trackID.track, { $push: { users: user._id }});
+      await Track.findByIdAndUpdate(trackID.track, { $push: { users: user._id }}, { new: true, runValidators: true, });
     }
     await user.save()
     return res.status(201).send(user);
