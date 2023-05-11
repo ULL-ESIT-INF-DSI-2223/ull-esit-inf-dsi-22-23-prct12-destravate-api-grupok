@@ -2,6 +2,7 @@ import express from "express";
 import { User } from "../models/user.js";
 import { Group } from "../models/group.js";
 import { Challenge } from "../models/challenge.js";
+import { Track } from "../models/track.js";
 
 export const userRouter = express.Router();
 
@@ -204,6 +205,11 @@ userRouter.delete("/users", async (req, res) => {
     await User.updateMany({ friends: user._id },{ $pull: { friends: user._id }});
     // borrar de los grupos en los que es participante
     await Group.updateMany({ members: user._id },{ $pull: { members: user._id }});
+    // borrar de los retos en los que es participante
+    await Challenge.updateMany({ users: user._id },{ $pull: { users: user._id }});
+    // borrar de las rutas  que ha realizado
+    await Track.updateMany({ users: user._id },{ $pull: { users: user._id }});
+
     await User.findOneAndDelete({ name });
     return res.status(200).send(user);
   } catch (error) {
@@ -222,7 +228,15 @@ userRouter.delete("/users/:id", async (req, res) => {
     if (!user) {
       return res.status(404).send();
     }
+    // borrar de la lista de amigos de los demás usuarios
     await User.updateMany({ friends: user._id },{ $pull: { friends: user._id }});
+    // borrar de los grupos en los que es participante
+    await Group.updateMany({ members: user._id },{ $pull: { members: user._id }});
+    // borrar de los retos en los que es participante
+    await Challenge.updateMany({ users: user._id },{ $pull: { users: user._id }});
+    // borrar de las rutas  que ha realizado
+    await Track.updateMany({ users: user._id },{ $pull: { users: user._id }});
+    
     await User.findByIdAndDelete(userID);
     return res.send(user);
   } catch (error) {

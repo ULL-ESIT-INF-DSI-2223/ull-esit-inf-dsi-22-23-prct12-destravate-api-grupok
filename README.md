@@ -17,43 +17,26 @@ TRABAJO QUE FALTA (CÓDIGO)
 
 User:
 {
-  "name": "Aday",
+  "name": "Aday2",
   "activities": "running",
-  "friends": [],
+  "friends": ["645d342cf4d742296183ddb2"],
   "groups": [],
   "trainingStatistics": {
     "week": { "km": 10, "elevationGain": 100},
     "month": { "km": 20, "elevationGain": 200},
     "year": { "km": 50, "elevationGain": 500}
   },
-  "favouriteTracks": [],
+  "favouriteTracks": ["645d33c8f4d742296183ddaf"],
   "tracksHistory": [ 
     {
       "track": "645d33c8f4d742296183ddaf",
       "date": "1987-09-28"
     }],
-  "activeChallenges": []
+  "activeChallenges": ["645d33aff4d742296183ddad"]
 }
 
 Groups:
-{
-  "name": "Secta",
-  "activities": "running",
-  "members": [],
-  "groups": [],
-  "groupStatistics": {
-    "week": { "km": 10, "elevationGain": 100},
-    "month": { "km": 20, "elevationGain": 200},
-    "year": { "km": 50, "elevationGain": 500}
-  },
-  "favouriteTracks": [],
-  "tracksHistory": [ 
-    {
-      "track": "645d33c8f4d742296183ddaf",
-      "date": "1987-09-28"
-    }],
-  "activeChallenges": []
-}
+
 
 Challenge:
 {
