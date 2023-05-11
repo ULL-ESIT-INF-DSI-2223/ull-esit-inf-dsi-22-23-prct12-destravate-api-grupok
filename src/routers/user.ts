@@ -94,7 +94,7 @@ userRouter.patch("/users", async (req, res) => {
     "activities",
     "friends",
     "groups",
-    "favoriteTracks",
+    "favouriteTracks",
     "activeChallenges",
     "tracksHistory",
   ];
@@ -104,7 +104,7 @@ userRouter.patch("/users", async (req, res) => {
   if (!isValidOperation) {
     return res.status(400).send({ error: "Invalid updates!" });
   }
-  try {
+  try {            
     const user = await User.findOneAndUpdate({ name }, req.body, {
       new: true,
       runValidators: true,
@@ -112,6 +112,27 @@ userRouter.patch("/users", async (req, res) => {
     if (!user) {
       return res.status(404).send();
     }
+        // recorrer updates y actualizar las demas cosas en cada caso
+        for (const update of updates) {
+          switch (update) {
+            case "groups":
+              // borrar de los grupos en los que es participante
+              await Group.updateMany({ members: user._id },{ $pull: { members: user._id }});
+              for(const groupID of req.body.groups) {
+                await Group.findByIdAndUpdate(groupID, { $push: { members: user._id }});
+              }
+            break;
+            case "activeChallenges":
+              // borrar de los challenge en los que es participante
+              await Challenge.updateMany({ users: user._id },{ $pull: { users: user._id }});
+              for(const challengeID of req.body.activeChallenges) {
+                await Challenge.findByIdAndUpdate(challengeID, { $push: { users: user._id }});
+              }
+            break;
+            default:
+            break;
+          }
+        }
     return res.status(200).send(user);
   } catch (err) {
     return res.status(400).send(err);
@@ -130,7 +151,7 @@ userRouter.patch("/users/:id", async (req, res) => {
     "activities",
     "friends",
     "groups",
-    "favoriteTracks",
+    "favouriteTracks",
     "activeChallenges",
     "tracksHistory",
   ];
