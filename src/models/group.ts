@@ -44,6 +44,7 @@ const groupSchema = new Schema<GroupDocumentInterface>({
   favouriteTracks: {
     type: [Schema.Types.ObjectId],
     default: [],
+    ref: 'Track',
   },
   tracksHistory: {
     type: [Object],

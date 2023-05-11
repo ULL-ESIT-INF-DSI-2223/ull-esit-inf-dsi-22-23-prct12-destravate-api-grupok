@@ -21,9 +21,9 @@ userRouter.post('/users', async (req, res) => {
       await Group.findByIdAndUpdate(groupID, { $push: { members: user._id }});
     }
     // actualizar los usuarios de los challenge que tiene activos
-    // for (const challengeID of user.activeChallenges) {
-    //   await Challenge.findByIdAndUpdate(challengeID, { $push: { users: user._id }});
-    // }
+    for (const challengeID of user.activeChallenges) {
+      await Challenge.findByIdAndUpdate(challengeID, { $push: { users: user._id }});
+    }
     await user.save()
     return res.status(201).send(user);
   } catch (err) {
@@ -35,19 +35,34 @@ userRouter.post('/users', async (req, res) => {
  * Get para todos los usuarios o para un usuario en específico mediante nombre usando query
  */
 userRouter.get("/users", async (req, res) => {
-  const { name } = req.query;
+  const name = req.query.name;
   try {
     let users;
     if (name) {
       // Find all users that match the name
-      users = await User.find({ name }).populate({ path: "friends", select: "name"});
+      users = await User.find({ name }).populate(
+        { path: "friends", select: "name"}
+      ).populate(
+        { path: "groups", select: "name"}
+      ).populate(
+        { path: "activeChallenges", select: "name"}
+      ).populate(
+        { path: "favouriteTracks", select: "name"}
+      );
     } else {
       // Find all users
-      users = await User.find().populate({ path: "friends", select: "name"});
+      users = await User.find().populate({ path: "friends", select: "name"}
+      ).populate(
+        { path: "groups", select: "name"}
+      ).populate(
+        { path: "activeChallenges", select: "name"}
+      ).populate(
+        { path: "favouriteTracks", select: "name"}
+      );
     }
     return res.status(200).send(users);
   } catch (err) {
-    return res.status(500).send();
+    return res.status(500).send(err);
   }
 });
 

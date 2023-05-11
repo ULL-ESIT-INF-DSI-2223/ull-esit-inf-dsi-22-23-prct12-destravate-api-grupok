@@ -70,6 +70,22 @@ const userSchema = new Schema<UserDocumentInterface>({
     type: [Schema.Types.ObjectId],
     default: [],
     ref: 'Track',
+    validate: {
+      validator: async function(tracksIds: TrackDocumentInterface[]) {
+        const Track = model('Track');
+        // Verificar que los id de los tracks existen
+        // Verificar cada ID de track
+        for (const trackId of tracksIds) {
+          const track = await Track.findById(trackId);
+          if (!track) {
+            return false; // El ID de track no existe en la base de datos
+          }
+        }
+
+        return true; // Todos los IDs de track existen en la base de datos
+      },
+      message: 'One or more track IDs do not exist.',
+    },  
   },
   activeChallenges: {
     type: [Schema.Types.ObjectId],
@@ -79,6 +95,7 @@ const userSchema = new Schema<UserDocumentInterface>({
   tracksHistory: {
     type: [Object],
     default: [],
+    ref: 'Track',
   },
 });
 

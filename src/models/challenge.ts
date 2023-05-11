@@ -31,10 +31,12 @@ const challengeSchema = new Schema<ChallengeDocumentInterface>({
   users: {
     type: [Schema.Types.ObjectId],
     required: false,
+    ref: 'User',
   },
   tracks: {
     type: [Schema.Types.ObjectId],
     required: false,
+    ref: 'Track',
   },
   activity: {
     type : String, 
