@@ -46,7 +46,7 @@ trackRouter.get("/tracks", async (req, res) => {
 trackRouter.get("/tracks/:id", async (req, res) => {
   const trackID = req.params.id;
   try {
-    const track = await Track.findById(trackID);
+    const track = await Track.findById(trackID).populate({ path: "users", select: "name" });
     if (!track) {
       return res.status(404).send();
     }
