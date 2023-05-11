@@ -7,6 +7,7 @@
 
 - levantar servidor mongodb:  sudo /home/usuario/mongodb/bin/mongod --dbpath /home/usuario/mongodb-data/
 - levantar servidor express: npm run dev (de momento)
+- Para los test: npm run test
 
 
 TRABAJO QUE FALTA (CÓDIGO)
