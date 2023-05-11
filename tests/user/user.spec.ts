@@ -60,7 +60,7 @@ describe('POST /users', () => {
       activities : "running", 
     });
 
-    // expect (response.body._id).to.include({
+    // expect (response.body).to.include({
     //   trainingStatistics: {
     //     week: {
     //       km: 10,
@@ -76,7 +76,7 @@ describe('POST /users', () => {
     //     }
     //   },
     // });
-    /// TODO: trainingStatistics falla: como que no reconoce bien el formato o algo, porque incluirlo lo incluye
+    /// TODO: trainingStatistics falla: como que no reconoce bien el formato o algo, porque incluirlo lo incluye, pero es fallo del test. El programma lo hace bien
 
     
     const secondUser = await User.findById(response.body._id);
@@ -95,14 +95,13 @@ describe('GET /users', () => {
   it('Should get a user by username', async () => {
     const response = await request(app).get('/users?name=Yanfri').expect(200);
     
-
     console.log("//////////////////////////////////////////////////////");
     console.log(response.body);
     console.log("//////////////////////////////////////////////////////");
     
-    expect(response.body).to.include({
-      name: "Yanfri",
-      activities : "running", 
+    expect(response.body[0]).to.include({
+      name: 'Yanfri',
+      activities : 'running', 
     });
     /// TODO: Meter la estadísticas también aquí
   });
