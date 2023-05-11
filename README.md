@@ -27,7 +27,11 @@ User:
     "year": { "km": 50, "elevationGain": 500}
   },
   "favouriteTracks": [],
-  "tracksHistory": [],   // id, "1987-09-28"
+  "tracksHistory": [ 
+    {
+      "track": "645d33c8f4d742296183ddaf",
+      "date": "1987-09-28"
+    }],
   "activeChallenges": []
 }
 
@@ -43,7 +47,11 @@ Groups:
     "year": { "km": 50, "elevationGain": 500}
   },
   "favouriteTracks": [],
-  "tracksHistory": [],   // id, "1987-09-28"
+  "tracksHistory": [ 
+    {
+      "track": "645d33c8f4d742296183ddaf",
+      "date": "1987-09-28"
+    }],
   "activeChallenges": []
 }
 

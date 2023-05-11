@@ -48,6 +48,8 @@ userRouter.get("/users", async (req, res) => {
         { path: "activeChallenges", select: "name"}
       ).populate(
         { path: "favouriteTracks", select: "name"}
+      ).populate(
+        { path: "tracksHistory.track", select: "name"}
       );
     } else {
       // Find all users
@@ -58,6 +60,8 @@ userRouter.get("/users", async (req, res) => {
         { path: "activeChallenges", select: "name"}
       ).populate(
         { path: "favouriteTracks", select: "name"}
+      ).populate(
+        { path: "tracksHistory.track", select: "name"}
       );
     }
     return res.status(200).send(users);
@@ -72,7 +76,15 @@ userRouter.get("/users", async (req, res) => {
 userRouter.get("/users/:id", async (req, res) => {
   const userID = req.params.id;
   try {
-    const user = await User.findById(userID).populate({ path: "friends", select: "name"});
+    const user = await User.findById(userID).populate(
+      { path: "friends", select: "name"}
+    ).populate(
+      { path: "groups", select: "name"}
+    ).populate(
+      { path: "activeChallenges", select: "name"}
+    ).populate(
+      { path: "favouriteTracks", select: "name"}
+    );
     if (!user) {
       return res.status(404).send();
     }
