@@ -13,7 +13,7 @@ export interface UserDocumentInterface extends Document {
   groups: GroupDocumentInterface[]
   trainingStatistics: TrainingStatisticsInterface;
   favouriteTracks: TrackDocumentInterface[];
-  activeChallenges: ChallengeDocumentInterface[]; 
+  activeChallenges: ChallengeDocumentInterface[];   
   tracksHistory: HistoryData[];
 }
 

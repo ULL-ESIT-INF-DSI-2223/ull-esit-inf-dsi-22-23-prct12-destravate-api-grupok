@@ -1,6 +1,7 @@
 import express from "express";
 import { User } from "../models/user.js";
 import { Group } from "../models/group.js";
+import { Challenge } from "../models/challenge.js";
 
 export const userRouter = express.Router();
 
@@ -19,6 +20,10 @@ userRouter.post('/users', async (req, res) => {
     for (const groupID of user.groups) {
       await Group.findByIdAndUpdate(groupID, { $push: { members: user._id }});
     }
+    // actualizar los usuarios de los challenge que tiene activos
+    // for (const challengeID of user.activeChallenges) {
+    //   await Challenge.findByIdAndUpdate(challengeID, { $push: { users: user._id }});
+    // }
     await user.save()
     return res.status(201).send(user);
   } catch (err) {
