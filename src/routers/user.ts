@@ -35,7 +35,7 @@ userRouter.post('/users', async (req, res) => {
  * Get para todos los usuarios o para un usuario en específico mediante nombre usando query
  */
 userRouter.get("/users", async (req, res) => {
-  const { name } = req.query;
+  const name = req.query.name;
   try {
     let users;
     if (name) {
@@ -62,7 +62,7 @@ userRouter.get("/users", async (req, res) => {
     }
     return res.status(200).send(users);
   } catch (err) {
-    return res.status(500).send();
+    return res.status(500).send(err);
   }
 });
 
