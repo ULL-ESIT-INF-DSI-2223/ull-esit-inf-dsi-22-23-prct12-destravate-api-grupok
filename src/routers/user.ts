@@ -49,7 +49,7 @@ userRouter.get("/users", async (req, res) => {
       ).populate(
         { path: "favouriteTracks", select: "name"}
       ).populate(
-        { path: "tracksHistory { id }", select: "name"}
+        { path: "tracksHistory.track", select: "name"}
       );
     } else {
       // Find all users
@@ -60,6 +60,8 @@ userRouter.get("/users", async (req, res) => {
         { path: "activeChallenges", select: "name"}
       ).populate(
         { path: "favouriteTracks", select: "name"}
+      ).populate(
+        { path: "tracksHistory.track", select: "name"}
       );
     }
     return res.status(200).send(users);
