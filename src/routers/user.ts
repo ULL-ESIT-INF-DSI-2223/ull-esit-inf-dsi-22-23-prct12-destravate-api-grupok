@@ -30,10 +30,10 @@ userRouter.get("/users", async (req, res) => {
     let users;
     if (name) {
       // Find all users that match the name
-      users = await User.find({ name });
+      users = await User.find({ name }).populate({ path: "friends", select: "name"});
     } else {
       // Find all users
-      users = await User.find();
+      users = await User.find().populate({ path: "friends", select: "name"});
     }
     return res.status(200).send(users);
   } catch (err) {
@@ -47,7 +47,7 @@ userRouter.get("/users", async (req, res) => {
 userRouter.get("/users/:id", async (req, res) => {
   const userID = req.params.id;
   try {
-    const user = await User.findById(userID);
+    const user = await User.findById(userID).populate({ path: "friends", select: "name"});
     if (!user) {
       return res.status(404).send();
     }
@@ -137,10 +137,13 @@ userRouter.delete("/users", async (req, res) => {
   const name = req.query.name;
 
   try {
-    const user = await User.findOneAndDelete({ name });
+    const user = await User.findOne({ name });
+    //const user = await User.findOneAndDelete({ name });
     if (!user) {
       return res.status(404).send();
     }
+    await User.updateMany({ friends: user._id },{ $pull: { friends: user._id }});
+    await User.findOneAndDelete({ name });
     return res.status(200).send(user);
   } catch (error) {
     return res.status(400).send(error);
@@ -151,11 +154,15 @@ userRouter.delete("/users", async (req, res) => {
  * Delete para eliminar un usuario en específico mediante ID
  */
 userRouter.delete("/users/:id", async (req, res) => {
+  const userID = req.params.id;
   try {
-    const user = await User.findByIdAndDelete(req.params.id);
+    const user = await User.findById(userID);
+    //const user = await User.findByIdAndDelete(req.params.id);
     if (!user) {
       return res.status(404).send();
     }
+    await User.updateMany({ friends: user._id },{ $pull: { friends: user._id }});
+    await User.findByIdAndDelete(userID);
     return res.send(user);
   } catch (error) {
     return res.status(500).send(error);
