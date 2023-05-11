@@ -20,32 +20,33 @@ const firstUser = {
   },
 }
 
-// beforeEach(async () => {
-//   await User.deleteMany();
-//   await new User(firstUser).save();
-// });
+const userToAdd = {
+  name: "Aday",
+  activities : "running",
+  trainingStatistics : {
+    week : { km : 2,
+      elevationGain : 1300,
+    },
+    month : { km : 4,
+      elevationGain : 6,
+    },
+    year : { km : 6,
+      elevationGain : 6,
+    },
+  },
+}
+
+beforeEach(async () => {
+  await User.deleteMany();
+  await new User(firstUser).save();
+});
 
 /// Creamos a los usuarios
 describe('POST /users', () => {
   it('Should successfully create a new user', async () => {
-    const response = await request(app).post('/users').send({
-      name: "Yanfri",
-      activities : "running", 
-      trainingStatistics : {
-        week : { km : 10,
-          elevationGain : 100,
-        },
-        month : { km : 0,
-          elevationGain : 0,
-        },
-        year : { km : 0,
-          elevationGain : 0,
-        },
-      },
-    }).expect(201);
-
+    const response = await request(app).post('/users').send(userToAdd).expect(201);
     expect(response.body).to.include({
-      name: "Yanfri",
+      name: "Aday",
       activities : "running", 
     });
 
@@ -66,11 +67,10 @@ describe('POST /users', () => {
     //   },
     // });
     /// TODO: trainingStatistics falla: como que no reconoce bien el formato o algo, porque incluirlo lo incluye, pero es fallo del test. El programma lo hace bien
-
     
     const secondUser = await User.findById(response.body._id);
     expect(secondUser).not.to.be.null;
-    expect(secondUser?.name).to.equal('Yanfri');
+    expect(secondUser?.name).to.equal('Aday');
   });
 
   /// Introducimos el mismo usuario
@@ -95,17 +95,21 @@ describe('GET /users', () => {
   });
 });
 
-/// TODO: Este no debería poder comprobarse ya que mongodb es el que genera el ID y desde fuera no se puede saber
 /// Get users con el id
-// describe('GET /users/:id', () => {
-//   it('Should get a user by id', async () => {
-//     const response = await request(app).get(`/users/${userAwait._id}`).expect(200);
-//     expect(response.body).to.include({
-//       name: 'Yanfri',
-//       activities : 'running', 
-//     });
-//   });
-// });
+describe('GET /users/:id', () => {
+  it('Should get a user by id', async () => {
+    const awaitUser = await request(app).post('/users').send(userToAdd).expect(201);
+    const response = await request(app).get(`/users/${awaitUser.body._id}`).expect(200);
+    expect(response.body).to.include({
+      name: 'Aday',
+      activities : 'running', 
+    });
+  });
+  
+  it ('Should not get a user by id', async () => {
+    await request(app).get(`/users/idquenoexiste`).expect(404);
+  });
+});
 
 /// Hacemos el patch mediante query
 describe('PATCH /users', () => {
@@ -121,9 +125,29 @@ describe('PATCH /users', () => {
     expect(secondUser).not.to.be.null;
     expect(secondUser?.activities).to.equal('cicling');
   });
+  // TODO: Poner el caso en el que no se ponga un name que exista
+  // TODO: Poner que no se actualice en caso de que el parámetro no cambie
 });
 
-/// Borramos todos los usuarios
-after(async () => {
-  await User.deleteMany();
+/// Patch mediante id
+describe('PATCH /users/:id', () => {
+  it('Should update a user by id', async () => {
+    const awaitUser = await request(app).post('/users').send(userToAdd).expect(201);
+    /// hacemos un get all para ver los usuarios que están dentro ya
+    const getresponse = await request(app).get('/users').expect(200);
+    console.log(getresponse.body);
+    const response = await request(app).patch(`/users/${awaitUser.body._id}`).send({
+                      activities : "cicling",
+                    }).expect(200);
+
+    expect(response.body).to.include({
+      name: 'Aday',
+      activities : 'cicling',
+    });
+  });
 });
+
+// /// Borramos todos los usuarios
+// after(async () => {
+//   await User.deleteMany();
+// });
