@@ -29,7 +29,11 @@ groupRouter.get("/groups", async (req, res) => {
   const filter = req.query.name ? { name: req.query.name.toString() } : {};
 
   try {
-    const groups = await Group.find(filter);
+    const groups = await Group.find(filter).populate(
+      { path: "members", select: "name"}
+    ).populate(
+      { path: "favouriteTracks", select: "name"}
+    );
 
     if (groups.length !== 0) {
       return res.send(groups);
@@ -46,7 +50,12 @@ groupRouter.get("/groups", async (req, res) => {
 groupRouter.get("/groups/:id", async (req, res) => {
   const groupID = req.params.id;
   try {
-    const group = await Group.findById(groupID);
+    const group = await Group.findById(groupID).populate(
+      { path: "members", select: "name"}
+    ).populate(
+      { path: "favouriteTracks", select: "name"}
+    );
+    
     if (!group) {
       return res.status(404).send();
     }
