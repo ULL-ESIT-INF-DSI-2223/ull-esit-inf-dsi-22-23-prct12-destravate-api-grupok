@@ -69,7 +69,7 @@ userRouter.get("/users", async (req, res) => {
         { path: "tracksHistory.track", select: "name"}
       );
     }
-    if (!users) {
+    if (users.length === 0) {
       return res.status(404).send();
     }
     return res.status(200).send(users);
