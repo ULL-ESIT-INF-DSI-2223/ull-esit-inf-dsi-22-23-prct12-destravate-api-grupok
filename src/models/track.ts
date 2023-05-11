@@ -8,7 +8,7 @@ export interface TrackDocumentInterface extends Document {
   endCoordinates: [number, number]; // [lat, long]
   length: number;
   grade: number;
-  users: [UserDocumentInterface, Date][]; // let birthday: Date = new Date(1990, 2, 15); // 15 de marzo de 1990
+  users: [UserDocumentInterface]; // let birthday: Date = new Date(1990, 2, 15); // 15 de marzo de 1990
   activities: Activity;
   rating: number;
 }
@@ -49,7 +49,7 @@ const trackSchema = new Schema<TrackDocumentInterface>({
     }
   },
   users: {
-    type: [[Schema.Types.ObjectId, String]],
+    type: [Schema.Types.ObjectId],
     default: [],
     //ref: 'User',
   },
