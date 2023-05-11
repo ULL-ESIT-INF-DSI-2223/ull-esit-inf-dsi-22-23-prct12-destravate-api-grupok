@@ -25,6 +25,10 @@ userRouter.post('/users', async (req, res) => {
     for (const challengeID of user.activeChallenges) {
       await Challenge.findByIdAndUpdate(challengeID, { $push: { users: user._id }});
     }
+    // actualizar los usuarios de las tutas realizadas
+    for (const trackID of user.tracksHistory) {
+      await Track.findByIdAndUpdate(trackID.track, { $push: { users: user._id }});
+    }
     await user.save()
     return res.status(201).send(user);
   } catch (err) {
