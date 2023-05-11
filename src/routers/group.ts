@@ -123,7 +123,6 @@ groupRouter.patch("/groups/:id", async (req, res) => {
     return res.status(400).send({ error: "Invalid updates!" });
   }
   try {
-    
     const group = await Group.findByIdAndUpdate(
       { groupID }, 
       req.body, 
@@ -131,6 +130,13 @@ groupRouter.patch("/groups/:id", async (req, res) => {
     );
     if (!group) {
       return res.status(404).send();
+    }
+    // si en el body se ha cambiado members, actualizar los grupos de los usuarios
+    if (updates.includes("members")) {
+      await User.updateMany({ groups: group._id },{ $pull: { groups: group._id }});
+      for(const userID of req.body.members) {
+        await User.findByIdAndUpdate({ userID }, { $push: { groups: group._id }});
+      }
     }
     return res.status(200).send(group);
   } catch (err) {

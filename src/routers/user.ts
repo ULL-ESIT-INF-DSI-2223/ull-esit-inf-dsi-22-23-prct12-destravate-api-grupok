@@ -139,14 +139,14 @@ userRouter.patch("/users", async (req, res) => {
           // borrar de los grupos en los que es participante
           await Group.updateMany({ members: user._id },{ $pull: { members: user._id }});
           for(const groupID of req.body.groups) {
-            await Group.findByIdAndUpdate(groupID, { $push: { members: user._id }});
+            await Group.findByIdAndUpdate(groupID, { $push: { members: user._id }}, { new: true, runValidators: true, });
           }
         break;
         case "activeChallenges":
           // borrar de los challenge en los que es participante
           await Challenge.updateMany({ users: user._id },{ $pull: { users: user._id }});
           for(const challengeID of req.body.activeChallenges) {
-            await Challenge.findByIdAndUpdate(challengeID, { $push: { users: user._id }});
+            await Challenge.findByIdAndUpdate(challengeID, { $push: { users: user._id }}, { new: true, runValidators: true, });
           }
         break;
         case "tracksHistory":
@@ -154,7 +154,7 @@ userRouter.patch("/users", async (req, res) => {
           await Track.updateMany({ users: user._id },{ $pull: { users: user._id }});
           for(const track of req.body.tracksHistory) {
             const trackID = track.track;
-            await Track.findByIdAndUpdate(trackID, { $push: { users: user._id }});
+            await Track.findByIdAndUpdate(trackID, { $push: { users: user._id }}, { new: true, runValidators: true, });
           }
         break;
         default:
@@ -205,22 +205,22 @@ userRouter.patch("/users/:id", async (req, res) => {
           // borrar de los grupos en los que es participante
           await Group.updateMany({ members: user._id },{ $pull: { members: user._id }});
           for(const groupID of req.body.groups) {
-            await Group.findByIdAndUpdate(groupID, { $push: { members: user._id }});
+            await Group.findByIdAndUpdate(groupID, { $push: { members: user._id }}, { new: true, runValidators: true, });
           }
         break;
         case "activeChallenges":
           // borrar de los challenge en los que es participante
           await Challenge.updateMany({ users: user._id },{ $pull: { users: user._id }});
           for(const challengeID of req.body.activeChallenges) {
-            await Challenge.findByIdAndUpdate(challengeID, { $push: { users: user._id }});
+            await Challenge.findByIdAndUpdate(challengeID, { $push: { users: user._id }}, { new: true, runValidators: true, });
           }
         break;
         case "tracksHistory":
           // borrar de los tracks en los que es participante
-          await Track.updateMany({ users: user._id },{ $pull: { users: user._id }});
+          await Track.updateMany({ users: user._id },{ $pull: { users: user._id }},);
           for(const track of req.body.tracksHistory) {
             const trackID = track.track;
-            await Track.findByIdAndUpdate(trackID, { $push: { users: user._id }});
+            await Track.findByIdAndUpdate(trackID, { $push: { users: user._id }}, { new: true, runValidators: true, });
           }
         break;
         default:
