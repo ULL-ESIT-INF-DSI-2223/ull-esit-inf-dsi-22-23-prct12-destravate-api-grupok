@@ -94,11 +94,6 @@ describe('POST /users', () => {
 describe('GET /users', () => {
   it('Should get a user by username', async () => {
     const response = await request(app).get('/users?name=Yanfri').expect(200);
-    
-    console.log("//////////////////////////////////////////////////////");
-    console.log(response.body);
-    console.log("//////////////////////////////////////////////////////");
-    
     expect(response.body[0]).to.include({
       name: 'Yanfri',
       activities : 'running', 
@@ -111,6 +106,7 @@ describe('GET /users', () => {
   });
 });
 
+/// TODO: Este no debería poder comprobarse ya que mongodb es el que genera el ID y desde fuera no se puede saber
 /// Get users con el id
 // describe('GET /users/:id', () => {
 //   it('Should get a user by id', async () => {
@@ -118,6 +114,22 @@ describe('GET /users', () => {
 //     await request(app).get(`/users/${response.body[0]._id}`).expect(200);
 //   });
 // });
+
+/// Ahora comprobamos la actualización de los campos mediante query
+describe('PATCH /users', () => {
+  it('Should update a user by query', async () => {
+    const response = await request(app).patch(`/users?name=Yanfri`).send({
+                      activities : "cicling",
+                    }).expect(200);
+    expect(response.body).to.include({
+      name: 'Yanfri',
+      activities : 'cicling', 
+    });
+    const secondUser = await User.findById(response.body._id);
+    expect(secondUser).not.to.be.null;
+    expect(secondUser?.activities).to.equal('cicling');
+  });
+});
 
 /// Borramos todos los usuarios
 after(async () => {
