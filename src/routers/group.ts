@@ -1,5 +1,6 @@
 import express from "express";
 import { Group } from "../models/group.js";
+import { User } from "../models/user.js";
 
 export const groupRouter = express.Router();
 
@@ -122,6 +123,7 @@ groupRouter.patch("/groups/:id", async (req, res) => {
     return res.status(400).send({ error: "Invalid updates!" });
   }
   try {
+    
     const group = await Group.findByIdAndUpdate(
       { groupID }, 
       req.body, 
@@ -147,6 +149,8 @@ groupRouter.delete("/groups", async (req, res) => {
     if (!group) {
       return res.status(404).send();
     }
+    // borrar el grupo de los usuarios que lo tienen
+    await User.updateMany({ groups: group._id },{ $pull: { groups: group._id }});
     return res.status(200).send(group);
   } catch (error) {
     return res.status(400).send(error);
@@ -162,6 +166,9 @@ groupRouter.delete("/groups/:id", async (req, res) => {
     if (!group) {
       return res.status(404).send();
     }
+    // borrar el grupo de los usuarios que lo tienen
+    await User.updateMany({ groups: group._id },{ $pull: { groups: group._id }});
+
     return res.send(group);
   } catch (error) {
     return res.status(500).send(error);
