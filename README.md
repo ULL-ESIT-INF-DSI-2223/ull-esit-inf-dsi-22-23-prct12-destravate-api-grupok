@@ -3,6 +3,7 @@
 
 - Editar Typedoc
 - Workflow ignorados (los tiene Aday en su pc)
+- Entry points de la documentación
 
 - levantar servidor mongodb:  sudo /home/usuario/mongodb/bin/mongod --dbpath /home/usuario/mongodb-data/
 - levantar servidor express: npm run dev (de momento)
