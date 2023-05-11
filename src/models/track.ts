@@ -50,7 +50,8 @@ const trackSchema = new Schema<TrackDocumentInterface>({
   },
   users: {
     type: [[Schema.Types.ObjectId, String]],
-    required: false,
+    default: [],
+    //ref: 'User',
   },
   activities: {
     type : String, 

@@ -29,7 +29,11 @@ challengeRouter.get("/challenges", async (req, res) => {
   const filter = req.query.name ? { name: req.query.name.toString() } : {};
 
   try {
-    const challenges = await Challenge.find(filter);
+    const challenges = await Challenge.find(filter).populate(
+      { path: "users", select: "name"}
+    ).populate(
+      { path: "tracks", select: "name"}
+    );
 
     if (challenges.length !== 0) {
       return res.send(challenges);
@@ -46,7 +50,12 @@ challengeRouter.get("/challenges", async (req, res) => {
 challengeRouter.get("/challenges/:id", async (req, res) => {
   const challengeID = req.params.id;
   try {
-    const challenge = await Challenge.findById(challengeID);
+    const challenge = await Challenge.findById(challengeID).populate(
+      { path: "users", select: "name"}
+    ).populate(
+      { path: "tracks", select: "name"}
+    );
+
     if (!challenge) {
       return res.status(404).send();
     }
