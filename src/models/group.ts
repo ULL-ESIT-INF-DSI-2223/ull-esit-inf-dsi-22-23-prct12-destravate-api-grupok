@@ -24,6 +24,20 @@ const groupSchema = new Schema<GroupDocumentInterface>({
     type: [Schema.Types.ObjectId],
     default: [],
     ref: 'User',
+    validate: {
+      validator: async function() {
+        // Verificar que no haya usuarios repetidos en el array
+        const existingMembers = await this.$model('User').countDocuments({
+          _id: { $in: this.members },
+        });
+      
+        if (existingMembers !== this.members.length) {
+          return false;
+        }
+        return true;
+      },
+      message: props => `Invalid members, some duplicated id: ${JSON.stringify(props.value)}`
+    }
   },
   groupStatistics: {
     type: Object,
