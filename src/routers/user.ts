@@ -40,7 +40,17 @@ userRouter.get("/users", async (req, res) => {
     let users;
     if (name) {
       // Find all users that match the name
-      users = await User.find({ name }).populate({ path: "friends", select: "name"});
+      users = await User.find({ name }).populate(
+        { path: "friends", select: "name"}
+      ).populate(
+        { path: "groups", select: "name"}
+      ).populate(
+        { path: "activeChallenges", select: "name"}
+      ).populate(
+        { path: "favoriteTracks", select: "name"}
+      ).populate(
+        { path: "tracksHistory", select: "name"}
+      );
     } else {
       // Find all users
       users = await User.find().populate({ path: "friends", select: "name"});

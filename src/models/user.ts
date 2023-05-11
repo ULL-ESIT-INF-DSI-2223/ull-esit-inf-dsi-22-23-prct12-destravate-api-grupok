@@ -79,6 +79,7 @@ const userSchema = new Schema<UserDocumentInterface>({
   tracksHistory: {
     type: [Object],
     default: [],
+    ref: 'Track',
   },
 });
 
