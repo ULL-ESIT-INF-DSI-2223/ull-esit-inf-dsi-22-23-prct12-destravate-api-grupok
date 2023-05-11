@@ -21,9 +21,9 @@ userRouter.post('/users', async (req, res) => {
       await Group.findByIdAndUpdate(groupID, { $push: { members: user._id }});
     }
     // actualizar los usuarios de los challenge que tiene activos
-    // for (const challengeID of user.activeChallenges) {
-    //   await Challenge.findByIdAndUpdate(challengeID, { $push: { users: user._id }});
-    // }
+    for (const challengeID of user.activeChallenges) {
+      await Challenge.findByIdAndUpdate(challengeID, { $push: { users: user._id }});
+    }
     await user.save()
     return res.status(201).send(user);
   } catch (err) {
