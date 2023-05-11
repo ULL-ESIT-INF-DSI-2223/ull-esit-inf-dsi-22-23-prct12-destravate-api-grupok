@@ -20,21 +20,10 @@ const firstUser = {
   },
 }
 
-// const secondUser = {
-//   name: "Aday",
-//   activities : "running",
-//   trainingStatistics : {
-//     week : { km : 10,
-//       elevationGain : 100,
-//     },
-//     month : { km : 0,
-//       elevationGain : 0,
-//     },
-//     year : { km : 0,
-//       elevationGain : 0,
-//     },
-//   },
-// }
+// beforeEach(async () => {
+//   await User.deleteMany();
+//   await new User(firstUser).save();
+// });
 
 /// Creamos a los usuarios
 describe('POST /users', () => {
@@ -110,12 +99,15 @@ describe('GET /users', () => {
 /// Get users con el id
 // describe('GET /users/:id', () => {
 //   it('Should get a user by id', async () => {
-//     const response = await request(app).get('/users?name=Yanfri').expect(200);
-//     await request(app).get(`/users/${response.body[0]._id}`).expect(200);
+//     const response = await request(app).get(`/users/${userAwait._id}`).expect(200);
+//     expect(response.body).to.include({
+//       name: 'Yanfri',
+//       activities : 'running', 
+//     });
 //   });
 // });
 
-/// Ahora comprobamos la actualización de los campos mediante query
+/// Hacemos el patch mediante query
 describe('PATCH /users', () => {
   it('Should update a user by query', async () => {
     const response = await request(app).patch(`/users?name=Yanfri`).send({
