@@ -47,7 +47,7 @@ userRouter.get("/users", async (req, res) => {
       ).populate(
         { path: "activeChallenges", select: "name"}
       ).populate(
-        { path: "favoriteTracks", select: "name"}
+        { path: "favouriteTracks", select: "name"}
       ).populate(
         { path: "tracksHistory", select: "name"}
       );
