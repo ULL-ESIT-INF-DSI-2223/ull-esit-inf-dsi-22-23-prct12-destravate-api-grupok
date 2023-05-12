@@ -1,6 +1,11 @@
 {
   "entryPoints": [
-    "./src/ejercicio-pe/*",
+    "./src/*",
+    "./db/*",
+    "./enums/*",
+    "./interfaces/*",
+    "./models/*",
+    "./routers/*",
   ],
   "out": "./docs"
 }

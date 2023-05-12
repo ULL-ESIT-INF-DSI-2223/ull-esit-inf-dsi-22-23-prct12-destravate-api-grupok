@@ -239,9 +239,6 @@ En este caso, el id de los amigos se almacena como un array de usuarios, usando 
 
 
 
-- Editar Typedoc
-- Workflow ignorados (los tiene Aday en su pc)
-- Entry points de la documentación
 
 - levantar servidor mongodb:  sudo /home/usuario/mongodb/bin/mongod --dbpath /home/usuario/mongodb-data/
 - levantar servidor express: npm run dev (de momento)
@@ -249,8 +246,7 @@ En este caso, el id de los amigos se almacena como un array de usuarios, usando 
 
 
 TRABAJO QUE FALTA (CÓDIGO)
-- Ver que hacer con el ranking de group
-- Linkear todo
+- Test de linkear todo
 
 
 User:
