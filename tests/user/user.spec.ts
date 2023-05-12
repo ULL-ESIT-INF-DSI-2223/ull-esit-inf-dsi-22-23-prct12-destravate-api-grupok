@@ -3,7 +3,6 @@ import request from 'supertest';
 import { app } from '../../src/app.js';
 import { User } from '../../src/models/user.js';
 
-/// Creamos 2 usuarios para hacer las pruebas
 const firstUser = {
   name: "Yanfri",
   activities : "running", 
@@ -41,7 +40,7 @@ beforeEach(async () => {
   await new User(firstUser).save();
 });
 
-/// Creamos a los usuarios
+
 describe('POST /users', () => {
   it('Should successfully create a new user', async () => {
     const response = await request(app).post('/users').send(userToAdd).expect(201);
@@ -50,24 +49,12 @@ describe('POST /users', () => {
       activities : "running", 
     });
 
-    // expect (response.body).to.include({
-    //   trainingStatistics: {
-    //     week: {
-    //       km: 10,
-    //       elevationGain: 100
-    //     },
-    //     month: {
-    //       km: 0,
-    //       elevationGain: 0
-    //     },
-    //     year: {
-    //       km: 0,
-    //       elevationGain: 0
-    //     }
-    //   },
-    // });
-    /// TODO: trainingStatistics falla: como que no reconoce bien el formato o algo, porque incluirlo lo incluye, pero es fallo del test. El programma lo hace bien
-    
+    expect(response.body.trainingStatistics).to.eql({
+      week: { km: 2, elevationGain: 1300 },
+      month: { km: 4, elevationGain: 6 },
+      year: { km: 6, elevationGain: 6 }
+    });
+ 
     const secondUser = await User.findById(response.body._id);
     expect(secondUser).not.to.be.null;
     expect(secondUser?.name).to.equal('Aday');
@@ -79,7 +66,7 @@ describe('POST /users', () => {
   });
 });
 
-/// Get users con el query
+
 describe('GET /users', () => {
   it('Should get a user by username', async () => {
     const response = await request(app).get('/users?name=Yanfri').expect(200);
@@ -87,7 +74,13 @@ describe('GET /users', () => {
       name: 'Yanfri',
       activities : 'running', 
     });
-    /// TODO: Meter la estadísticas también aquí
+
+    expect(response.body[0].trainingStatistics).to.eql({
+      week: { km: 10, elevationGain: 100 },
+      month: { km: 0, elevationGain: 0 },
+      year: { km: 0, elevationGain: 0 }
+    });
+
   });
 
   it('Should not find a user by username', async () => {
@@ -95,7 +88,7 @@ describe('GET /users', () => {
   });
 });
 
-/// Get users con el id
+
 describe('GET /users/:id', () => {
   it('Should get a user by id', async () => {
     const awaitUser = await request(app).post('/users').send(userToAdd).expect(201);
@@ -116,7 +109,7 @@ describe('GET /users/:id', () => {
 
 });
 
-/// Hacemos el patch mediante query
+
 describe('PATCH /users', () => {
   it('Should update a user by query', async () => {
     const response = await request(app).patch(`/users?name=Yanfri`).send({
@@ -138,7 +131,7 @@ describe('PATCH /users', () => {
   });
 });
 
-/// Patch mediante id
+
 describe('PATCH /users/:id', () => {
   it('Should update a user by id', async () => {
     const awaitUser = await request(app).post('/users').send(userToAdd).expect(201);
@@ -168,7 +161,7 @@ describe('PATCH /users/:id', () => {
   });
 });
 
-/// Borramos un usuario mediante query
+
 describe('DELETE /users', () => {
   it('Should delete a user by query', async () => {
     const response = await request(app).delete(`/users?name=Yanfri`).expect(200);
@@ -185,7 +178,6 @@ describe('DELETE /users', () => {
   });
 });
 
-/// Borramos un usuario mediante id
 describe('DELETE /users/:id', () => {
   it('Should delete a user by id', async () => {
     const awaitUser = await request(app).post('/users').send(userToAdd).expect(201);
@@ -205,8 +197,6 @@ describe('DELETE /users/:id', () => {
   });
 });
   
-
-/// Borramos todos los usuarios
 after(async () => {
   await User.deleteMany();
 });
