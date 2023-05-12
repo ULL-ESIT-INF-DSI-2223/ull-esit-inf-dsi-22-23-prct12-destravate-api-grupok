@@ -10,8 +10,8 @@ Esta práctica consiste en desarrollar una API REST con Node.js y Express para l
 
 La API debe ofrecer distintas funcionalidades, para los distintos puntos de acceso o rutas de esta. La api se basa en el seguimiento de actividades deportivas, por lo que se ofrecerán funcionalidades para gestionar usuarios, grupos, retos y rutas. Para cada uno de estos elementos se ofrecerán las operaciones CRUD. Algo común en todos es que la operación de consulta, modificación y borrado se puede realizar de dos formas, o bien utilizando una query string por el nombre de lo que se consulte, o bien utilizando el id único de dicho elemento como parametro de la ruta de acceso.
 
-* http://localhost:3000/userss?name=ejemplo -> Consulta de usuarios por nombre
-* http://localhost:3000/userss/5f9e9b0a1c9d440000d1b0b0 -> Consulta de usuarios por id único
+* http://localhost:3000/users?name=ejemplo -> Consulta de usuarios por nombre
+* http://localhost:3000/users/5f9e9b0a1c9d440000d1b0b0 -> Consulta de usuarios por id único
 
 ### Track
 
