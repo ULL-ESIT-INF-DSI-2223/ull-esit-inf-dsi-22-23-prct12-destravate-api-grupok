@@ -133,11 +133,10 @@ groupRouter.patch("/groups/:id", async (req, res) => {
     return res.status(400).send({ error: "Invalid updates!" });
   }
   try {
-    const group = await Group.findByIdAndUpdate(
-      { groupID }, 
-      req.body, 
-      { new: true, runValidators: true, }
-    );
+    const group = await Group.findByIdAndUpdate(groupID , req.body, { 
+      new: true, 
+      runValidators: true, 
+    });
     if (!group) {
       return res.status(404).send();
     }
