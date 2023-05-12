@@ -41,7 +41,7 @@ Groups:
 Challenge:
 {
   "name": "Ironman",
-  "tracks" [],
+  "tracks": [],
   "activity": "running",
   "length": 45,
   "users": []
