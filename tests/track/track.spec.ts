@@ -121,8 +121,8 @@ describe('PATCH /tracks', () => {
 
   it ('Should not update a track by query if does not exist', async () => {
     await request(app).patch(`/tracks?name=NoSoyRutaDeLaBDD`).send({
-                      activities : "cicling",
-                    }).expect(400);
+                      activities : "cycling",
+                    }).expect(404);
   });
 });
 

@@ -121,7 +121,7 @@
 
 //   it ('Should not update a group by query if does not exist', async () => {
 //     await request(app).patch(`/groups?name=NoSoyRutaDeLaBDD`).send({
-//                       activities : "cicling",
+//                       activities : "cycling",
 //                     }).expect(400);
 //   });
 // });

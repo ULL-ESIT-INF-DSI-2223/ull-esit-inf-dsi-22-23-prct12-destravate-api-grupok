@@ -145,8 +145,8 @@ describe('PATCH /users', () => {
 
   it ('Should not update a user by query if does not exist', async () => {
     await request(app).patch(`/users?name=NoSoyUsuarioDeLaBDD`).send({
-                      activities : "cicling",
-                    }).expect(400);
+                      activities : "cycling",
+                    }).expect(404);
   });
 });
 

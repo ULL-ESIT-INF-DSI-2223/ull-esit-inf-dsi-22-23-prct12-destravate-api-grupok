@@ -97,7 +97,7 @@ describe('PATCH /challenges', () => {
   it ('Should not update a challenge by query if does not exist', async () => {
     await request(app).patch(`/challenges?name=NoSoyRutaDeLaBDD`).send({
                       activities : "cycling",
-                    }).expect(400);
+                    }).expect(404);
   });
 });
 
