@@ -1,5 +1,6 @@
 import express from "express";
 import { Challenge } from "../models/challenge.js";
+import { User } from "../models/user.js";
 
 export const challengeRouter = express.Router();
 
@@ -15,6 +16,10 @@ challengeRouter.post("/challenges", async (req, res) => {
   const challenge = new Challenge(req.body);
 
   try {
+    // actualizar los usuarios de los que forme parte el challenge
+    for (const userID of challenge.users) {
+      await User.findByIdAndUpdate(userID, { $push: { activeChallenges: challenge._id }}, { new: true, runValidators: true, });
+    }
     await challenge.save();
     res.status(201).send(challenge);
   } catch (err) {
@@ -93,6 +98,13 @@ challengeRouter.patch("/challenges", async (req, res) => {
     if (!challenge) {
       return res.status(404).send();
     }
+    // si se actualiza la lista de usuarios, actualizar los usuarios de los que forma parte el challenge
+    if (updates.includes("users")) {
+      await User.updateMany({ activeChallenges: challenge._id }, { $pull: { activeChallenges: challenge._id }});
+      for (const userID of challenge.users) {
+        await User.findByIdAndUpdate(userID, { $push: { activeChallenges: challenge._id }}, { new: true, runValidators: true, });
+      }
+    }
     return res.status(200).send(challenge);
   } catch (err) {
     return res.status(400).send(err);
@@ -127,6 +139,13 @@ challengeRouter.patch("/challenges/:id", async (req, res) => {
     if (!challenge) {
       return res.status(404).send();
     }
+    // si se actualiza la lista de usuarios, actualizar los usuarios de los que forma parte el challenge
+    if (updates.includes("users")) {
+      await User.updateMany({ activeChallenges: challenge._id }, { $pull: { activeChallenges: challenge._id }});
+      for (const userID of challenge.users) {
+        await User.findByIdAndUpdate(userID, { $push: { activeChallenges: challenge._id }}, { new: true, runValidators: true, });
+      }
+    }
     return res.status(200).send(challenge);
   } catch (err) {
     return res.status(400).send(err);
@@ -138,12 +157,14 @@ challengeRouter.patch("/challenges/:id", async (req, res) => {
  */
 challengeRouter.delete("/challenges", async (req, res) => {
   const name = req.query.name;
-
   try {
-    const challenge = await Challenge.findOneAndDelete({ name });
+    const challenge = await Challenge.findOne({ name });
     if (!challenge) {
       return res.status(404).send();
     }
+    // actualizar los usuarios de los que forma parte el challenge
+    await User.updateMany({ activeChallenges: challenge._id }, { $pull: { activeChallenges: challenge._id }});
+    await Challenge.findOneAndDelete({ name });
     return res.status(200).send(challenge);
   } catch (error) {
     return res.status(400).send(error);
@@ -156,10 +177,13 @@ challengeRouter.delete("/challenges", async (req, res) => {
 challengeRouter.delete("/challenges/:id", async (req, res) => {
   const challengeID = req.params.id;
   try {
-    const challenge = await Challenge.findByIdAndDelete(challengeID);
+    const challenge = await Challenge.findById(challengeID);
     if (!challenge) {
       return res.status(404).send();
     }
+    // actualizar los usuarios de los que forma parte el challenge
+    await User.updateMany({ activeChallenges: challenge._id }, { $pull: { activeChallenges: challenge._id }});
+    await Challenge.findByIdAndDelete(challengeID);
     return res.send(challenge);
   } catch (error) {
     return res.status(500).send(error);
