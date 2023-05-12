@@ -153,7 +153,8 @@ trackRouter.delete("/tracks", async (req, res) => {
     }
 
     // borrar de la historico de rutas de un usuario
-    await User.updateMany({ tracksHistory: {track: track._id} },{ $pull: { tracksHistory: {track: track._id} }});
+    // await User.updateMany({ tracksHistory: {track: track._id} },{ $pull: { tracksHistory: {track: track._id} }});
+    await User.updateMany({ tracksHistory: { $elemMatch: { 0: track._id } } },{ $pull: { tracksHistory: { 0: track._id } } });
     // borrar de las rutas favoritas de un usuario
     await User.updateMany({ favouriteTracks: track._id },{ $pull: { favouriteTracks: track._id} });
     // borrar ruta de los retos en los que se incluye
