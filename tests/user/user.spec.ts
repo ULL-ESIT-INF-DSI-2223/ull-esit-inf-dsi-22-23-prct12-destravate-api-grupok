@@ -63,6 +63,26 @@ describe('POST /users', () => {
   it('Should get an error', async () => {
     await request(app).post('/users').send(firstUser).expect(400);
   });
+
+  it('Should get an error if the trainingStatistics are invalid', async () => {
+    await request(app).post('/users').send({
+      name: "Aday",
+      activities : "running",
+      trainingStatistics : {
+        week : { km : "äsdasd",
+          elevationGain : "soy una estadística mala",
+        },
+        month : { km : 4,
+          elevationGain : 6,
+        },
+        year : { km : 6,
+          elevationGain : 6,
+        },
+        invalid : "invalid",
+      },
+    }).expect(400);
+  });
+
 });
 
 
