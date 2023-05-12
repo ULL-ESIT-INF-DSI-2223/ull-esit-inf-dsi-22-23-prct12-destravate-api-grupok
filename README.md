@@ -635,8 +635,11 @@ El código de la implementación de esta operación es el siguiente:
 TRABAJO QUE FALTA (CÓDIGO)
 - Test de linkear todo
 
+## Ejemplos de uso
+Aquí se
 
 User:
+
 {
   "name": "Aday2",
   "activity": "running",
