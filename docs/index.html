@@ -26,8 +26,8 @@
 </a>
 <p>La API debe ofrecer distintas funcionalidades, para los distintos puntos de acceso o rutas de esta. La api se basa en el seguimiento de actividades deportivas, por lo que se ofrecerán funcionalidades para gestionar usuarios, grupos, retos y rutas. Para cada uno de estos elementos se ofrecerán las operaciones CRUD. Algo común en todos es que la operación de consulta, modificación y borrado se puede realizar de dos formas, o bien utilizando una query string por el nombre de lo que se consulte, o bien utilizando el id único de dicho elemento como parametro de la ruta de acceso.</p>
 <ul>
-<li><a href="http://localhost:3000/userss?name=ejemplo">http://localhost:3000/userss?name=ejemplo</a> -&gt; Consulta de usuarios por nombre</li>
-<li><a href="http://localhost:3000/userss/5f9e9b0a1c9d440000d1b0b0">http://localhost:3000/userss/5f9e9b0a1c9d440000d1b0b0</a> -&gt; Consulta de usuarios por id único</li>
+<li><a href="http://localhost:3000/users?name=ejemplo">http://localhost:3000/users?name=ejemplo</a> -&gt; Consulta de usuarios por nombre</li>
+<li><a href="http://localhost:3000/users/5f9e9b0a1c9d440000d1b0b0">http://localhost:3000/users/5f9e9b0a1c9d440000d1b0b0</a> -&gt; Consulta de usuarios por id único</li>
 </ul>
 
 <a href="#track" id="track" style="color: inherit; text-decoration: none;">
@@ -286,8 +286,8 @@
 </a>
 <p>Para la ejecucicón de la API, hay que seguir un procedimiento, el cual es la ejecución del servidor en MongoDB, y luego la ejecución del servidor en express o la pruebas, según lo que se desee. Los comandos son:</p>
 <ul>
-<li>Servidor mongodb:  <code>sudo /home/usuario/mongodb/bin/mongod --dbpath /home/usuario/mongodb-data/</code></li>
-<li>Servidor express: <code>npm run dev (de momento)</code></li>
+<li>Servidor mongodb: <code>sudo /home/usuario/mongodb/bin/mongod --dbpath /home/usuario/mongodb-data/</code></li>
+<li>Servidor express: <code>npm run dev</code></li>
 <li>Test: <code>npm run test</code></li>
 </ul>
 <p>Podremos acceder al servidor mediante la dirección http <code>http://localhost:3000</code> mediante operaciones CRUD, donde se utilizan cuerpos en formato JSON. Se ofrecen distintos ejemplos usados a lo largo del desarrollo, los cuales se pueden emplear como plantillas para hacer solicitudes (Recordar eliminar los ID porque aparecerán errores si no encuentan dichos id en la base de datos):</p>
