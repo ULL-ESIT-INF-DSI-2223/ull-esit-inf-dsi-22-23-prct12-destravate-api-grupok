@@ -322,17 +322,96 @@ Viendo punto por punto, comenzando por el atributo `name`, vemos que es de tipo 
 
 El atributo `activity` es de tipo `String`, es requerido y se le aplica una validación para que el valor sea uno de los valores del enumerado `Activity`. 
 
-El atributo `friends` es de tipo `Schema.Types.ObjectId`, es decir, es un array de ids de usuarios, es requerido, por defecto es un array vacío y se le aplica una validación para que no haya ids repetidos en el array. 
+El atributo `friends` es un array de tipo `Schema.Types.ObjectId`, es decir, es un array de ids de usuarios, es requerido, por defecto es un array vacío y se le aplica una validación para que no haya ids repetidos en el array y a la vez que todos los ids de usuarios existan en la base de datos.
 
-El atributo `groups` es de tipo `Schema.Types.ObjectId`, es decir, es un array de ids de grupos, es requerido, por defecto es un array vacío. 
+El atributo `groups` es un array de tipo `Schema.Types.ObjectId`, es decir, es un array de ids de grupos, es requerido, por defecto es un array vacío. 
 
-El atributo `trainingStatistics` es de tipo `Object`, es requerido y se le aplica una validación para que tenga los atributos de la interfaz de estadísticas de entrenamiento comentada anteriormente. 
+El atributo `trainingStatistics` es de tipo `Object`, es requerido y se le aplica una validación para comprobar que tenga los atributos de la interfaz de estadísticas de entrenamiento comentada anteriormente. 
 
-El atributo `favouriteTracks` es de tipo `Schema.Types.ObjectId`, es decir, es un array de ids de rutas, es requerido, por defecto es un array vacío y se le aplica una validación para que todos los ids de rutas existan en la base de datos. 
+El atributo `favouriteTracks` es un array de tipo `Schema.Types.ObjectId`, es decir, es un array de ids de rutas, es requerido, por defecto es un array vacío y se le aplica una validación para que todos los ids de rutas existan en la base de datos. 
 
-El atributo `activeChallenges` es de tipo `Schema.Types.ObjectId`, es decir, es un array de ids de retos, es requerido, por defecto es un array vacío. 
+El atributo `activeChallenges` es un array de tipo `Schema.Types.ObjectId`, es decir, es un array de ids de retos, es requerido, por defecto es un array vacío. 
 
-El atributo `tracksHistory` es de tipo `Object`, es decir, es un array de objetos de la interfaz de histórico de rutas comentada anteriormente, es requerido y por defecto es un array vacío.
+El atributo `tracksHistory` es un array de tipo `Object`, es decir, es un array de objetos de la interfaz de histórico de rutas comentada anteriormente, es requerido y por defecto es un array vacío.
+
+Por ultimo en este fichero se exporta el modelo de datos al igual que en el anterior, pero siendo este caso `User`.
+
+#### Group
+
+La interfaz de grupo que se ha diseñado es la siguiente:
+
+```typescript
+interface GroupDocumentInterface extends Document {
+  name: string;
+  members: UserDocumentInterface[];
+  groupStatistics: TrainingStatisticsInterface;
+  userClasification: number[]; // usuarios ordenados por cantidad de km más el desnivel
+  favouriteTracks: TrackDocumentInterface[]; // ordenado de mayor a menor en función del número de veces que se ha hecho la ruta
+  tracksHistory: HistoryData[];
+}
+```
+
+En esta, simplemente se almacena el nombre del grupo, los miembros del grupo los cuales son un array de usuarios, usando la interfaz de usuario. Las estadísticas de entrenamiento del grupo, que son un objeto de la interfaz de estadísticas de entrenamiento comentada anteriormente. La clasificación de los usuarios, que es un array de ids de usuarios ordenados por la cantidad de km más el desnivel. Las rutas favoritas del grupo, que son un array de rutas, usando la interfaz de ruta que se ha creado. Por último, el histórico de rutas se almacena como un array de objetos de la interfaz de histórico de rutas comentada anteriormente, que consta de un id de ruta y una fecha en la que se realizó la ruta.
+
+En cuanto al esquema utilizado para este modelo, es el siguiente:
+
+```typescript
+const groupSchema = new Schema<GroupDocumentInterface>({
+  name: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  members: {
+    type: [Schema.Types.ObjectId],
+    default: [],
+    ref: 'User',
+  },
+  groupStatistics: {
+    type: Object,
+    validate: {
+      validator: function(val: TrainingStatisticsInterface) {
+        const isWeekValid = val.week && typeof val.week.km === "number" && typeof val.week.elevationGain === "number";
+        const isMonthValid = val.month && typeof val.month.km === "number" && typeof val.month.elevationGain === "number";
+        const isYearValid = val.year && typeof val.year.km === "number" && typeof val.year.elevationGain === "number";
+        return isWeekValid && isMonthValid && isYearValid;
+      }
+    },
+    required: false,
+  },
+  userClasification: {
+    type: [Number],
+    default: [],
+  },
+  favouriteTracks: {
+    type: [Schema.Types.ObjectId],
+    default: [],
+    ref: 'Track',
+  },
+  tracksHistory: {
+    type: [Object],
+    default: [],
+  },
+});
+```
+
+En este podemos ver, que el atributo `name` es de tipo `String`, es requerido, se le aplica un `trim` para eliminar los espacios en blanco al principio y al final y es único, osea que no puede existir un grupo en la base de datos con el mismo nombre que otro. 
+
+En cuanto al atributo `members`, es un array de tipo `Schema.Types.ObjectId`, es decir, es un array de ids de usuarios, es requerido, por defecto es un array vacío.
+
+El atributo `groupStatistics` es de tipo `Object`, es decir, es un objeto de la interfaz de estadísticas de entrenamiento comentada anteriormente, no es requerido y se le aplica una validación para asi comprobar que tenga los atributos de la interfaz de estadísticas de entrenamiento comentada anteriormente.
+
+El atributo `userClasification` es un array de tipo `Number`, es decir, es un array de números, es requerido y por defecto es un array vacío.
+
+El atributo `favouriteTracks` es un array de tipo `Schema.Types.ObjectId`, es decir, es un array de ids de rutas, es requerido, por defecto es un array vacío.
+
+El atributo `tracksHistory` al igual que en modelos comentados anteriormente es un array de tipo `Object`, es decir, es un array de objetos de la interfaz de histórico de rutas comentada anteriormente, es requerido y por defecto es un array vacío.
+
+Por ultimo en este fichero se exporta el modelo de datos al igual que en los anteriores, pero siendo este caso `Group`.
+
+#### Challenge
+
 
 
 
