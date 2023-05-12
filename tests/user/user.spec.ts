@@ -156,9 +156,15 @@ describe('PATCH /users/:id', () => {
   it ('Should not update a user by id if the id does not exist', async () => {
     await request(app).patch(`/users/idquenoexiste`).send({
                       activities : "cicling",
-                    }).expect(406);
+                    }).expect(400);
   });
-  // TODO: Poner que no se actualice en caso de que el parámetro no cambie
+
+  it ('Should not update a user by id if the data is equal', async () => {
+    const awaitUser = await request(app).post('/users').send(userToAdd).expect(201);
+    await request(app).patch(`/users/${awaitUser.body._id}`).send({
+                      activities : "running",
+                    }).expect(400);
+  });
 });
 
 /// Borramos todos los usuarios
