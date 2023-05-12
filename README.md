@@ -232,8 +232,107 @@ interface UserDocumentInterface extends Document {
 }
 ```
 
-En este caso, el id de los amigos se almacena como un array de usuarios, usando la interfaz de usuario que se ha creado y se comentará más adelante. Además, el id de los grupos se almacena como un array de grupos, usando la interfaz de grupo que se ha creado y se comentará más adelante. Por último, el histórico de rutas se almacena como un array de objetos de tipo `HistoryData`, que es la interfaz que se ha comentado anteriormente.
+En este caso, el id de los amigos se almacena como un array de usuarios, usando la propia interfaz de usuario. Además, el tipo de actividad es el enumerado que se ha comentado anteriormente, otra cosa a resaltar es que las estadísticas de entrenamiento se almacenan como un objeto de la interfaz de estadísticas de entrenamiento comentada anteriormente. Las rutas favoritas se almacenan como un array de rutas, usando la interfaz de ruta que se ha creado y se comentará más adelante, de igual forma con los retos activos. Por último, el histórico de rutas se almacena como un array de objetos de la interfaz de histórico de rutas comentada anteriormente, que consta de un id de ruta y una fecha en la que se realizó la ruta.
 
+El esquema de mongoose para este modelo es el siguiente:
+
+```typescript
+const userSchema = new Schema<UserDocumentInterface>({
+  name: {
+    type: String,
+    required: false,
+    trim: true,
+    unique: true,
+  },
+  activity: {
+    type: String,
+    enum: Object.values(Activity),
+    required: true,
+  },    
+  friends: {
+    type: [Schema.Types.ObjectId],
+    default: [],
+    ref: 'User',
+    validate: {
+      validator: async function() {
+        // Verificar que no haya usuarios repetidos en el array
+        const existingFriends = await this.$model('User').countDocuments({
+          _id: { $in: this.friends },
+        });
+      
+        if (existingFriends !== this.friends.length) {
+          return false;
+        }
+        return true;
+      },
+      message: props => `Invalid friends, some duplicated id: ${JSON.stringify(props.value)}`
+    }  
+  },
+  groups: {
+    type: [Schema.Types.ObjectId],
+    default: [],
+    ref: 'Group',
+  },
+  trainingStatistics: {
+    type: Object,
+    validate: {
+      validator: function(val: TrainingStatisticsInterface) {
+        const isWeekValid = val.week && typeof val.week.km === "number" && typeof val.week.elevationGain === "number";
+        const isMonthValid = val.month && typeof val.month.km === "number" && typeof val.month.elevationGain === "number";
+        const isYearValid = val.year && typeof val.year.km === "number" && typeof val.year.elevationGain === "number";
+        return isWeekValid && isMonthValid && isYearValid;
+      },
+      message: props => `Invalid training statistics: ${JSON.stringify(props.value)}`
+    },
+    required: true,
+  },  
+  favouriteTracks: {
+    type: [Schema.Types.ObjectId],
+    default: [],
+    ref: 'Track',
+    validate: {
+      validator: async function(tracksIds: TrackDocumentInterface[]) {
+        const Track = model('Track');
+        for (const trackId of tracksIds) {
+          const track = await Track.findById(trackId);
+          if (!track) {
+            return false; // El ID de track no existe en la base de datos
+          }
+        }
+
+        return true; // Todos los IDs de track existen en la base de datos
+      },
+      message: 'One or more track IDs do not exist.',
+    },  
+  },
+  activeChallenges: {
+    type: [Schema.Types.ObjectId],
+    default: [],
+    ref: 'Challenge',
+  },
+  tracksHistory: {
+    type: [Object],
+    default: [],
+    ref: 'Track',
+  },
+});
+```
+
+Viendo punto por punto, comenzando por el atributo `name`, vemos que es de tipo `String`, que no es requerido, que se le aplica un `trim` para eliminar los espacios en blanco al principio y al final y que es único, osea que no puede existir un usuario en la base de datos con el mismo nombre que otro. 
+
+El atributo `activity` es de tipo `String`, es requerido y se le aplica una validación para que el valor sea uno de los valores del enumerado `Activity`. 
+
+El atributo `friends` es de tipo `Schema.Types.ObjectId`, es decir, es un array de ids de usuarios, es requerido, por defecto es un array vacío y se le aplica una validación para que no haya ids repetidos en el array. 
+
+El atributo `groups` es de tipo `Schema.Types.ObjectId`, es decir, es un array de ids de grupos, es requerido, por defecto es un array vacío. 
+
+El atributo `trainingStatistics` es de tipo `Object`, es requerido y se le aplica una validación para que tenga los atributos de la interfaz de estadísticas de entrenamiento comentada anteriormente. 
+
+El atributo `favouriteTracks` es de tipo `Schema.Types.ObjectId`, es decir, es un array de ids de rutas, es requerido, por defecto es un array vacío y se le aplica una validación para que todos los ids de rutas existan en la base de datos. 
+
+El atributo `activeChallenges` es de tipo `Schema.Types.ObjectId`, es decir, es un array de ids de retos, es requerido, por defecto es un array vacío. 
+
+El atributo `tracksHistory` es de tipo `Object`, es decir, es un array de objetos de la interfaz de histórico de rutas comentada anteriormente, es requerido y por defecto es un array vacío.
 
 
 
