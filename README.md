@@ -775,7 +775,7 @@ Podremos acceder al servidor mediante la dirección http `http://localhost:3000`
     }
   },
   "members": [],
-  "favouriteTracks": []
+  "favouriteTracks": [],
   "tracksHistory": []
 }
 ```

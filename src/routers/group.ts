@@ -20,12 +20,16 @@ groupRouter.post("/groups", async (req, res) => {
   try {
     // actualizar los grupos de los usuarios que forman parte del grupo
     for (const userID of group.members) {
-      await User.findByIdAndUpdate(userID, { $push: { groups: group._id }}, { new: true, runValidators: true, });
+      await User.findByIdAndUpdate(
+        userID,
+        { $push: { groups: group._id } },
+        { new: true, runValidators: true }
+      );
     }
     await group.save();
     res.status(201).send(group);
   } catch (err) {
-    res.status(400).send(err);  
+    res.status(400).send(err);
   }
 });
 
@@ -36,11 +40,9 @@ groupRouter.get("/groups", async (req, res) => {
   const filter = req.query.name ? { name: req.query.name.toString() } : {};
 
   try {
-    const groups = await Group.find(filter).populate(
-      { path: "members", select: "name"}
-    ).populate(
-      { path: "favouriteTracks", select: "name"}
-    );
+    const groups = await Group.find(filter)
+      .populate({ path: "members", select: "name" })
+      .populate({ path: "favouriteTracks", select: "name" });
 
     if (groups.length !== 0) {
       return res.send(groups);
@@ -57,12 +59,10 @@ groupRouter.get("/groups", async (req, res) => {
 groupRouter.get("/groups/:id", async (req, res) => {
   const groupID = req.params.id;
   try {
-    const group = await Group.findById(groupID).populate(
-      { path: "members", select: "name"}
-    ).populate(
-      { path: "favouriteTracks", select: "name"}
-    );
-    
+    const group = await Group.findById(groupID)
+      .populate({ path: "members", select: "name" })
+      .populate({ path: "favouriteTracks", select: "name" });
+
     if (!group) {
       return res.status(404).send();
     }
@@ -103,9 +103,16 @@ groupRouter.patch("/groups", async (req, res) => {
     }
     // si en el body se ha cambiado members, actualizar los grupos de los usuarios
     if (updates.includes("members")) {
-      await User.updateMany({ groups: group._id },{ $pull: { groups: group._id }});
-      for(const userID of req.body.members) {
-        await User.findByIdAndUpdate({ userID }, { $push: { groups: group._id }}, { new: true, runValidators: true, });
+      await User.updateMany(
+        { groups: group._id },
+        { $pull: { groups: group._id } }
+      );
+      for (const userID of req.body.members) {
+        await User.findByIdAndUpdate(
+          { userID },
+          { $push: { groups: group._id } },
+          { new: true, runValidators: true }
+        );
       }
     }
     return res.status(200).send(group);
@@ -136,18 +143,25 @@ groupRouter.patch("/groups/:id", async (req, res) => {
     return res.status(400).send({ error: "Invalid updates!" });
   }
   try {
-    const group = await Group.findByIdAndUpdate(groupID , req.body, { 
-      new: true, 
-      runValidators: true, 
+    const group = await Group.findByIdAndUpdate(groupID, req.body, {
+      new: true,
+      runValidators: true,
     });
     if (!group) {
       return res.status(404).send();
     }
     // si en el body se ha cambiado members, actualizar los grupos de los usuarios
     if (updates.includes("members")) {
-      await User.updateMany({ groups: group._id },{ $pull: { groups: group._id }});
-      for(const userID of req.body.members) {
-        await User.findByIdAndUpdate({ userID }, { $push: { groups: group._id }}, { new: true, runValidators: true, });
+      await User.updateMany(
+        { groups: group._id },
+        { $pull: { groups: group._id } }
+      );
+      for (const userID of req.body.members) {
+        await User.findByIdAndUpdate(
+          { userID },
+          { $push: { groups: group._id } },
+          { new: true, runValidators: true }
+        );
       }
     }
     return res.status(200).send(group);

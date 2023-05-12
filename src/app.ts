@@ -24,4 +24,3 @@ app.use(groupRouter);
 app.use(trackRouter);
 app.use(challengeRouter);
 app.use(defaultRouter);
-

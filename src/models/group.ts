@@ -1,8 +1,8 @@
-import { Document, Schema, model } from 'mongoose';
-import { TrainingStatisticsInterface } from '../interfaces/trainingStatistics.js';
-import { UserDocumentInterface } from './user.js';
-import { TrackDocumentInterface } from './track.js';
-import { HistoryData } from '../interfaces/historyInterface.js';
+import { Document, Schema, model } from "mongoose";
+import { TrainingStatisticsInterface } from "../interfaces/trainingStatistics.js";
+import { UserDocumentInterface } from "./user.js";
+import { TrackDocumentInterface } from "./track.js";
+import { HistoryData } from "../interfaces/historyInterface.js";
 
 /**
  * Interfaz que define el formato de un grupo, se usa en mongoose
@@ -29,17 +29,26 @@ const groupSchema = new Schema<GroupDocumentInterface>({
   members: {
     type: [Schema.Types.ObjectId],
     default: [],
-    ref: 'User',
+    ref: "User",
   },
   groupStatistics: {
     type: Object,
     validate: {
-      validator: function(val: TrainingStatisticsInterface) {
-        const isWeekValid = val.week && typeof val.week.km === "number" && typeof val.week.elevationGain === "number";
-        const isMonthValid = val.month && typeof val.month.km === "number" && typeof val.month.elevationGain === "number";
-        const isYearValid = val.year && typeof val.year.km === "number" && typeof val.year.elevationGain === "number";
+      validator: function (val: TrainingStatisticsInterface) {
+        const isWeekValid =
+          val.week &&
+          typeof val.week.km === "number" &&
+          typeof val.week.elevationGain === "number";
+        const isMonthValid =
+          val.month &&
+          typeof val.month.km === "number" &&
+          typeof val.month.elevationGain === "number";
+        const isYearValid =
+          val.year &&
+          typeof val.year.km === "number" &&
+          typeof val.year.elevationGain === "number";
         return isWeekValid && isMonthValid && isYearValid;
-      }
+      },
     },
     required: false,
   },
@@ -50,7 +59,7 @@ const groupSchema = new Schema<GroupDocumentInterface>({
   favouriteTracks: {
     type: [Schema.Types.ObjectId],
     default: [],
-    ref: 'Track',
+    ref: "Track",
   },
   tracksHistory: {
     type: [Object],
@@ -58,7 +67,7 @@ const groupSchema = new Schema<GroupDocumentInterface>({
   },
 });
 
-/** 
+/**
  * Modelo de mongoose para group, exportado pues se usa en la implementación de los routers
-*/
-export const Group = model<GroupDocumentInterface>('Group', groupSchema);
+ */
+export const Group = model<GroupDocumentInterface>("Group", groupSchema);

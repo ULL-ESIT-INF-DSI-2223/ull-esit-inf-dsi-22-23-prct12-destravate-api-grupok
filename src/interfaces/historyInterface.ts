@@ -1,4 +1,4 @@
-import { Schema } from 'mongoose';
+import { Schema } from "mongoose";
 
 /**
  * Interfaz que define el formato de las estadísticas de entrenamiento

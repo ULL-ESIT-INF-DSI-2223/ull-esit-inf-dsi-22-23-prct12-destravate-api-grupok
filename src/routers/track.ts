@@ -32,9 +32,10 @@ trackRouter.get("/tracks", async (req, res) => {
   const filter = req.query.name ? { name: req.query.name.toString() } : {};
 
   try {
-    const tracks = await Track.find(filter).populate(
-      { path: "users", select: "name"}
-    );
+    const tracks = await Track.find(filter).populate({
+      path: "users",
+      select: "name",
+    });
 
     if (tracks.length !== 0) {
       return res.send(tracks);
@@ -46,12 +47,15 @@ trackRouter.get("/tracks", async (req, res) => {
 });
 
 /**
- * Get para un track en específico mediante ID 
+ * Get para un track en específico mediante ID
  */
 trackRouter.get("/tracks/:id", async (req, res) => {
   const trackID = req.params.id;
   try {
-    const track = await Track.findById(trackID).populate({ path: "users", select: "name" });
+    const track = await Track.findById(trackID).populate({
+      path: "users",
+      select: "name",
+    });
     if (!track) {
       return res.status(404).send();
     }
@@ -103,7 +107,7 @@ trackRouter.patch("/tracks", async (req, res) => {
  */
 trackRouter.patch("/tracks/:id", async (req, res) => {
   const updates = Object.keys(req.body);
-  const trackID = req.params.id
+  const trackID = req.params.id;
   const allowedUpdates = [
     "name",
     "startCoordinates",
@@ -127,11 +131,10 @@ trackRouter.patch("/tracks/:id", async (req, res) => {
   }
 
   try {
-    const track = await Track.findByIdAndUpdate(
-      trackID,
-      req.body,
-      { new: true, runValidators: true }
-    );
+    const track = await Track.findByIdAndUpdate(trackID, req.body, {
+      new: true,
+      runValidators: true,
+    });
     if (!track) {
       return res.status(404).send();
     }
@@ -161,14 +164,13 @@ trackRouter.delete("/tracks", async (req, res) => {
   } catch (error) {
     return res.status(400).send(error);
   }
-
 });
 
 /**
  * Delete para eliminar un track en específico mediante ID
  */
 trackRouter.delete("/tracks/:id", async (req, res) => {
-  const trackID = req.params.id
+  const trackID = req.params.id;
   try {
     const track = await Track.findByIdAndDelete(trackID);
     if (!track) {

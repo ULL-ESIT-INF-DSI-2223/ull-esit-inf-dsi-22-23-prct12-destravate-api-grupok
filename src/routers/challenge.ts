@@ -21,7 +21,11 @@ challengeRouter.post("/challenges", async (req, res) => {
   try {
     // actualizar los usuarios de los que forme parte el challenge
     for (const userID of challenge.users) {
-      await User.findByIdAndUpdate(userID, { $push: { activeChallenges: challenge._id }}, { new: true, runValidators: true, });
+      await User.findByIdAndUpdate(
+        userID,
+        { $push: { activeChallenges: challenge._id } },
+        { new: true, runValidators: true }
+      );
     }
     await challenge.save();
     res.status(201).send(challenge);
@@ -37,11 +41,9 @@ challengeRouter.get("/challenges", async (req, res) => {
   const filter = req.query.name ? { name: req.query.name.toString() } : {};
 
   try {
-    const challenges = await Challenge.find(filter).populate(
-      { path: "users", select: "name"}
-    ).populate(
-      { path: "tracks", select: "name"}
-    );
+    const challenges = await Challenge.find(filter)
+      .populate({ path: "users", select: "name" })
+      .populate({ path: "tracks", select: "name" });
 
     if (challenges.length !== 0) {
       return res.send(challenges);
@@ -58,11 +60,9 @@ challengeRouter.get("/challenges", async (req, res) => {
 challengeRouter.get("/challenges/:id", async (req, res) => {
   const challengeID = req.params.id;
   try {
-    const challenge = await Challenge.findById(challengeID).populate(
-      { path: "users", select: "name"}
-    ).populate(
-      { path: "tracks", select: "name"}
-    );
+    const challenge = await Challenge.findById(challengeID)
+      .populate({ path: "users", select: "name" })
+      .populate({ path: "tracks", select: "name" });
 
     if (!challenge) {
       return res.status(404).send();
@@ -80,13 +80,7 @@ challengeRouter.patch("/challenges", async (req, res) => {
   //actualizar un challenge por su nombre
   const name = req.query.name;
   const updates = Object.keys(req.body);
-  const allowedUpdates = [
-    "name",
-    "activity",
-    "tracks",
-    "users",
-    "length",
-  ];
+  const allowedUpdates = ["name", "activity", "tracks", "users", "length"];
   const isValidOperation = updates.every((update) =>
     allowedUpdates.includes(update)
   );
@@ -103,9 +97,16 @@ challengeRouter.patch("/challenges", async (req, res) => {
     }
     // si se actualiza la lista de usuarios, actualizar los usuarios de los que forma parte el challenge
     if (updates.includes("users")) {
-      await User.updateMany({ activeChallenges: challenge._id }, { $pull: { activeChallenges: challenge._id }});
+      await User.updateMany(
+        { activeChallenges: challenge._id },
+        { $pull: { activeChallenges: challenge._id } }
+      );
       for (const userID of challenge.users) {
-        await User.findByIdAndUpdate(userID, { $push: { activeChallenges: challenge._id }}, { new: true, runValidators: true, });
+        await User.findByIdAndUpdate(
+          userID,
+          { $push: { activeChallenges: challenge._id } },
+          { new: true, runValidators: true }
+        );
       }
     }
     return res.status(200).send(challenge);
@@ -121,13 +122,7 @@ challengeRouter.patch("/challenges/:id", async (req, res) => {
   //actualizar un usaurio por su id
   const challengeID = req.params.id;
   const updates = Object.keys(req.body);
-  const allowedUpdates = [
-    "name",
-    "activity",
-    "tracks",
-    "users",
-    "length",
-  ];
+  const allowedUpdates = ["name", "activity", "tracks", "users", "length"];
   const isValidOperation = updates.every((update) =>
     allowedUpdates.includes(update)
   );
@@ -144,9 +139,16 @@ challengeRouter.patch("/challenges/:id", async (req, res) => {
     }
     // si se actualiza la lista de usuarios, actualizar los usuarios de los que forma parte el challenge
     if (updates.includes("users")) {
-      await User.updateMany({ activeChallenges: challenge._id }, { $pull: { activeChallenges: challenge._id }});
+      await User.updateMany(
+        { activeChallenges: challenge._id },
+        { $pull: { activeChallenges: challenge._id } }
+      );
       for (const userID of challenge.users) {
-        await User.findByIdAndUpdate(userID, { $push: { activeChallenges: challenge._id }}, { new: true, runValidators: true, });
+        await User.findByIdAndUpdate(
+          userID,
+          { $push: { activeChallenges: challenge._id } },
+          { new: true, runValidators: true }
+        );
       }
     }
     return res.status(200).send(challenge);
