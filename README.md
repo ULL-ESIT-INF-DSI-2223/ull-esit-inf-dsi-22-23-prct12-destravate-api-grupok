@@ -412,6 +412,215 @@ Por ultimo en este fichero se exporta el modelo de datos al igual que en los ant
 
 #### Challenge
 
+Para los retos se ha diseñado la siguiente interfaz:
+
+```typescript
+export interface ChallengeDocumentInterface extends Document {
+  name: string;
+  tracks: TrackDocumentInterface[];
+  activity: Activity;
+  length: number;
+  users: UserDocumentInterface[];
+}
+```
+
+Cada reto tiene un nombre, un array de rutas, usando la interfaz de ruta que se ha creado. El tipo de actividad, que es el enumerado que se ha comentado anteriormente. La longitud del reto, que es la suma de los kilómetros de las rutas que lo engloban. Por último, los usuarios que están realizando el reto, que es un array de usuarios, usando la interfaz de usuario.
+
+En cuanto al esquema utilizado para este modelo, es el siguiente:
+
+```typescript
+const challengeSchema = new Schema<ChallengeDocumentInterface>({
+  name: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  length: {
+    type: Number,
+    required: true,
+    validate: {
+      validator: function(val: number) {
+        return val > 0;
+      },
+      message: props => `Invalid length: ${props.value}`
+    }
+  },
+  users: {
+    type: [Schema.Types.ObjectId],
+    required: false,
+    ref: 'User',
+  },
+  tracks: {
+    type: [Schema.Types.ObjectId],
+    required: false,
+    ref: 'Track',
+  },
+  activity: {
+    type : String, 
+    enum : Object.values(Activity),
+    required: true,
+  },
+
+});
+```
+
+Hay elementos comunes a los demas esquemas, como el nombre, el tipo de actividad y los usuarios que están realizando el reto, por lo que no se comentarán de nuevo. Lo único diferente en este caso es el atributo `tracks`, que es un array de tipo `Schema.Types.ObjectId`, es decir, es un array de ids de rutas, es requerido, por defecto es un array vacío y se le aplica una validación para que todos los ids de rutas existan en la base de datos.
+
+Por ultimo en este fichero se exporta el modelo de datos al igual que en los anteriores, pero siendo este caso `Challenge`.
+
+### Routes
+
+Para cada una de las rutas correspondientes a cada modelo de datos, se ha creado un fichero, en el que se encuentra implementadas las operaciones que se puede realizar sobre cada ruta, que son básicamente las operaciones CRUD. Cabe resaltar que todos el código de estos ficheros sigue el patrón async/await. 
+
+#### User
+
+Todas las operaciones a llevar a cabo sobre los usuarios, se realizan a traves de la ruta `/users`, utilizando los métodos HTTP referentes a cada operación CRUD (POST, GET, PATCH, DELETE). Este es el mas amplio a comentar, por lo que se comentará cada una de las operaciones por separado.
+
+##### POST
+
+Esta operación se utiliza para crear un nuevo usuario, para ello se debe realizar una petición POST a la ruta `/users` con la información del usuario en el body de la petición, aqui un ejemplo de como sería el cuerpo de la petición:
+
+```json
+{
+  "name": "Aday2",
+  "activity": "running",
+  "friends": ["645d342cf4d742296183ddb2"],
+  "groups": [],
+  "trainingStatistics": {
+    "week": { "km": 10, "elevationGain": 100},
+    "month": { "km": 20, "elevationGain": 200},
+    "year": { "km": 50, "elevationGain": 500}
+  },
+  "favouriteTracks": ["645d33c8f4d742296183ddaf"],
+  "tracksHistory": [ 
+    {
+      "track": "645d33c8f4d742296183ddaf",
+      "date": "1987-09-28"
+    }],
+  "activeChallenges": ["645d33aff4d742296183ddad"]
+}
+```
+
+Como se puede ver sigue el schema que comentamos con anterioridad, el atributo `name` es el nombre del usuario, el atributo `activity` es el tipo de actividad que realiza, el atributo `friends` es un array de ids de usuarios, el atributo `groups` es un array de ids de grupos, el atributo `trainingStatistics` es un objeto con las estadísticas de entrenamiento, el atributo `favouriteTracks` es un array de ids de rutas, el atributo `tracksHistory` es un array de objetos con el id de la ruta y la fecha en la que se realizó y por último el atributo `activeChallenges` es un array de ids de retos, cabe destacar que las id de los amigos, grupos, rutas y retos deben existir en la base de datos, además se puden omitir muchos de los atributos, ya que no son requeridos y tienen un valor por defecto.
+
+En cuanto a la implementación de esta operación, se puede ver en el siguiente código:
+
+```typescript
+userRouter.post('/users', async (req, res) => {
+  const user = new User(req.body);
+  try {
+    // actualizar los grupos de los que forme parte el usuario
+    for (const groupID of user.groups) {
+      await Group.findByIdAndUpdate(groupID, { $push: { members: user._id }}, { new: true, runValidators: true, });
+    }
+    // actualizar los usuarios de los challenge que tiene activos
+    for (const challengeID of user.activeChallenges) {
+      await Challenge.findByIdAndUpdate(challengeID, { $push: { users: user._id }}, { new: true, runValidators: true, });
+    }
+    // actualizar las rutas realizadas, añadiendo el usuario a la ruta
+    for (const trackID of user.tracksHistory) {
+      await Track.findByIdAndUpdate(trackID.track, { $push: { users: user._id }}, { new: true, runValidators: true, });
+    }
+    await user.save()
+    return res.status(201).send(user);
+  } catch (err) {
+    return res.status(400).send(err);
+  }
+});
+```
+
+Lo primero que es guardar en una variable el usuario que se ha pasado en el body de la petición, después se actualizan los grupos de los que forma parte el usuario recorriendo el array de ids de grupos que se ha pasado en el body de la petición, para cada uno de estos grupos se actualiza el grupo en la base de datos añadiendo el id del usuario al array de miembros del grupo. Después se actualizan los usuarios de los retos que tiene activos de la misma forma, también se actualizan las rutas realizadas, añadiendo el usuario a la ruta. Por último, se guarda el usuario en la base de datos y se devuelve el usuario creado con codigo de status 201. En caso de que haya algún error, se devuelve un error 400. 
+
+##### GET
+
+Mediante el método GET se puede obtener información de los usuarios, para ello hay distintas formas de realizar la petición como se mencionó previamente, se puede consultar un usuario concreto por su nombre usando una query en la url, se puede cosultar un usuario en concreto por su id usando este como parámetro en la url o se puede consultar todos los usuarios simplemente con la ruta base `/users` utilizando este metodo.
+
+El código de la implementación de esta operación es el siguiente:
+
+```typescript
+/**
+ * Get para todos los usuarios o para un usuario en específico mediante nombre usando query
+ */
+userRouter.get("/users", async (req, res) => {
+  const name = req.query.name;
+  try {
+    let users;
+    if (name) {
+      // Find all users that match the name
+      users = await User.find({ name }).populate(
+        { path: "friends", select: "name"}
+      ).populate(
+        { path: "groups", select: "name"}
+      ).populate(
+        { path: "activeChallenges", select: "name"}
+      ).populate(
+        { path: "favouriteTracks", select: "name"}
+      ).populate(
+        { path: "tracksHistory.track", select: "name"}
+      );
+    } else {
+      // Find all users
+      users = await User.find().populate({ path: "friends", select: "name"}
+      ).populate(
+        { path: "groups", select: "name"}
+      ).populate(
+        { path: "activeChallenges", select: "name"}
+      ).populate(
+        { path: "favouriteTracks", select: "name"}
+      ).populate(
+        { path: "tracksHistory.track", select: "name"}
+      );
+    }
+    if (users.length === 0) {
+      return res.status(404).send();
+    }
+    return res.status(200).send(users);
+  } catch (err) {
+    return res.status(500).send(err);
+  }
+});
+
+/**
+ * Get para un usuario en específico mediante ID
+ */
+userRouter.get("/users/:id", async (req, res) => {
+  const userID = req.params.id;
+  try {
+    const user = await User.findById(userID).populate(
+      { path: "friends", select: "name"}
+    ).populate(
+      { path: "groups", select: "name"}
+    ).populate(
+      { path: "activeChallenges", select: "name"}
+    ).populate(
+      { path: "favouriteTracks", select: "name"}
+    ).populate(
+      { path: "tracksHistory.track", select: "name"}
+    );
+    if (!user) {
+      return res.status(404).send();
+    }
+    return res.send(user);
+  } catch (err) {
+    return res.status(500).send();
+  }
+});
+```
+
+En el primer caso, se obtiene el nombre del usuario de la query de la url, si existe se buscan todos los usuarios que coincidan con ese nombre, si no existe se buscan todos los usuarios. En ambos casos se utiliza el método `populate` para obtener información (en este caso solo el nombre) de los usuarios que son amigos, grupos, retos, rutas favoritas y rutas realizadas. En el segundo caso, se obtiene el id del usuario de los parámetros de la url, se busca el usuario con ese id. En ambos casos, si no se encuentra ningún usuario se devuelve un error 404 y si hay algún error se devuelve un error 500.
+
+##### PATCH
+
+Mediante el método PATCH se puede actualizar información de los usuarios, para ello hay distintas formas de realizar la petición al igual que en el método GET, además el cuerpo de la petición debe contener la información que se quiere actualizar.
+
+El código de la implementación de esta operación es el siguiente:
+
+```typescript
+
+
+
+
 
 
 
