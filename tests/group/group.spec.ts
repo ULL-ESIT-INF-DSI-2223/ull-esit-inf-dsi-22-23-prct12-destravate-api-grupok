@@ -66,7 +66,6 @@ describe('POST /groups', () => {
       }
     });
     
-
     const secondGroup = await Group.findById(response.body._id);
     expect(secondGroup).not.to.be.null;
     expect(secondGroup?.name).to.equal('GrupoYanfri');
@@ -84,6 +83,21 @@ describe('GET /groups', () => {
     expect(response.body[0]).to.include({
       name: "GrupoAday",
     });
+    
+    expect(response.body[0].groupStatistics).to.eql({
+      week: {
+        km: 10,
+        elevationGain: 100
+      },
+      month: {
+        km: 20,
+        elevationGain: 200
+      },
+      year: {
+        km: 50,
+        elevationGain: 500
+      }
+    });
   });
 
   it('Should not find a group by groupname', async () => {
@@ -98,6 +112,21 @@ describe('GET /groups/:id', () => {
     const response = await request(app).get(`/groups/${awaitGroup.body._id}`).expect(200);
     expect(response.body).to.include({
       name: "GrupoYanfri"
+    });
+    
+    expect(response.body.groupStatistics).to.eql({
+      week: {
+        km: 1,
+        elevationGain: 43
+      },
+      month: {
+        km: 2350,
+        elevationGain: 54
+      },
+      year: {
+        km: 51,
+        elevationGain: 5123
+      }
     });
   });
   
@@ -163,42 +192,38 @@ describe('PATCH /groups/:id', () => {
 });
 
 
-// describe('DELETE /groups', () => {
-//   it('Should delete a group by query', async () => {
-//     const response = await request(app).delete(`/groups?name=Ironman`).expect(200);
-//     expect(response.body).to.include({
-//       name: "Ironman",
-//       activity: "running",
-//       length: 45,
-//     });
-//     const secondGroup = await Group.findById(response.body._id);
-//     expect(secondGroup).to.be.null;
-//   });
+describe('DELETE /groups', () => {
+  it('Should delete a group by query', async () => {
+    const response = await request(app).delete(`/groups?name=GrupoAday`).expect(200);
+    expect(response.body).to.include({
+      name: "GrupoAday",
+    });
+    const secondGroup = await Group.findById(response.body._id);
+    expect(secondGroup).to.be.null;
+  });
 
-//   it ('Should not delete a group by query if the group does not exist', async () => {
-//     await request(app).delete(`/groups?name=NoSoRutaDeLaBDD`).expect(404);
-//   });
-// });
+  it ('Should not delete a group by query if the group does not exist', async () => {
+    await request(app).delete(`/groups?name=NoSoRutaDeLaBDD`).expect(404);
+  });
+});
 
-// describe('DELETE /groups/:id', () => {
-//   it('Should delete a group by id', async () => {
-//     const awaitGroup = await request(app).post('/groups').send(groupToAdd).expect(201);
-//     const response = await request(app).delete(`/groups/${awaitGroup.body._id}`).expect(200);
-//     expect(response.body).to.include({
-//       name: "Decathlon",
-//       activity: "running",
-//       length: 45,
-//     });
-//   });
+describe('DELETE /groups/:id', () => {
+  it('Should delete a group by id', async () => {
+    const awaitGroup = await request(app).post('/groups').send(groupToAdd).expect(201);
+    const response = await request(app).delete(`/groups/${awaitGroup.body._id}`).expect(200);
+    expect(response.body).to.include({
+      name: "GrupoYanfri",
+    });
+  });
 
-//   it ('Should not delete a group by id if the id does not exist', async () => {
-//     await request(app).delete(`/groups/ab5d342cf4d742296183d123`).expect(404);
-//   });
+  it ('Should not delete a group by id if the id does not exist', async () => {
+    await request(app).delete(`/groups/ab5d342cf4d742296183d123`).expect(404);
+  });
 
-//   it ('Should not delete a group by id if is not valid', async () => {
-//     await request(app).delete(`/groups/idquenoexiste`).expect(500);
-//   });
-// });
+  it ('Should not delete a group by id if is not valid', async () => {
+    await request(app).delete(`/groups/idquenoexiste`).expect(500);
+  });
+});
   
 after(async () => {
   await Group.deleteMany();

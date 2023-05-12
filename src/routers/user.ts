@@ -45,7 +45,7 @@ userRouter.get("/users", async (req, res) => {
     let users;
     if (name) {
       // Find all users that match the name
-      users = await User.find({ name }).populate(
+      users = await User.findOne({ name }).populate(
         { path: "friends", select: "name"}
       ).populate(
         { path: "groups", select: "name"}
@@ -56,6 +56,10 @@ userRouter.get("/users", async (req, res) => {
       ).populate(
         { path: "tracksHistory.track", select: "name"}
       );
+
+      if (!users) {
+        return res.status(404).send();
+      }
     } else {
       // Find all users
       users = await User.find().populate({ path: "friends", select: "name"}
@@ -68,9 +72,10 @@ userRouter.get("/users", async (req, res) => {
       ).populate(
         { path: "tracksHistory.track", select: "name"}
       );
-    }
-    if (users.length === 0) {
-      return res.status(404).send();
+
+      if (users.length === 0) {
+        return res.status(404).send();
+      }
     }
     return res.status(200).send(users);
   } catch (err) {
@@ -92,6 +97,8 @@ userRouter.get("/users/:id", async (req, res) => {
       { path: "activeChallenges", select: "name"}
     ).populate(
       { path: "favouriteTracks", select: "name"}
+    ).populate(
+      { path: "tracksHistory.track", select: "name"}
     );
     if (!user) {
       return res.status(404).send();
@@ -247,14 +254,6 @@ userRouter.delete("/users", async (req, res) => {
     if (!user) {
       return res.status(404).send();
     }
-    // borrar de la lista de amigos de los demás usuarios
-    await User.updateMany({ friends: user._id },{ $pull: { friends: user._id }});
-    // borrar de los grupos en los que es participante
-    await Group.updateMany({ members: user._id },{ $pull: { members: user._id }});
-    // borrar de los retos en los que es participante
-    await Challenge.updateMany({ users: user._id },{ $pull: { users: user._id }});
-    // borrar de las rutas  que ha realizado
-    await Track.updateMany({ users: user._id },{ $pull: { users: user._id }});
 
     await User.findOneAndDelete({ name });
     return res.status(200).send(user);
@@ -274,14 +273,7 @@ userRouter.delete("/users/:id", async (req, res) => {
     if (!user) {
       return res.status(404).send();
     }
-    // borrar de la lista de amigos de los demás usuarios
-    await User.updateMany({ friends: user._id },{ $pull: { friends: user._id }});
-    // borrar de los grupos en los que es participante
-    await Group.updateMany({ members: user._id },{ $pull: { members: user._id }});
-    // borrar de los retos en los que es participante
-    await Challenge.updateMany({ users: user._id },{ $pull: { users: user._id }});
-    // borrar de las rutas  que ha realizado
-    await Track.updateMany({ users: user._id },{ $pull: { users: user._id }});
+    
     
     await User.findByIdAndDelete(userID);
     return res.send(user);
