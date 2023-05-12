@@ -722,8 +722,29 @@ En cuanto al post lo único que cambia es lo que se actualiza, en este caso se a
 
 Por otro lado, el get es exactamente igual, lo que cambia es la información que se muestra con el populate, en este caso solo se muestra el nombre de los usuarios que forman parte del grupo y el nombre de las rutas favoritas del grupo.
 
-Por último, el patch en gran parte también es igual, solo que las opciones a actualiza
+Por último, el patch en gran parte también es igual, solo que las opciones validas a actualizar son diferentes y lo único que hay que tener en cuenta es que si se actualizan los miembros del grupo, se actualizan los grupos de los usuarios que forman parte del grupo.
 
+#### Challenge
+
+Para las operaciones sobre los retos, se utiliza la ruta `/challenges`, utilizando los métodos HTTP referentes a cada operación CRUD (POST, GET, PATCH, DELETE). Este también es muy similar a los anteriores, por lo que no se comentará en detalle cada operación
+
+En cuanto al post lo único que cambia es lo que se actualiza, en este caso se actualizan los retos activos de los usuarios que están realizando el reto.
+
+Por otro lado, en el get lo que cambia es la información que se muestra con el populate, que en este caso solo se muestra el nombre de los usuarios que están realizando el reto y el nombre de las rutas que forman parte del reto.
+
+Por último, en el patch solo cambia las opciones validas a actualizar, Cabe destacar que si se actualizan las rutas que forman parte del reto, se actualizan los retos activos de los usuarios que están realizando el reto.
+
+#### Track
+
+En este caso se utiliza la ruta `/tracks`, utilizando también los métodos HTTP referentes a cada operación CRUD (POST, GET, PATCH, DELETE). Este también es muy similar a los anteriores, por lo que no se comentará en detalle cada operación sino los cambios en cada una de ellas.
+
+En cuanto al post lo único que cambia es que en este caso se actualizan las rutas favoritas de los usuarios que tienen la ruta como favorita.
+
+Por otro lado, en el get lo que cambia es la información que se muestra con el populate, que en este caso solo se muestra el nombre de los usuarios que tienen la ruta como favorita.
+
+Por último, en el patch cambia las opciones validas a actualizar. Lo unico a mencionar es que si se actualizan los usuarios que tienen la ruta como favorita, se actualizan las rutas favoritas de los usuarios que tienen la ruta como favorita.
+
+Se debe mencionar que en el `delete` se deberían borrar las referencias a la ruta en los usuarios que la tienen dentro de su `tracksHistory`, sin embargo, esto no se ha podido realizar, ya que la base de datos no permite esto o no encontramos la forma, ya que al formar parte de un objeto con el elemento id y la fecha, conseguimos borrar la referencia al id, pero no a la fecha. y se quedaba igual el objeto pero con el id vacio y la fecha aun existiendo.
 
 
 
