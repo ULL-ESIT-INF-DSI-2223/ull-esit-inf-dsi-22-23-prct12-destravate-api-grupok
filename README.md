@@ -725,11 +725,6 @@ Por último, en el patch cambia las opciones validas a actualizar. Lo unico a me
 
 Se debe mencionar que en el `delete` se deberían borrar las referencias a la ruta en los usuarios que la tienen dentro de su `tracksHistory`, sin embargo, esto no se ha podido realizar, ya que la base de datos no permite esto o no encontramos la forma, ya que al formar parte de un objeto con el elemento id y la fecha, conseguimos borrar la referencia al id, pero no a la fecha. y se quedaba igual el objeto pero con el id vacio y la fecha aun existiendo.
 
-
-
-TRABAJO QUE FALTA (CÓDIGO)
-- Test de linkear todo
-
 ## Ejecución y ejemplos de uso
 Para la ejecucicón de la API, hay uqe seguir un procedimiento, el cual es la ejecución del servidor en MongoDB, y luego la ejecución del servidor en express o la pruebas, según lo que se desee. Los comandos son:
 
@@ -737,7 +732,7 @@ Para la ejecucicón de la API, hay uqe seguir un procedimiento, el cual es la ej
 - Servidor express: `npm run dev (de momento)`
 - Test: `npm run test`
 
-Aquí se ofrecen distintos ejemplos usados a lo largo del desarrollo, los cuales se pueden emplear como plantillas para hacer solicitudes (Recordar eliminar los ID porque aparecerán errores si no encuentan dichos id en la base de datos):
+Podremos acceder al servidor mediante la dirección http `http://localhost:3000` mediante operaciones CRUD, donde se utilizan cuerpos en formato JSON. Se ofrecen distintos ejemplos usados a lo largo del desarrollo, los cuales se pueden emplear como plantillas para hacer solicitudes (Recordar eliminar los ID porque aparecerán errores si no encuentan dichos id en la base de datos):
 
 #### User:
 ```typescript
@@ -817,6 +812,9 @@ Mediante MongoDBAtlas y Cyclic, se ha subido la base de datos y la api a servido
 - Acceso al servidor de cyclic: `https://wide-eyed-plum-dungarees.cyclic.app`
 
 ## Conclusiones
+En este proyecto se ha podido ver como se puede crear un sistema de gestión de rutas de una manera más eficiente que en el primer proyecto. Se simplifica todo a la realización de distintas peticiones, las facilidades que ofrecen por ejemplo Mongoose o el validador se pueden comprobar en busca de errores y que gracias a la base de datos ofrecida por MongoDB podemos almacenar. Además, También cabe mencionar el uso de MongoDB Atlas y Cyclic, que permiten tener tanto la base de datos como el servidor en la nuve para poder acceder desde fuera del entorno  de desarrollo. Todo junto ha permitido un desarrollo solido y consistente de la API rest que se observa como resultado.
+
+Al haber hecho esta práctica en grupo, también hemos observado una mejora respecto a la primera en cuanto a la velocidad de desarrollo al estar familiarizados con el entorno, lo que nos ha permitido un desarrollo más eficiente.
 
 ## Referencias
 
