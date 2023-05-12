@@ -158,7 +158,7 @@ describe('PATCH /users/:id', () => {
   it ('Should not update a user by id if the id does not exist', async () => {
     await request(app).patch(`/users/ab5d342cf4d742296183d123`).send({
                       activities : "cycling",
-                    }).expect(400);
+                    }).expect(404);
   });
 });
 
