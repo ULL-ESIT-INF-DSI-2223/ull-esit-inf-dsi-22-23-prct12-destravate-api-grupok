@@ -227,7 +227,8 @@ interface UserDocumentInterface extends Document {
 }
 ```
 
-En este caso, el id de los amigos se almacena como un array de usuarios, usando la interfaz de usuario que se ha creado y se comentará más adelante. Además, el id de los grupos se almacena como un array de grupos, usando la interfaz de grupo que se ha creado y se comentará más adelante. Por último, el histórico de rutas se almacena como un array de objetos de tipo `HistoryData`, que es la interfaz que se ha comentado anteriormente.
+En este caso, el id de los amigos se almacena como un array de usuarios, usando la propia interfaz de usuario. Además, el tipo de actividad es el enumerado que se ha comentado anteriormente, otra cosa a resaltar es que las estadísticas de entrenamiento se almacenan como un objeto de la interfaz de estadísticas de entrenamiento comentada anteriormente. Las rutas favoritas se almacenan como un array de rutas, usando la interfaz de ruta que se ha creado y se comentará más adelante, de igual forma con los retos activos. Por último, el histórico de rutas se almacena como un array de objetos de la interfaz de histórico de rutas comentada anteriormente, que consta de un id de ruta y una fecha en la que se realizó la ruta.
+
 
 
 
