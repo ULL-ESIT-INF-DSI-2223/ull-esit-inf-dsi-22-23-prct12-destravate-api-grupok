@@ -150,16 +150,34 @@ describe('PATCH /users/:id', () => {
       name: 'Aday',
       activities : 'cycling',
     });
+    const secondUser = await User.findById(response.body._id);
+    expect(secondUser).not.to.be.null;
+    expect(secondUser?.activities).to.equal('cycling');
   });
 
   it ('Should not update a user by id if the id does not exist', async () => {
-    await request(app).patch(`/users/idquenoexiste`).send({
-                      activities : "cicling",
+    await request(app).patch(`/users/ab5d342cf4d742296183d123`).send({
+                      activities : "cycling",
                     }).expect(400);
   });
 });
 
-/// Probaos el delete
+/// Borramos un usuario mediante query
+describe('DELETE /users', () => {
+  it('Should delete a user by query', async () => {
+    const response = await request(app).delete(`/users?name=Yanfri`).expect(200);
+    expect(response.body).to.include({
+      name: 'Yanfri',
+      activities : 'running',
+    });
+    const secondUser = await User.findById(response.body._id);
+    expect(secondUser).to.be.null;
+  });
+
+  it ('Should not delete a user by query if the user does not exist', async () => {
+    await request(app).delete(`/users?name=NoSoyUsuarioDeLaBDD`).expect(400);
+  });
+});
 
 /// Borramos todos los usuarios
 after(async () => {
