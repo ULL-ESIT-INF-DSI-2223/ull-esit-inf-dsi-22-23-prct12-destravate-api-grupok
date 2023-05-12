@@ -1,5 +1,10 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/GwypoZrl)
+# Práctica 12 - Destravate: API Node/Express - Grupo K
 
+Esta práctica consiste en desarrollar una API REST con Node.js y Express para la aplicación Destravate. Esta API se encargará de gestionar los datos de la aplicación, ofreciendo todas las operaciones CRUD, almacenándolos en una base de datos MongoDB, implementado utilizando mongoose.
+
+## Funcionalidad de la API
+
+La API debe ofrecer distintas funcionalidades, para los distintos puntos de acceso o rutas de esta. La api se basa en el seguimiento de actividades deportivas, por lo que se ofrecerán funcionalidades para gestionar usuarios, grupos, retos y rutas. Para cada uno de estos elementos se ofrecerán las operaciones CRUD. Algo común en todos es que la operación de lectura 
 
 - Editar Typedoc
 - Workflow ignorados (los tiene Aday en su pc)
@@ -18,7 +23,7 @@ TRABAJO QUE FALTA (CÓDIGO)
 User:
 {
   "name": "Aday2",
-  "activities": "running",
+  "activity": "running",
   "friends": ["645d342cf4d742296183ddb2"],
   "groups": [],
   "trainingStatistics": {
@@ -37,11 +42,31 @@ User:
 
 Groups:
 
+{
+ "name": "GrupoAday",
+ "groupStatistics": {
+    "week": {
+      "km": 10,
+      "elevationGain": 100
+    },
+    "month": {
+      "km": 20,
+      "elevationGain": 200
+    },
+    "year": {
+      "km": 50,
+      "elevationGain": 500
+    }
+  },
+  "members": ["645ccf402d45736f7d2cfdb1"],
+  "favouriteTracks": []
+}
+
 
 Challenge:
 {
   "name": "Ironman",
-  "tracks" [],
+  "tracks": [],
   "activity": "running",
   "length": 45,
   "users": []
@@ -56,6 +81,6 @@ Track:
   "length": 44,
   "grade": 6,
   "users":[],
-  "activities": "running",
+  "activity": "running",
   "rating": 4.3
 }

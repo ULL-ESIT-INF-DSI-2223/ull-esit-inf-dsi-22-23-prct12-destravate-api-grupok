@@ -73,7 +73,7 @@ trackRouter.patch("/tracks", async (req, res) => {
     "length",
     "grade",
     "users",
-    "activities",
+    "activity",
     "rating",
   ];
   const isValidOperation = updates.every((update) =>
@@ -109,7 +109,7 @@ trackRouter.patch("/tracks/:id", async (req, res) => {
     "length",
     "grade",
     "users",
-    "activities",
+    "activity",
     "rating",
   ];
   const isValidOperation = updates.every((update) =>

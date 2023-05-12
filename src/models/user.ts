@@ -8,7 +8,7 @@ import { GroupDocumentInterface } from './group.js';
 
 export interface UserDocumentInterface extends Document {
   name: string;
-  activities: Activity;
+  activity: Activity;
   friends: UserDocumentInterface[];
   groups: GroupDocumentInterface[]
   trainingStatistics: TrainingStatisticsInterface;
@@ -24,7 +24,7 @@ const userSchema = new Schema<UserDocumentInterface>({
     trim: true,
     unique: true,
   },
-  activities: {
+  activity: {
     type: String,
     enum: Object.values(Activity),
     required: true,

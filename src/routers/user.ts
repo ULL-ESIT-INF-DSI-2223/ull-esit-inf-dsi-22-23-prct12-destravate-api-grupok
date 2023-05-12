@@ -25,7 +25,7 @@ userRouter.post('/users', async (req, res) => {
     for (const challengeID of user.activeChallenges) {
       await Challenge.findByIdAndUpdate(challengeID, { $push: { users: user._id }}, { new: true, runValidators: true, });
     }
-    // actualizar los usuarios de las tutas realizadas
+    // actualizar los usuarios de las rutas realizadas
     for (const trackID of user.tracksHistory) {
       await Track.findByIdAndUpdate(trackID.track, { $push: { users: user._id }}, { new: true, runValidators: true, });
     }
@@ -118,7 +118,7 @@ userRouter.patch("/users", async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = [
     "name",
-    "activities",
+    "activity",
     "friends",
     "groups",
     "favouriteTracks",
@@ -184,7 +184,7 @@ userRouter.patch("/users/:id", async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = [
     "name",
-    "activities",
+    "activity",
     "friends",
     "groups",
     "favouriteTracks",
