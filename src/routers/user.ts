@@ -111,7 +111,7 @@ userRouter.patch("/users", async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = [
     "name",
-    "activities",
+    "activity",
     "friends",
     "groups",
     "favouriteTracks",
@@ -177,7 +177,7 @@ userRouter.patch("/users/:id", async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = [
     "name",
-    "activities",
+    "activity",
     "friends",
     "groups",
     "favouriteTracks",

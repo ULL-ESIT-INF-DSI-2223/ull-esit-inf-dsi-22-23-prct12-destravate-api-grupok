@@ -4,22 +4,22 @@ import { app } from '../../src/app.js';
 import { Track } from '../../src/models/track.js';
 
 const firstTrack = {
-  name: "Ironman",
+  name: "Ruta del pescado",
   startCoordinates: [12,12],
   endCoordinates: [23,25],
   length: 44,
   grade: 6,
-  activities: "running",
+  activity: "running",
   rating: 4.3
 }
 
 const trackToAdd = {
-  name: "Decathlon",
+  name: "Tetir",
   startCoordinates: [10,10],
   endCoordinates: [22,30],
   length: 60,
   grade: 8,
-  activities: "running",
+  activity: "running",
   rating: 5
 }
 
@@ -32,10 +32,10 @@ describe('POST /tracks', () => {
   it('Should successfully create a new track', async () => {
     const response = await request(app).post('/tracks').send(trackToAdd).expect(201);
     expect(response.body).to.include({
-      name: "Decathlon",
+      name: "Tetir",
       length: 60,
       grade: 8,
-      activities: "running",
+      activity: "running",
       rating: 5
     });
     expect (response.body.startCoordinates).to.eql([10,10]);
@@ -43,7 +43,7 @@ describe('POST /tracks', () => {
  
     const secondTrack = await Track.findById(response.body._id);
     expect(secondTrack).not.to.be.null;
-    expect(secondTrack?.name).to.equal('Decathlon');
+    expect(secondTrack?.name).to.equal('Tetir');
   });
 
   it('Should get an error if try to insert a track that is already in DB', async () => {
@@ -54,12 +54,12 @@ describe('POST /tracks', () => {
 
 describe('GET /tracks', () => {
   it('Should get a track by trackname', async () => {
-    const response = await request(app).get('/tracks?name=Ironman').expect(200);
+    const response = await request(app).get('/tracks?name=Ruta del pescado').expect(200);
     expect(response.body[0]).to.include({
-      name: "Ironman",
+      name: "Ruta del pescado",
       length: 44,
       grade: 6,
-      activities: "running",
+      activity: "running",
       rating: 4.3
     });
     expect (response.body[0].startCoordinates).to.eql([12,12]);
@@ -78,10 +78,10 @@ describe('GET /tracks/:id', () => {
     const awaitTrack = await request(app).post('/tracks').send(trackToAdd).expect(201);
     const response = await request(app).get(`/tracks/${awaitTrack.body._id}`).expect(200);
     expect(response.body).to.include({
-      name: "Decathlon",
+      name: "Tetir",
       length: 60,
       grade: 8,
-      activities: "running",
+      activity: "running",
       rating: 5
     });
     expect (response.body.startCoordinates).to.eql([10,10]);
@@ -101,14 +101,14 @@ describe('GET /tracks/:id', () => {
 
 describe('PATCH /tracks', () => {
   it('Should update a track by query', async () => {
-    const response = await request(app).patch(`/tracks?name=Ironman`).send({
-                      activities : "cycling",
+    const response = await request(app).patch(`/tracks?name=Ruta del pescado`).send({
+                      activity : "cycling",
                     }).expect(200);
     expect(response.body).to.include({
-      name: "Ironman",
+      name: "Ruta del pescado",
       length: 44,
       grade: 6,
-      activities: "cycling",
+      activity: "cycling",
       rating: 4.3
     });
     expect (response.body.startCoordinates).to.eql([12,12]);
@@ -116,13 +116,13 @@ describe('PATCH /tracks', () => {
  
     const secondTrack = await Track.findById(response.body._id);
     expect(secondTrack).not.to.be.null;
-    expect(secondTrack?.activities).to.equal('cycling');
+    expect(secondTrack?.activity).to.equal('cycling');
   });
 
   it ('Should not update a track by query if does not exist', async () => {
     await request(app).patch(`/tracks?name=NoSoyRutaDeLaBDD`).send({
-                      activities : "cicling",
-                    }).expect(400);
+                      activity : "cycling",
+                    }).expect(404);
   });
 });
 
@@ -131,13 +131,13 @@ describe('PATCH /tracks/:id', () => {
   it('Should update a track by id', async () => {
     const awaitTrack = await request(app).post('/tracks').send(trackToAdd).expect(201);
     const response = await request(app).patch(`/tracks/${awaitTrack.body._id}`).send({
-                      activities : "cycling",
+                      activity : "cycling",
                     }).expect(200);
     expect(response.body).to.include({
-      name: "Decathlon",
+      name: "Tetir",
       length: 60,
       grade: 8,
-      activities: "cycling",
+      activity: "cycling",
       rating: 5
     });
     expect (response.body.startCoordinates).to.eql([10,10]);
@@ -145,18 +145,18 @@ describe('PATCH /tracks/:id', () => {
  
     const secondTrack = await Track.findById(response.body._id);
     expect(secondTrack).not.to.be.null;
-    expect(secondTrack?.activities).to.equal('cycling');
+    expect(secondTrack?.activity).to.equal('cycling');
   });
 
   it ('Should not update a track by id if the id does not exist', async () => {
     await request(app).patch(`/tracks/ab5d342cf4d742296183d123`).send({
-                      activities : "cycling",
+                      activity : "cycling",
                     }).expect(404);
   });
 
   it ('Should not update a track by id if is not valid', async () => {
     await request(app).patch(`/tracks/idquenoexiste`).send({
-                      activities : "cycling",
+                      activity : "cycling",
                     }).expect(400);
   });
 });
@@ -164,12 +164,12 @@ describe('PATCH /tracks/:id', () => {
 
 describe('DELETE /tracks', () => {
   it('Should delete a track by query', async () => {
-    const response = await request(app).delete(`/tracks?name=Ironman`).expect(200);
+    const response = await request(app).delete(`/tracks?name=Ruta del pescado`).expect(200);
     expect(response.body).to.include({
-      name: "Ironman",
+      name: "Ruta del pescado",
       length: 44,
       grade: 6,
-      activities: "running",
+      activity: "running",
       rating: 4.3
     });
     const secondTrack = await Track.findById(response.body._id);
@@ -186,10 +186,10 @@ describe('DELETE /tracks/:id', () => {
     const awaitTrack = await request(app).post('/tracks').send(trackToAdd).expect(201);
     const response = await request(app).delete(`/tracks/${awaitTrack.body._id}`).expect(200);
     expect(response.body).to.include({
-      name: "Decathlon",
+      name: "Tetir",
       length: 60,
       grade: 8,
-      activities: "running",
+      activity: "running",
       rating: 5
     });
   });

@@ -5,7 +5,7 @@ import { User } from '../../src/models/user.js';
 
 const firstUser = {
   name: "Yanfri",
-  activities : "running", 
+  activity : "running", 
   trainingStatistics : {
     week : { km : 10,
       elevationGain : 100,
@@ -21,7 +21,7 @@ const firstUser = {
 
 const userToAdd = {
   name: "Aday",
-  activities : "running",
+  activity : "running",
   trainingStatistics : {
     week : { km : 2,
       elevationGain : 1300,
@@ -46,7 +46,7 @@ describe('POST /users', () => {
     const response = await request(app).post('/users').send(userToAdd).expect(201);
     expect(response.body).to.include({
       name: "Aday",
-      activities : "running", 
+      activity : "running", 
     });
 
     expect(response.body.trainingStatistics).to.eql({
@@ -67,7 +67,7 @@ describe('POST /users', () => {
   it('Should get an error if the trainingStatistics are invalid', async () => {
     await request(app).post('/users').send({
       name: "Aday",
-      activities : "running",
+      activity : "running",
       trainingStatistics : {
         week : { km : "äsdasd",
           elevationGain : "soy una estadística mala",
@@ -91,7 +91,7 @@ describe('GET /users', () => {
     const response = await request(app).get('/users?name=Yanfri').expect(200);
     expect(response.body[0]).to.include({
       name: 'Yanfri',
-      activities : 'running', 
+      activity : 'running', 
     });
 
     expect(response.body[0].trainingStatistics).to.eql({
@@ -114,7 +114,7 @@ describe('GET /users/:id', () => {
     const response = await request(app).get(`/users/${awaitUser.body._id}`).expect(200);
     expect(response.body).to.include({
       name: 'Aday',
-      activities : 'running', 
+      activity : 'running', 
     });
   });
   
@@ -132,21 +132,21 @@ describe('GET /users/:id', () => {
 describe('PATCH /users', () => {
   it('Should update a user by query', async () => {
     const response = await request(app).patch(`/users?name=Yanfri`).send({
-                      activities : "cycling",
+                      activity : "cycling",
                     }).expect(200);
     expect(response.body).to.include({
       name: 'Yanfri',
-      activities : 'cycling', 
+      activity : 'cycling', 
     });
     const secondUser = await User.findById(response.body._id);
     expect(secondUser).not.to.be.null;
-    expect(secondUser?.activities).to.equal('cycling');
+    expect(secondUser?.activity).to.equal('cycling');
   });
 
   it ('Should not update a user by query if does not exist', async () => {
     await request(app).patch(`/users?name=NoSoyUsuarioDeLaBDD`).send({
-                      activities : "cicling",
-                    }).expect(400);
+                      activity : "cycling",
+                    }).expect(404);
   });
 });
 
@@ -155,27 +155,27 @@ describe('PATCH /users/:id', () => {
   it('Should update a user by id', async () => {
     const awaitUser = await request(app).post('/users').send(userToAdd).expect(201);
     const response = await request(app).patch(`/users/${awaitUser.body._id}`).send({
-                      activities : "cycling",
+                      activity : "cycling",
                     }).expect(200);
 
     expect(response.body).to.include({
       name: 'Aday',
-      activities : 'cycling',
+      activity : 'cycling',
     });
     const secondUser = await User.findById(response.body._id);
     expect(secondUser).not.to.be.null;
-    expect(secondUser?.activities).to.equal('cycling');
+    expect(secondUser?.activity).to.equal('cycling');
   });
 
   it ('Should not update a user by id if the id does not exist', async () => {
     await request(app).patch(`/users/ab5d342cf4d742296183d123`).send({
-                      activities : "cycling",
+                      activity : "cycling",
                     }).expect(404);
   });
 
   it ('Should not update a user by id if is not valid', async () => {
     await request(app).patch(`/users/idquenoexiste`).send({
-                      activities : "cycling",
+                      activity : "cycling",
                     }).expect(400);
   });
 });
@@ -186,7 +186,7 @@ describe('DELETE /users', () => {
     const response = await request(app).delete(`/users?name=Yanfri`).expect(200);
     expect(response.body).to.include({
       name: 'Yanfri',
-      activities : 'running',
+      activity : 'running',
     });
     const secondUser = await User.findById(response.body._id);
     expect(secondUser).to.be.null;
@@ -203,7 +203,7 @@ describe('DELETE /users/:id', () => {
     const response = await request(app).delete(`/users/${awaitUser.body._id}`).expect(200);
     expect(response.body).to.include({
       name: 'Aday',
-      activities : 'running',
+      activity : 'running',
     });
   });
 
