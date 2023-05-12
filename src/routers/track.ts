@@ -1,8 +1,6 @@
 import express from "express";
 import { Track } from "../models/track.js";
-import { User } from "../models/user.js";
-import { Challenge } from "../models/challenge.js";
-import { Group } from "../models/group.js";
+
 
 export const trackRouter = express.Router();
 
@@ -148,24 +146,20 @@ trackRouter.delete("/tracks", async (req, res) => {
   const name = req.query.name;
 
   try {
-    const track = await Track.findOneAndDelete({ name });
+    const track = await Track.findOne({ name });
     if (!track) {
       return res.status(404).send();
     }
+    // No funciona el find
+    //await User.updateMany({ "tracksHistory.track": {} }, { $pull: { tracksHistory: { track: track._id, date: "1987-09-28" }} });
+    //await Group.updateMany({ tracksHistory: { track: track._id, date: {}  } }, { $pull: { tracksHistory: { track: track._id, date: {}  }} });
 
-    // borrar de la historico de rutas de un usuario
-    await User.updateMany({ tracksHistory: {track: track._id} }, { $pull: { tracksHistory: { $elemMatch: { $eq: track._id }}} });    
-    // borrar de las rutas favoritas de un usuario
-    await User.updateMany({ favouriteTracks: track._id },{ $pull: { favouriteTracks: track._id} });
-    // borrar de las rutas favoritas de un grupo
-    await Group.updateMany({ favouriteTracks: track._id },{ $pull: { favouriteTracks: track._id} });
-    // borrar ruta de los retos en los que se incluye
-    await Challenge.updateMany({ tracks: track._id },{ $pull: { tracks: track._id }});
-
+    await Track.findOneAndDelete({ name });
     return res.status(200).send(track);
   } catch (error) {
     return res.status(400).send(error);
   }
+
 });
 
 /**

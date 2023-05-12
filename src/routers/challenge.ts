@@ -162,8 +162,6 @@ challengeRouter.delete("/challenges", async (req, res) => {
     if (!challenge) {
       return res.status(404).send();
     }
-    // actualizar los usuarios de los que forma parte el challenge
-    await User.updateMany({ activeChallenges: challenge._id }, { $pull: { activeChallenges: challenge._id }});
     await Challenge.findOneAndDelete({ name });
     return res.status(200).send(challenge);
   } catch (error) {
@@ -181,8 +179,6 @@ challengeRouter.delete("/challenges/:id", async (req, res) => {
     if (!challenge) {
       return res.status(404).send();
     }
-    // actualizar los usuarios de los que forma parte el challenge
-    await User.updateMany({ activeChallenges: challenge._id }, { $pull: { activeChallenges: challenge._id }});
     await Challenge.findByIdAndDelete(challengeID);
     return res.send(challenge);
   } catch (error) {
