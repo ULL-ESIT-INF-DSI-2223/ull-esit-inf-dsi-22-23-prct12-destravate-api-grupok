@@ -22,7 +22,7 @@ groupRouter.post("/groups", async (req, res) => {
     await group.save();
     res.status(201).send(group);
   } catch (err) {
-    res.status(400).send(err);
+    res.status(400).send(err);  
   }
 });
 

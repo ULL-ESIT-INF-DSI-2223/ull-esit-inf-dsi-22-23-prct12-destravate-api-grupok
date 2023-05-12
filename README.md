@@ -616,11 +616,113 @@ Mediante el método PATCH se puede actualizar información de los usuarios, para
 El código de la implementación de esta operación es el siguiente:
 
 ```typescript
+userRouter.patch("/users", async (req, res) => {
+  //actualizar un usaurio por su nombre
+  const name = req.query.name;
+  const updates = Object.keys(req.body);
+  const allowedUpdates = [
+    "name",
+    "activity",
+    "friends",
+    "groups",
+    "favouriteTracks",
+    "activeChallenges",
+    "tracksHistory",
+    "trainingStatistics",
+  ];
+  const isValidOperation = updates.every((update) =>
+    allowedUpdates.includes(update)
+  );
+  if (!isValidOperation) {
+    return res.status(400).send({ error: "Invalid updates!" });
+  }
+  try {            
+    const user = await User.findOneAndUpdate({ name }, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!user) {
+      return res.status(404).send();
+    }
+    // recorrer updates y actualizar las demas cosas en cada caso
+    for (const update of updates) {
+      switch (update) {
+        case "groups":
+          // borrar de los grupos en los que es participante
+          await Group.updateMany({ members: user._id },{ $pull: { members: user._id }});
+          for(const groupID of req.body.groups) {
+            await Group.findByIdAndUpdate(groupID, { $push: { members: user._id }}, { new: true, runValidators: true, });
+          }
+        break;
+        case "activeChallenges":
+          // borrar de los challenge en los que es participante
+          await Challenge.updateMany({ users: user._id },{ $pull: { users: user._id }});
+          for(const challengeID of req.body.activeChallenges) {
+            await Challenge.findByIdAndUpdate(challengeID, { $push: { users: user._id }}, { new: true, runValidators: true, });
+          }
+        break;
+        case "tracksHistory":
+          // borrar de los tracks en los que es participante
+          await Track.updateMany({ users: user._id },{ $pull: { users: user._id }});
+          for(const track of req.body.tracksHistory) {
+            const trackID = track.track;
+            await Track.findByIdAndUpdate(trackID, { $push: { users: user._id }}, { new: true, runValidators: true, });
+          }
+        break;
+        default:
+        break;
+      }
+    }
+    return res.status(200).send(user);
+  } catch (err) {
+    return res.status(400).send(err);
+  }
+});
+```
 
+Este es el código para realizar el patch utilizando la query de la url para obtener el nombre del usuario, para el caso de usar el id es exactamente lo mismo que este pero utilizando algunas funciones buscando con el id en lugar del nombre como en el GET.
 
+Primero se obtienen las claves del body de la petición, se comprueba que todas las claves sean actualizaciones válidas, se busca el usuario por el nombre y se actualiza con la información del body de la petición, devolviendo el nuevo usuario (para ello se usa la variable new en la llamada a `findOneAndUpdate`). Después se recorren las claves del body de la petición y se actualizan las demás cosas en cada caso, en el caso de los grupos, se eliminan los grupos de los que es participante y se actualizan con los nuevos grupos, en el caso de los retos, se eliminan los retos de los que es participante y se actualizan con los nuevos retos, en el caso de las rutas realizadas, se eliminan las rutas de las que es participante y se actualizan con las nuevas rutas. En caso de que no se encuentre el usuario se devuelve un error 404 y en caso de que haya algún error se devuelve un error 400, si no hay ningún error se devuelve el usuario actualizado con un código 200.
 
+##### DELETE
 
+Mediante el método DELETE se puede eliminar un usuario, para ello tambien hay distintas formas de realizar la petición al igual que en los métodos anteriores. 
 
+El código de la implementación de esta operación es el siguiente:
+
+```typescript
+/**
+ * Delete para eliminar un usuario en específico mediante ID
+ */
+userRouter.delete("/users/:id", async (req, res) => {
+  const userID = req.params.id;
+  try {
+    const user = await User.findById(userID);
+    //const user = await User.findByIdAndDelete(req.params.id);
+    if (!user) {
+      return res.status(404).send();
+    }
+    await User.findByIdAndDelete(userID);
+    return res.send(user);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+});
+```
+
+Este es el código para borrar buscando por el id, para el caso de usar el nombre es exactamente lo mismo que este pero utilizando algunas funciones buscando con el nombre en lugar del id. 
+
+Primero se obtiene el id del usuario de los parámetros de la url, se busca el usuario con ese id, si no se encuentra se devuelve un error 404, si se encuentra se elimina y se devuelve el usuario eliminado con un código 200. En caso de que haya algún error se devuelve un error 500. Cabe destacar que al borrar el usuario, se eliminan las referencias a este en los grupos, retos y rutas realizadas, sin mebargo hay ciertos objetos que no se eliminan, por ejemplo cuando un id de usuario está dentro de un objeto historyData, este no se elimina.
+
+#### Group
+
+Para las operaciones sobre los grupos, se utiliza la ruta `/groups`, utilizando los métodos HTTP referentes a cada operación CRUD (POST, GET, PATCH, DELETE). En cuanto a este, es muy similar al de los usuarios, por lo que no se comentará en detalle cada operación, para empezar el DELETE es exactamente igual, esto se repite en los demas modelos.
+
+En cuanto al post lo único que cambia es lo que se actualiza, en este caso se actualizan los grupos de los usuarios que forman parte del grupo.
+
+Por otro lado, el get es exactamente igual, lo que cambia es la información que se muestra con el populate, en este caso solo se muestra el nombre de los usuarios que forman parte del grupo y el nombre de las rutas favoritas del grupo.
+
+Por último, el patch en gran parte también es igual, solo que las opciones a actualiza
 
 
 

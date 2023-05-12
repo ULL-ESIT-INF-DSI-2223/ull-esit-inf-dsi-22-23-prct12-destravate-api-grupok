@@ -242,14 +242,12 @@ userRouter.patch("/users/:id", async (req, res) => {
  */
 userRouter.delete("/users", async (req, res) => {
   const name = req.query.name;
-
   try {
     const user = await User.findOne({ name });
     //const user = await User.findOneAndDelete({ name });
     if (!user) {
       return res.status(404).send();
     }
-
     await User.findOneAndDelete({ name });
     return res.status(200).send(user);
   } catch (error) {
@@ -268,8 +266,6 @@ userRouter.delete("/users/:id", async (req, res) => {
     if (!user) {
       return res.status(404).send();
     }
-    
-    
     await User.findByIdAndDelete(userID);
     return res.send(user);
   } catch (error) {
