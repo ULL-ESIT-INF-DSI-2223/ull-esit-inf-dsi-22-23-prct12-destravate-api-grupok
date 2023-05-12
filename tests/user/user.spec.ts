@@ -115,15 +115,15 @@ describe('GET /users/:id', () => {
 describe('PATCH /users', () => {
   it('Should update a user by query', async () => {
     const response = await request(app).patch(`/users?name=Yanfri`).send({
-                      activities : "cicling",
+                      activities : "cycling",
                     }).expect(200);
     expect(response.body).to.include({
       name: 'Yanfri',
-      activities : 'cicling', 
+      activities : 'cycling', 
     });
     const secondUser = await User.findById(response.body._id);
     expect(secondUser).not.to.be.null;
-    expect(secondUser?.activities).to.equal('cicling');
+    expect(secondUser?.activities).to.equal('cycling');
   });
   // TODO: Poner el caso en el que no se ponga un name que exista
   // TODO: Poner que no se actualice en caso de que el parámetro no cambie
@@ -137,12 +137,12 @@ describe('PATCH /users/:id', () => {
     const getresponse = await request(app).get('/users').expect(200);
     console.log(getresponse.body);
     const response = await request(app).patch(`/users/${awaitUser.body._id}`).send({
-                      activities : "cicling",
+                      activities : "cycling",
                     }).expect(200);
 
     expect(response.body).to.include({
       name: 'Aday',
-      activities : 'cicling',
+      activities : 'cycling',
     });
   });
 });
