@@ -2,6 +2,6 @@
  * Enumerado de actividades
  */
 export enum Activity {
-  cicling = "cicling",
+  cicling = "cycling",
   running = "running",
 }

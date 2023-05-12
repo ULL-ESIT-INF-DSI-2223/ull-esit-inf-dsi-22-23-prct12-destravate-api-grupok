@@ -117,6 +117,7 @@ userRouter.patch("/users", async (req, res) => {
     "favouriteTracks",
     "activeChallenges",
     "tracksHistory",
+    "trainingStatistics",
   ];
   const isValidOperation = updates.every((update) =>
     allowedUpdates.includes(update)
@@ -182,6 +183,7 @@ userRouter.patch("/users/:id", async (req, res) => {
     "favouriteTracks",
     "activeChallenges",
     "tracksHistory",
+    "trainingStatistics",
   ];
   const isValidOperation = updates.every((update) =>
     allowedUpdates.includes(update)
@@ -191,7 +193,7 @@ userRouter.patch("/users/:id", async (req, res) => {
   }
   try {
     const user = await User.findByIdAndUpdate(
-      { userID }, 
+      userID, 
       req.body, 
       { new: true, runValidators: true, }
     );

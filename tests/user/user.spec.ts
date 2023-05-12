@@ -115,15 +115,15 @@ describe('GET /users/:id', () => {
 describe('PATCH /users', () => {
   it('Should update a user by query', async () => {
     const response = await request(app).patch(`/users?name=Yanfri`).send({
-                      activities : "cicling",
+                      activities : "cycling",
                     }).expect(200);
     expect(response.body).to.include({
       name: 'Yanfri',
-      activities : 'cicling', 
+      activities : 'cycling', 
     });
     const secondUser = await User.findById(response.body._id);
     expect(secondUser).not.to.be.null;
-    expect(secondUser?.activities).to.equal('cicling');
+    expect(secondUser?.activities).to.equal('cycling');
   });
 
   it ('Should not update a user by query', async () => {
@@ -145,12 +145,12 @@ describe('PATCH /users/:id', () => {
   it('Should update a user by id', async () => {
     const awaitUser = await request(app).post('/users').send(userToAdd).expect(201);
     const response = await request(app).patch(`/users/${awaitUser.body._id}`).send({
-                      activities : "cicling",
+                      activities : "cycling",
                     }).expect(200);
 
     expect(response.body).to.include({
       name: 'Aday',
-      activities : 'cicling',
+      activities : 'cycling',
     });
   });
 

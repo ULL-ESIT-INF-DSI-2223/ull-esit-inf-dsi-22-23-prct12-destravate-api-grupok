@@ -1,5 +1,7 @@
 import express from "express";
 import { Track } from "../models/track.js";
+import { User } from "../models/user.js";
+import { Challenge } from "../models/challenge.js";
 
 export const trackRouter = express.Router();
 
@@ -16,7 +18,6 @@ trackRouter.post("/tracks", async (req, res) => {
 
   try {
     await track.save();
-    
     return res.status(201).send(track);
   } catch (err) {
     return res.status(400).send(err);
@@ -30,7 +31,9 @@ trackRouter.get("/tracks", async (req, res) => {
   const filter = req.query.name ? { name: req.query.name.toString() } : {};
 
   try {
-    const tracks = await Track.find(filter);
+    const tracks = await Track.find(filter).populate(
+      { path: "users", select: "name"}
+    );
 
     if (tracks.length !== 0) {
       return res.send(tracks);
@@ -148,6 +151,14 @@ trackRouter.delete("/tracks", async (req, res) => {
     if (!track) {
       return res.status(404).send();
     }
+
+    // borrar de la historico de rutas de un usuario
+    await User.updateMany({ tracksHistory: {track: track._id} },{ $pull: { tracksHistory: {track: track._id} }});
+    // borrar de las rutas favoritas de un usuario
+    await User.updateMany({ favouriteTracks: track._id },{ $pull: { favouriteTracks: track._id} });
+    // borrar ruta de los retos en los que se incluye
+    await Challenge.updateMany({ tracks: track._id },{ $pull: { tracks: track._id }});
+
     return res.status(200).send(track);
   } catch (error) {
     return res.status(400).send(error);
