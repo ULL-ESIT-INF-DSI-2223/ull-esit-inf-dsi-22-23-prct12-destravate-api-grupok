@@ -722,7 +722,8 @@ Para las operaciones sobre los grupos, se utiliza la ruta `/groups`, utilizando 
 
 
 
-
+- Link bdd mongodbatlas: mongodb+srv://tracks-rest-api:tracksDSI@cluster0.owwhfgp.mongodb.net/
+- Cyclic link: https://wide-eyed-plum-dungarees.cyclic.app
 - levantar servidor mongodb:  sudo /home/usuario/mongodb/bin/mongod --dbpath /home/usuario/mongodb-data/
 - levantar servidor express: npm run dev (de momento)
 - Para los test: npm run test
