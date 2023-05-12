@@ -60,7 +60,6 @@ describe('POST /users', () => {
     expect(secondUser?.name).to.equal('Aday');
   });
 
-  /// Introducimos el mismo usuario
   it('Should get an error', async () => {
     await request(app).post('/users').send(firstUser).expect(400);
   });
