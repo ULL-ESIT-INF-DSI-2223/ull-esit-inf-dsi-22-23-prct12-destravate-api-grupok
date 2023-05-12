@@ -79,7 +79,138 @@ El puerto a utilizar se determina según el entorno en el que se ejecute la apli
 Ahora se comentará cada uno de los ficheros dentro de los directorios comentados anteriormente.
 
 ### Enums
+#### activityEnum.ts
 
+Este enumerado es simplemente para los tipos de actividades que tienen las rutas, estos son solo dos, correr y bicicleta, que los hemos representado en ingles como running y cycling. 
+
+```typescript	
+export enum ActivityEnum {
+  running = 'running',
+  cycling = 'cycling',
+}
+```
+
+Simplemente se utiliza para que el usuario no pueda introducir otro tipo de actividad que no sea una de estas dos.
+
+### Interfaces
+#### HistoryInterface
+
+Esta interfaz es para el histórico de rutas de los usuarios y grupos, como se ha comentado anteriormente, esta interfaz tiene dos atributos, el id de la ruta y la fecha en la que se realizó.
+
+```typescript
+export interface HistoryData {
+  track: Schema.Types.ObjectId;
+  date: Date;
+}
+```
+
+Vemos que el id de la ruta es de tipo `Schema.Types.ObjectId`, esto es porque en la base de datos se almacena como un id único de tipo `ObjectId`, que es un tipo de dato que proporciona mongoose para identificar de manera única los documentos de la base de datos.
+
+#### TrainingStatisticsInterface
+
+Esta interfaz es para las estadísticas de entrenamiento de los usuarios y grupos, como se ha comentado anteriormente, esta interfaz tiene tres atributos, uno para las estadísticas de la semana, otro para las del mes y otro para las del año. Cada uno de estos atributos tiene dos atributos, uno para los kilómetros y otro para el desnivel acumulado.
+
+```typescript
+export interface TrainingStatisticsInterface {
+  week: { km: number; elevationGain: number };
+  month: { km: number; elevationGain: number };
+  year: { km: number; elevationGain: number };
+}
+```
+
+### Models
+
+Para cada una de las rutas de la api, se ha creado un modelo de datos, se debe crear una interfaz para dicho modelo y un esquema de mongoose. 
+
+#### Track
+
+La interfaz diseñada para una ruta es el siguiente:
+
+```typescript
+interface TrackDocumentInterface extends Document {
+  name: string;
+  startCoordinates: [number, number]; // [lat, long]
+  endCoordinates: [number, number]; // [lat, long]
+  length: number;
+  grade: number;
+  users: [UserDocumentInterface];
+  activity: Activity;
+  rating: number;
+}
+```
+
+En este caso, el id de los usuarios que han realizado la ruta se almacena como un array de usuarios, usando la interfaz de usuario que se ha creado y se comentará más adelante. Además, el tipo de actividad es el enumerado que se ha comentado anteriormente, otra cosa a resaltar es que las cordeenadas se almacenan como un array de dos elementos, el primero es la latitud y el segundo la longitud.
+
+El esquema de mongoose para este modelo es el siguiente:
+
+```typescript
+const trackSchema = new Schema<TrackDocumentInterface>({
+  name: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  startCoordinates: {
+    type: [Number, Number],
+    required: true,
+  },
+  endCoordinates: {
+    type: [Number, Number],
+    required: true,
+  },
+  length: {
+    type: Number,
+    required: true,
+    validate: {
+      validator: function(val: number) {
+        return val > 0;
+      },
+      message: props => `Invalid length: ${props.value}`
+    }
+  },
+  grade: {
+    type: Number,
+    required: true,
+    validate: {
+      validator: function(val: number) {
+        return val >= 0;
+      },
+      message: props => `Invalid grade: ${props.value}`
+    }
+  },
+  users: {
+    type: [Schema.Types.ObjectId],
+    default: [],
+    ref: 'User',
+  },
+  activity: {
+    type : String, 
+    enum : Object.values(Activity),
+    required: true,
+  },
+  rating: {
+    type: Number,
+    required: false,
+    validate: {
+      validator: function(val: number) {
+        return val >= 0 && val <= 5;
+      },
+      message: props => `Invalid rating: ${props.value}`
+    }
+  },
+});
+```
+
+Viendo punto por punto, comenzando por el atributo `name`, vemos que es de tipo `String`, que es requerido, que se le aplica un `trim` para eliminar los espacios en blanco al principio y al final y que es único, osea que no puede existir un track en la base de datos con el mismo nombre que otro. Los atributos `startCoordinates` y `endCoordinates` son de tipo `Number` y son requeridos. El atributo `length` es de tipo `Number`, es requerido y se le aplica una validación para que el valor sea mayor que 0. El atributo `grade` es de tipo `Number`, es requerido y se le aplica una validación para que el valor sea mayor o igual que 0. El atributo `users` es de tipo `Schema.Types.ObjectId`, es decir, es un array de ids de usuarios, es requerido y por defecto es un array vacío. El atributo `activity` es de tipo `String`, es requerido y se le aplica una validación para que el valor sea uno de los valores del enumerado `Activity`. El atributo `rating` es de tipo `Number`, es requerido y se le aplica una validación para que el valor sea mayor o igual que 0 y menor o igual que 5.
+
+Por ultimo en este fichero se exporta el modelo de datos de la siguiente manera:
+
+```typescript
+export const Track = model<TrackDocumentInterface>('Track', trackSchema);
+```
+
+#### User
 
 
 

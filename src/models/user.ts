@@ -1,6 +1,6 @@
 import { Document, Schema, model } from 'mongoose';
 import { Activity } from '../enums/activityEnum.js';
-import { HistoryData } from '../interfaces/historyEnum.js';
+import { HistoryData } from '../interfaces/historyInterface.js';
 import { TrackDocumentInterface } from './track.js';
 import { TrainingStatisticsInterface } from '../interfaces/trainingStatistics.js';
 import { ChallengeDocumentInterface } from './challenge.js';
