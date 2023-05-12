@@ -38,7 +38,6 @@ describe('POST /tracks', () => {
       activities: "running",
       rating: 5
     });
-    console.log(response.body.startCoordinates);
     expect (response.body.startCoordinates).to.eql([10,10]);
     expect (response.body.endCoordinates).to.eql([22,30]);
  
@@ -53,135 +52,156 @@ describe('POST /tracks', () => {
 });
 
 
-// describe('GET /users', () => {
-//   it('Should get a user by username', async () => {
-//     const response = await request(app).get('/users?name=Yanfri').expect(200);
-//     expect(response.body[0]).to.include({
-//       name: 'Yanfri',
-//       activities : 'running', 
-//     });
+describe('GET /tracks', () => {
+  it('Should get a track by trackname', async () => {
+    const response = await request(app).get('/tracks?name=Ironman').expect(200);
+    expect(response.body[0]).to.include({
+      name: "Ironman",
+      length: 44,
+      grade: 6,
+      activities: "running",
+      rating: 4.3
+    });
+    expect (response.body[0].startCoordinates).to.eql([12,12]);
+    expect (response.body[0].endCoordinates).to.eql([23,25]);
 
-//     expect(response.body[0].trainingStatistics).to.eql({
-//       week: { km: 10, elevationGain: 100 },
-//       month: { km: 0, elevationGain: 0 },
-//       year: { km: 0, elevationGain: 0 }
-//     });
+  });
 
-//   });
-
-//   it('Should not find a user by username', async () => {
-//     await request(app).get('/users?name=NoSoyUsuarioDeLaBDD').expect(404);
-//   });
-// });
+  it('Should not find a track by trackname', async () => {
+    await request(app).get('/tracks?name=NoSoyTrackDeLaBDD').expect(404);
+  });
+});
 
 
-// describe('GET /users/:id', () => {
-//   it('Should get a user by id', async () => {
-//     const awaitUser = await request(app).post('/users').send(trackToAdd).expect(201);
-//     const response = await request(app).get(`/users/${awaitUser.body._id}`).expect(200);
-//     expect(response.body).to.include({
-//       name: 'Aday',
-//       activities : 'running', 
-//     });
-//   });
+describe('GET /tracks/:id', () => {
+  it('Should get a track by id', async () => {
+    const awaitTrack = await request(app).post('/tracks').send(trackToAdd).expect(201);
+    const response = await request(app).get(`/tracks/${awaitTrack.body._id}`).expect(200);
+    expect(response.body).to.include({
+      name: "Decathlon",
+      length: 60,
+      grade: 8,
+      activities: "running",
+      rating: 5
+    });
+    expect (response.body.startCoordinates).to.eql([10,10]);
+    expect (response.body.endCoordinates).to.eql([22,30]);
+  });
   
-//   it ('Should not get a user by id if the id does not exist', async () => {
-//     await request(app).get(`/users/ab5d342cf4d742296183ddb0`).expect(404);
-//   });
+  it ('Should not get a track by id if the id does not exist', async () => {
+    await request(app).get(`/tracks/ab5d342cf4d742296183ddb0`).expect(404);
+  });
 
-//   it ('Should not get a user by id if is not valid', async () => {
-//     await request(app).get(`/users/idquenoexiste`).expect(500);
-//   });
+  it ('Should not get a track by id if is not valid', async () => {
+    await request(app).get(`/tracks/idquenoexiste`).expect(500);
+  });
 
-// });
-
-
-// describe('PATCH /users', () => {
-//   it('Should update a user by query', async () => {
-//     const response = await request(app).patch(`/users?name=Yanfri`).send({
-//                       activities : "cycling",
-//                     }).expect(200);
-//     expect(response.body).to.include({
-//       name: 'Yanfri',
-//       activities : 'cycling', 
-//     });
-//     const secondUser = await User.findById(response.body._id);
-//     expect(secondUser).not.to.be.null;
-//     expect(secondUser?.activities).to.equal('cycling');
-//   });
-
-//   it ('Should not update a user by query if does not exist', async () => {
-//     await request(app).patch(`/users?name=NoSoyUsuarioDeLaBDD`).send({
-//                       activities : "cicling",
-//                     }).expect(400);
-//   });
-// });
+});
 
 
-// describe('PATCH /users/:id', () => {
-//   it('Should update a user by id', async () => {
-//     const awaitUser = await request(app).post('/users').send(trackToAdd).expect(201);
-//     const response = await request(app).patch(`/users/${awaitUser.body._id}`).send({
-//                       activities : "cycling",
-//                     }).expect(200);
+describe('PATCH /tracks', () => {
+  it('Should update a track by query', async () => {
+    const response = await request(app).patch(`/tracks?name=Ironman`).send({
+                      activities : "cycling",
+                    }).expect(200);
+    expect(response.body).to.include({
+      name: "Ironman",
+      length: 44,
+      grade: 6,
+      activities: "cycling",
+      rating: 4.3
+    });
+    expect (response.body.startCoordinates).to.eql([12,12]);
+    expect (response.body.endCoordinates).to.eql([23,25]);
+ 
+    const secondTrack = await Track.findById(response.body._id);
+    expect(secondTrack).not.to.be.null;
+    expect(secondTrack?.activities).to.equal('cycling');
+  });
 
-//     expect(response.body).to.include({
-//       name: 'Aday',
-//       activities : 'cycling',
-//     });
-//     const secondUser = await User.findById(response.body._id);
-//     expect(secondUser).not.to.be.null;
-//     expect(secondUser?.activities).to.equal('cycling');
-//   });
-
-//   it ('Should not update a user by id if the id does not exist', async () => {
-//     await request(app).patch(`/users/ab5d342cf4d742296183d123`).send({
-//                       activities : "cycling",
-//                     }).expect(404);
-//   });
-
-//   it ('Should not update a user by id if is not valid', async () => {
-//     await request(app).patch(`/users/idquenoexiste`).send({
-//                       activities : "cycling",
-//                     }).expect(400);
-//   });
-// });
+  it ('Should not update a track by query if does not exist', async () => {
+    await request(app).patch(`/tracks?name=NoSoyRutaDeLaBDD`).send({
+                      activities : "cicling",
+                    }).expect(400);
+  });
+});
 
 
-// describe('DELETE /users', () => {
-//   it('Should delete a user by query', async () => {
-//     const response = await request(app).delete(`/users?name=Yanfri`).expect(200);
-//     expect(response.body).to.include({
-//       name: 'Yanfri',
-//       activities : 'running',
-//     });
-//     const secondUser = await User.findById(response.body._id);
-//     expect(secondUser).to.be.null;
-//   });
+describe('PATCH /tracks/:id', () => {
+  it('Should update a track by id', async () => {
+    const awaitTrack = await request(app).post('/tracks').send(trackToAdd).expect(201);
+    const response = await request(app).patch(`/tracks/${awaitTrack.body._id}`).send({
+                      activities : "cycling",
+                    }).expect(200);
+    expect(response.body).to.include({
+      name: "Decathlon",
+      length: 60,
+      grade: 8,
+      activities: "cycling",
+      rating: 5
+    });
+    expect (response.body.startCoordinates).to.eql([10,10]);
+    expect (response.body.endCoordinates).to.eql([22,30]);
+ 
+    const secondTrack = await Track.findById(response.body._id);
+    expect(secondTrack).not.to.be.null;
+    expect(secondTrack?.activities).to.equal('cycling');
+  });
 
-//   it ('Should not delete a user by query if the user does not exist', async () => {
-//     await request(app).delete(`/users?name=NoSoyUsuarioDeLaBDD`).expect(404);
-//   });
-// });
+  it ('Should not update a track by id if the id does not exist', async () => {
+    await request(app).patch(`/tracks/ab5d342cf4d742296183d123`).send({
+                      activities : "cycling",
+                    }).expect(404);
+  });
 
-// describe('DELETE /users/:id', () => {
-//   it('Should delete a user by id', async () => {
-//     const awaitUser = await request(app).post('/users').send(trackToAdd).expect(201);
-//     const response = await request(app).delete(`/users/${awaitUser.body._id}`).expect(200);
-//     expect(response.body).to.include({
-//       name: 'Aday',
-//       activities : 'running',
-//     });
-//   });
+  it ('Should not update a track by id if is not valid', async () => {
+    await request(app).patch(`/tracks/idquenoexiste`).send({
+                      activities : "cycling",
+                    }).expect(400);
+  });
+});
 
-//   it ('Should not delete a user by id if the id does not exist', async () => {
-//     await request(app).delete(`/users/ab5d342cf4d742296183d123`).expect(404);
-//   });
 
-//   it ('Should not delete a user by id if is not valid', async () => {
-//     await request(app).delete(`/users/idquenoexiste`).expect(500);
-//   });
-// });
+describe('DELETE /tracks', () => {
+  it('Should delete a track by query', async () => {
+    const response = await request(app).delete(`/tracks?name=Ironman`).expect(200);
+    expect(response.body).to.include({
+      name: "Ironman",
+      length: 44,
+      grade: 6,
+      activities: "running",
+      rating: 4.3
+    });
+    const secondTrack = await Track.findById(response.body._id);
+    expect(secondTrack).to.be.null;
+  });
+
+  it ('Should not delete a track by query if the track does not exist', async () => {
+    await request(app).delete(`/tracks?name=NoSoRutaDeLaBDD`).expect(404);
+  });
+});
+
+describe('DELETE /tracks/:id', () => {
+  it('Should delete a track by id', async () => {
+    const awaitTrack = await request(app).post('/tracks').send(trackToAdd).expect(201);
+    const response = await request(app).delete(`/tracks/${awaitTrack.body._id}`).expect(200);
+    expect(response.body).to.include({
+      name: "Decathlon",
+      length: 60,
+      grade: 8,
+      activities: "running",
+      rating: 5
+    });
+  });
+
+  it ('Should not delete a track by id if the id does not exist', async () => {
+    await request(app).delete(`/tracks/ab5d342cf4d742296183d123`).expect(404);
+  });
+
+  it ('Should not delete a track by id if is not valid', async () => {
+    await request(app).delete(`/tracks/idquenoexiste`).expect(500);
+  });
+});
   
 after(async () => {
   await Track.deleteMany();
