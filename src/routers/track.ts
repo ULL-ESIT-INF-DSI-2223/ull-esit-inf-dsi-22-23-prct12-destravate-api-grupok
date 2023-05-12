@@ -2,6 +2,7 @@ import express from "express";
 import { Track } from "../models/track.js";
 import { User } from "../models/user.js";
 import { Challenge } from "../models/challenge.js";
+import { Group } from "../models/group.js";
 
 export const trackRouter = express.Router();
 
@@ -153,10 +154,11 @@ trackRouter.delete("/tracks", async (req, res) => {
     }
 
     // borrar de la historico de rutas de un usuario
-    // await User.updateMany({ tracksHistory: {track: track._id} },{ $pull: { tracksHistory: {track: track._id} }});
-    await User.updateMany({ tracksHistory: { $elemMatch: { 0: track._id } } },{ $pull: { tracksHistory: { 0: track._id } } });
+    await User.updateMany({ tracksHistory: {track: track._id} },{ $pull:  { $elemMatch: { tracksHistory:{ track : track._id }} }});
     // borrar de las rutas favoritas de un usuario
     await User.updateMany({ favouriteTracks: track._id },{ $pull: { favouriteTracks: track._id} });
+    // borrar de las rutas favoritas de un grupo
+    await Group.updateMany({ favouriteTracks: track._id },{ $pull: { favouriteTracks: track._id} });
     // borrar ruta de los retos en los que se incluye
     await Challenge.updateMany({ tracks: track._id },{ $pull: { tracks: track._id }});
 
