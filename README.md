@@ -727,21 +727,20 @@ Por último, el patch en gran parte también es igual, solo que las opciones a a
 
 
 
-- Link bdd mongodbatlas: mongodb+srv://tracks-rest-api:tracksDSI@cluster0.owwhfgp.mongodb.net/
-- Cyclic link: https://wide-eyed-plum-dungarees.cyclic.app
-- levantar servidor mongodb:  sudo /home/usuario/mongodb/bin/mongod --dbpath /home/usuario/mongodb-data/
-- levantar servidor express: npm run dev (de momento)
-- Para los test: npm run test
-
-
 TRABAJO QUE FALTA (CÓDIGO)
 - Test de linkear todo
 
-## Ejemplos de uso
-Aquí se
+## Ejecución y ejemplos de uso
+Para la ejecucicón de la API, hay uqe seguir un procedimiento, el cual es la ejecución del servidor en MongoDB, y luego la ejecución del servidor en express o la pruebas, según lo que se desee. Los comandos son:
 
-User:
+- Servidor mongodb:  `sudo /home/usuario/mongodb/bin/mongod --dbpath /home/usuario/mongodb-data/`
+- Servidor express: `npm run dev (de momento)`
+- Test: `npm run test`
 
+Aquí se ofrecen distintos ejemplos usados a lo largo del desarrollo, los cuales se pueden emplear como plantillas para hacer solicitudes (Recordar eliminar los ID porque aparecerán errores si no encuentan dichos id en la base de datos):
+
+#### User:
+```typescript
 {
   "name": "Aday2",
   "activity": "running",
@@ -760,11 +759,12 @@ User:
     }],
   "activeChallenges": ["645d33aff4d742296183ddad"]
 }
+```
 
-Groups:
-
+#### Groups:
+```typescript
 {
- "name": "GrupoAday",
+ "name": "GrupoBrayan",
  "groupStatistics": {
     "week": {
       "km": 10,
@@ -779,22 +779,25 @@ Groups:
       "elevationGain": 500
     }
   },
-  "members": ["645ccf402d45736f7d2cfdb1"],
+  "members": [],
   "favouriteTracks": []
+  "tracksHistory": []
 }
+```
 
-
-Challenge:
+#### Challenge:
+```typescript
 {
-  "name": "Ironman",
+  "name": "SergioChallenge",
   "tracks": [],
   "activity": "running",
   "length": 45,
   "users": []
 }
+```
 
-
-Track:
+#### Track:
+```typescript
 {
   "name": "Ironman",
   "startCoordinates": [12,12],
@@ -805,3 +808,19 @@ Track:
   "activity": "running",
   "rating": 4.3
 }
+```
+
+## MongoDBAtlas y Cyclic
+Mediante MongoDBAtlas y Cyclic, se ha subido la base de datos y la api a servidores que permiten su uso fuera de este entorno. Los enlaces de interes son:
+
+- Base de datos en MongoDBAtlas: `mongodb+srv://tracks-rest-api:tracksDSI@cluster0.owwhfgp.mongodb.net/`
+- Acceso al servidor de cyclic: `https://wide-eyed-plum-dungarees.cyclic.app`
+
+## Conclusiones
+
+## Referencias
+
+- [Guión de la práctica](https://ull-esit-inf-dsi-2223.github.io/prct12-destravate-api/)
+- [Apuntes de la asignatura](https://ull-esit-inf-dsi-2223.github.io/nodejs-theory/)
+- [ágina de mongoDBAtlas:](https://www.mongodb.com/atlas/database)
+- [Página de Cyclic](https://www.cyclic.sh/)
