@@ -37,6 +37,26 @@ User:
 
 Groups:
 
+{
+ "name": "GrupoAday",
+ "groupStatistics": {
+    "week": {
+      "km": 10,
+      "elevationGain": 100
+    },
+    "month": {
+      "km": 20,
+      "elevationGain": 200
+    },
+    "year": {
+      "km": 50,
+      "elevationGain": 500
+    }
+  },
+  "members": ["645ccf402d45736f7d2cfdb1"],
+  "favouriteTracks": []
+}
+
 
 Challenge:
 {
