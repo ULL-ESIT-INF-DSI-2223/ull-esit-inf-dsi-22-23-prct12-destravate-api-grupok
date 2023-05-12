@@ -417,9 +417,6 @@ Por ultimo en este fichero se exporta el modelo de datos al igual que en los ant
 
 
 
-- Editar Typedoc
-- Workflow ignorados (los tiene Aday en su pc)
-- Entry points de la documentación
 
 - levantar servidor mongodb:  sudo /home/usuario/mongodb/bin/mongod --dbpath /home/usuario/mongodb-data/
 - levantar servidor express: npm run dev (de momento)
@@ -427,8 +424,7 @@ Por ultimo en este fichero se exporta el modelo de datos al igual que en los ant
 
 
 TRABAJO QUE FALTA (CÓDIGO)
-- Ver que hacer con el ranking de group
-- Linkear todo
+- Test de linkear todo
 
 
 User:
