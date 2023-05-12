@@ -726,7 +726,7 @@ Por último, en el patch cambia las opciones validas a actualizar. Lo unico a me
 Se debe mencionar que en el `delete` se deberían borrar las referencias a la ruta en los usuarios que la tienen dentro de su `tracksHistory`, sin embargo, esto no se ha podido realizar, ya que la base de datos no permite esto o no encontramos la forma, ya que al formar parte de un objeto con el elemento id y la fecha, conseguimos borrar la referencia al id, pero no a la fecha. y se quedaba igual el objeto pero con el id vacio y la fecha aun existiendo.
 
 ## Ejecución y ejemplos de uso
-Para la ejecucicón de la API, hay uqe seguir un procedimiento, el cual es la ejecución del servidor en MongoDB, y luego la ejecución del servidor en express o la pruebas, según lo que se desee. Los comandos son:
+Para la ejecucicón de la API, hay que seguir un procedimiento, el cual es la ejecución del servidor en MongoDB, y luego la ejecución del servidor en express o la pruebas, según lo que se desee. Los comandos son:
 
 - Servidor mongodb:  `sudo /home/usuario/mongodb/bin/mongod --dbpath /home/usuario/mongodb-data/`
 - Servidor express: `npm run dev (de momento)`
