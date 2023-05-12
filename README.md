@@ -718,6 +718,11 @@ Primero se obtiene el id del usuario de los parámetros de la url, se busca el u
 
 Para las operaciones sobre los grupos, se utiliza la ruta `/groups`, utilizando los métodos HTTP referentes a cada operación CRUD (POST, GET, PATCH, DELETE). En cuanto a este, es muy similar al de los usuarios, por lo que no se comentará en detalle cada operación, para empezar el DELETE es exactamente igual, esto se repite en los demas modelos.
 
+En cuanto al post lo único que cambia es lo que se actualiza, en este caso se actualizan los grupos de los usuarios que forman parte del grupo.
+
+Por otro lado, el get es exactamente igual, lo que cambia es la información que se muestra con el populate, en este caso solo se muestra el nombre de los usuarios que forman parte del grupo y el nombre de las rutas favoritas del grupo.
+
+Por último, el patch en gran parte también es igual, solo que las opciones a actualiza
 
 
 
