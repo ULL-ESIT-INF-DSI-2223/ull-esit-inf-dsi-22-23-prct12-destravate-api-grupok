@@ -212,7 +212,22 @@ export const Track = model<TrackDocumentInterface>('Track', trackSchema);
 
 #### User
 
+La interfaz diseñada para un usuario es el siguiente:
 
+```typescript
+interface UserDocumentInterface extends Document {
+  name: string;
+  activity: Activity;
+  friends: UserDocumentInterface[];
+  groups: GroupDocumentInterface[]
+  trainingStatistics: TrainingStatisticsInterface;
+  favouriteTracks: TrackDocumentInterface[];
+  activeChallenges: ChallengeDocumentInterface[];   
+  tracksHistory: HistoryData[];
+}
+```
+
+En este caso, el id de los amigos se almacena como un array de usuarios, usando la interfaz de usuario que se ha creado y se comentará más adelante. Además, el id de los grupos se almacena como un array de grupos, usando la interfaz de grupo que se ha creado y se comentará más adelante. Por último, el histórico de rutas se almacena como un array de objetos de tipo `HistoryData`, que es la interfaz que se ha comentado anteriormente.
 
 
 
