@@ -478,28 +478,7 @@ Todas las operaciones a llevar a cabo sobre los usuarios, se realizan a traves d
 
 ##### POST
 
-Esta operación se utiliza para crear un nuevo usuario, para ello se debe realizar una petición POST a la ruta `/users` con la información del usuario en el body de la petición, aqui un ejemplo de como sería el cuerpo de la petición:
-
-```json
-{
-  "name": "Aday2",
-  "activity": "running",
-  "friends": ["645d342cf4d742296183ddb2"],
-  "groups": [],
-  "trainingStatistics": {
-    "week": { "km": 10, "elevationGain": 100},
-    "month": { "km": 20, "elevationGain": 200},
-    "year": { "km": 50, "elevationGain": 500}
-  },
-  "favouriteTracks": ["645d33c8f4d742296183ddaf"],
-  "tracksHistory": [ 
-    {
-      "track": "645d33c8f4d742296183ddaf",
-      "date": "1987-09-28"
-    }],
-  "activeChallenges": ["645d33aff4d742296183ddad"]
-}
-```
+Esta operación se utiliza para crear un nuevo usuario, para ello se debe realizar una petición POST a la ruta `/users` con la información del usuario en el body de la petición, casi al final de este informe hay un ejemplo de como debe ser el body de la petición para cada caso.
 
 Como se puede ver sigue el schema que comentamos con anterioridad, el atributo `name` es el nombre del usuario, el atributo `activity` es el tipo de actividad que realiza, el atributo `friends` es un array de ids de usuarios, el atributo `groups` es un array de ids de grupos, el atributo `trainingStatistics` es un objeto con las estadísticas de entrenamiento, el atributo `favouriteTracks` es un array de ids de rutas, el atributo `tracksHistory` es un array de objetos con el id de la ruta y la fecha en la que se realizó y por último el atributo `activeChallenges` es un array de ids de retos, cabe destacar que las id de los amigos, grupos, rutas y retos deben existir en la base de datos, además se puden omitir muchos de los atributos, ya que no son requeridos y tienen un valor por defecto.
 

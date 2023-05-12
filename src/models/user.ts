@@ -6,6 +6,9 @@ import { TrainingStatisticsInterface } from '../interfaces/trainingStatistics.js
 import { ChallengeDocumentInterface } from './challenge.js';
 import { GroupDocumentInterface } from './group.js';
 
+/**
+ * Interfaz que define el formato de un usuario, se usa en mongoose
+ */
 export interface UserDocumentInterface extends Document {
   name: string;
   activity: Activity;
@@ -17,6 +20,9 @@ export interface UserDocumentInterface extends Document {
   tracksHistory: HistoryData[];
 }
 
+/**
+ * Esquema de mongoose para user, utilizado para crear el modelo de mongoose
+ */
 const userSchema = new Schema<UserDocumentInterface>({
   name: {
     type: String,
@@ -97,4 +103,7 @@ const userSchema = new Schema<UserDocumentInterface>({
   },
 });
 
+/**
+ * Modelo de mongoose para user, exportado pues se usa en la implementación de los routers
+ */
 export const User = model<UserDocumentInterface>('User', userSchema);

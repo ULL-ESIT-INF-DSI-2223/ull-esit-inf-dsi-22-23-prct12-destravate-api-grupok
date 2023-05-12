@@ -2,6 +2,9 @@ import { Document, Schema, model } from 'mongoose';
 import { Activity } from '../enums/activityEnum.js';
 import { UserDocumentInterface } from './user.js';
 
+/**
+ * Interfaz que define el formato de un track, se usa en mongoose
+ */
 export interface TrackDocumentInterface extends Document {
   name: string;
   startCoordinates: [number, number]; // [lat, long]
@@ -13,6 +16,9 @@ export interface TrackDocumentInterface extends Document {
   rating: number;
 }
 
+/**
+ * Esquema de mongoose para track, utilizado para crear el modelo de mongoose
+ */
 const trackSchema = new Schema<TrackDocumentInterface>({
   name: {
     type: String,
@@ -70,4 +76,7 @@ const trackSchema = new Schema<TrackDocumentInterface>({
   },
 });
 
+/**
+ * Modelo de mongoose para track, exportado pues se usa en la implementación de los routers
+ */
 export const Track = model<TrackDocumentInterface>('Track', trackSchema);

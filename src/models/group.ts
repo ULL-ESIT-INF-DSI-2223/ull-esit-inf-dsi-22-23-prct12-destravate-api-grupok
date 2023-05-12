@@ -4,6 +4,9 @@ import { UserDocumentInterface } from './user.js';
 import { TrackDocumentInterface } from './track.js';
 import { HistoryData } from '../interfaces/historyInterface.js';
 
+/**
+ * Interfaz que define el formato de un grupo, se usa en mongoose
+ */
 export interface GroupDocumentInterface extends Document {
   name: string;
   members: UserDocumentInterface[];
@@ -13,6 +16,9 @@ export interface GroupDocumentInterface extends Document {
   tracksHistory: HistoryData[];
 }
 
+/**
+ * Esquema de mongoose para group
+ */
 const groupSchema = new Schema<GroupDocumentInterface>({
   name: {
     type: String,
@@ -52,4 +58,7 @@ const groupSchema = new Schema<GroupDocumentInterface>({
   },
 });
 
+/** 
+ * Modelo de mongoose para group, exportado pues se usa en la implementación de los routers
+*/
 export const Group = model<GroupDocumentInterface>('Group', groupSchema);

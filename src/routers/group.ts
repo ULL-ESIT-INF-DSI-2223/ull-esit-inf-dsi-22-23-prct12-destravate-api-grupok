@@ -2,6 +2,9 @@ import express from "express";
 import { Group } from "../models/group.js";
 import { User } from "../models/user.js";
 
+/**
+ * Se exporta el router para poder ser usado en app.ts
+ */
 export const groupRouter = express.Router();
 
 /**

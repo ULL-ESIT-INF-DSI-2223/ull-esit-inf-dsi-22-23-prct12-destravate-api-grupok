@@ -2,6 +2,9 @@ import express from "express";
 import { Challenge } from "../models/challenge.js";
 import { User } from "../models/user.js";
 
+/**
+ * Se exporta el router para poder ser usado en app.ts
+ */
 export const challengeRouter = express.Router();
 
 /**

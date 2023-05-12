@@ -1,7 +1,9 @@
 import express from "express";
 import { Track } from "../models/track.js";
 
-
+/**
+ * Se exporta el router para poder ser usado en app.ts
+ */
 export const trackRouter = express.Router();
 
 /**

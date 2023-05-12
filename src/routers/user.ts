@@ -4,6 +4,9 @@ import { Group } from "../models/group.js";
 import { Challenge } from "../models/challenge.js";
 import { Track } from "../models/track.js";
 
+/**
+ * Se exporta el router para poder ser usado en app.ts
+ */
 export const userRouter = express.Router();
 
 /**
