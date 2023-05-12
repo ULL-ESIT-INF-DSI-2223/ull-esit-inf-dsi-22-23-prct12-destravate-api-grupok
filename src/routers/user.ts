@@ -45,7 +45,7 @@ userRouter.get("/users", async (req, res) => {
     let users;
     if (name) {
       // Find all users that match the name
-      users = await User.findOne({ name }).populate(
+      users = await User.find({ name }).populate(
         { path: "friends", select: "name"}
       ).populate(
         { path: "groups", select: "name"}
@@ -56,10 +56,6 @@ userRouter.get("/users", async (req, res) => {
       ).populate(
         { path: "tracksHistory.track", select: "name"}
       );
-
-      if (!users) {
-        return res.status(404).send();
-      }
     } else {
       // Find all users
       users = await User.find().populate({ path: "friends", select: "name"}
@@ -72,10 +68,9 @@ userRouter.get("/users", async (req, res) => {
       ).populate(
         { path: "tracksHistory.track", select: "name"}
       );
-
-      if (users.length === 0) {
-        return res.status(404).send();
-      }
+    }
+    if (users.length === 0) {
+      return res.status(404).send();
     }
     return res.status(200).send(users);
   } catch (err) {
