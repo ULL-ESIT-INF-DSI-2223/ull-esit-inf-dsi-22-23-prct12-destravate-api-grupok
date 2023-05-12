@@ -2,7 +2,7 @@ import { Document, Schema, model } from 'mongoose';
 import { TrainingStatisticsInterface } from '../interfaces/trainingStatistics.js';
 import { UserDocumentInterface } from './user.js';
 import { TrackDocumentInterface } from './track.js';
-import { HistoryData } from '../interfaces/historyEnum.js';
+import { HistoryData } from '../interfaces/historyInterface.js';
 
 export interface GroupDocumentInterface extends Document {
   name: string;
