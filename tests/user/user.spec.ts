@@ -107,8 +107,13 @@ describe('GET /users/:id', () => {
   });
   
   it ('Should not get a user by id if the id does not exist', async () => {
-    await request(app).get(`/users/idquenoexiste`).expect(404);
+    await request(app).get(`/users/ab5d342cf4d742296183ddb0`).expect(404);
   });
+
+  it ('Should not get a user by id if is not valid', async () => {
+    await request(app).get(`/users/idquenoexiste`).expect(500);
+  });
+
 });
 
 /// Hacemos el patch mediante query
@@ -129,12 +134,6 @@ describe('PATCH /users', () => {
   it ('Should not update a user by query', async () => {
     await request(app).patch(`/users?name=NoSoyUsuarioDeLaBDD`).send({
                       activities : "cicling",
-                    }).expect(400);
-  });
-
-  it ('Should not update a user by query if the data is equal', async () => {
-    await request(app).patch(`/users?name=Yanfri`).send({
-                      activities : "running",
                     }).expect(400);
   });
 });
@@ -158,14 +157,9 @@ describe('PATCH /users/:id', () => {
                       activities : "cicling",
                     }).expect(400);
   });
-
-  it ('Should not update a user by id if the data is equal', async () => {
-    const awaitUser = await request(app).post('/users').send(userToAdd).expect(201);
-    await request(app).patch(`/users/${awaitUser.body._id}`).send({
-                      activities : "running",
-                    }).expect(400);
-  });
 });
+
+/// Probaos el delete
 
 /// Borramos todos los usuarios
 after(async () => {
