@@ -131,7 +131,7 @@ describe('PATCH /users', () => {
     expect(secondUser?.activities).to.equal('cycling');
   });
 
-  it ('Should not update a user by query', async () => {
+  it ('Should not update a user by query if does not exist', async () => {
     await request(app).patch(`/users?name=NoSoyUsuarioDeLaBDD`).send({
                       activities : "cicling",
                     }).expect(400);
@@ -159,6 +159,12 @@ describe('PATCH /users/:id', () => {
     await request(app).patch(`/users/ab5d342cf4d742296183d123`).send({
                       activities : "cycling",
                     }).expect(404);
+  });
+
+  it ('Should not update a user by id if is not valid', async () => {
+    await request(app).patch(`/users/idquenoexiste`).send({
+                      activities : "cycling",
+                    }).expect(400);
   });
 });
 
