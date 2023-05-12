@@ -18,7 +18,7 @@ TRABAJO QUE FALTA (CÓDIGO)
 User:
 {
   "name": "Aday2",
-  "activities": "running",
+  "activity": "running",
   "friends": ["645d342cf4d742296183ddb2"],
   "groups": [],
   "trainingStatistics": {
@@ -76,6 +76,6 @@ Track:
   "length": 44,
   "grade": 6,
   "users":[],
-  "activities": "running",
+  "activity": "running",
   "rating": 4.3
 }

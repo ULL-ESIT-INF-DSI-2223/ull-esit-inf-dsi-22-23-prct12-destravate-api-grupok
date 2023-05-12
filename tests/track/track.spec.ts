@@ -9,7 +9,7 @@ const firstTrack = {
   endCoordinates: [23,25],
   length: 44,
   grade: 6,
-  activities: "running",
+  activity: "running",
   rating: 4.3
 }
 
@@ -19,7 +19,7 @@ const trackToAdd = {
   endCoordinates: [22,30],
   length: 60,
   grade: 8,
-  activities: "running",
+  activity: "running",
   rating: 5
 }
 
@@ -35,7 +35,7 @@ describe('POST /tracks', () => {
       name: "Tetir",
       length: 60,
       grade: 8,
-      activities: "running",
+      activity: "running",
       rating: 5
     });
     expect (response.body.startCoordinates).to.eql([10,10]);
@@ -59,7 +59,7 @@ describe('GET /tracks', () => {
       name: "Ruta del pescado",
       length: 44,
       grade: 6,
-      activities: "running",
+      activity: "running",
       rating: 4.3
     });
     expect (response.body[0].startCoordinates).to.eql([12,12]);
@@ -81,7 +81,7 @@ describe('GET /tracks/:id', () => {
       name: "Tetir",
       length: 60,
       grade: 8,
-      activities: "running",
+      activity: "running",
       rating: 5
     });
     expect (response.body.startCoordinates).to.eql([10,10]);
@@ -102,13 +102,13 @@ describe('GET /tracks/:id', () => {
 describe('PATCH /tracks', () => {
   it('Should update a track by query', async () => {
     const response = await request(app).patch(`/tracks?name=Ruta del pescado`).send({
-                      activities : "cycling",
+                      activity : "cycling",
                     }).expect(200);
     expect(response.body).to.include({
       name: "Ruta del pescado",
       length: 44,
       grade: 6,
-      activities: "cycling",
+      activity: "cycling",
       rating: 4.3
     });
     expect (response.body.startCoordinates).to.eql([12,12]);
@@ -116,12 +116,12 @@ describe('PATCH /tracks', () => {
  
     const secondTrack = await Track.findById(response.body._id);
     expect(secondTrack).not.to.be.null;
-    expect(secondTrack?.activities).to.equal('cycling');
+    expect(secondTrack?.activity).to.equal('cycling');
   });
 
   it ('Should not update a track by query if does not exist', async () => {
     await request(app).patch(`/tracks?name=NoSoyRutaDeLaBDD`).send({
-                      activities : "cycling",
+                      activity : "cycling",
                     }).expect(404);
   });
 });
@@ -131,13 +131,13 @@ describe('PATCH /tracks/:id', () => {
   it('Should update a track by id', async () => {
     const awaitTrack = await request(app).post('/tracks').send(trackToAdd).expect(201);
     const response = await request(app).patch(`/tracks/${awaitTrack.body._id}`).send({
-                      activities : "cycling",
+                      activity : "cycling",
                     }).expect(200);
     expect(response.body).to.include({
       name: "Tetir",
       length: 60,
       grade: 8,
-      activities: "cycling",
+      activity: "cycling",
       rating: 5
     });
     expect (response.body.startCoordinates).to.eql([10,10]);
@@ -145,18 +145,18 @@ describe('PATCH /tracks/:id', () => {
  
     const secondTrack = await Track.findById(response.body._id);
     expect(secondTrack).not.to.be.null;
-    expect(secondTrack?.activities).to.equal('cycling');
+    expect(secondTrack?.activity).to.equal('cycling');
   });
 
   it ('Should not update a track by id if the id does not exist', async () => {
     await request(app).patch(`/tracks/ab5d342cf4d742296183d123`).send({
-                      activities : "cycling",
+                      activity : "cycling",
                     }).expect(404);
   });
 
   it ('Should not update a track by id if is not valid', async () => {
     await request(app).patch(`/tracks/idquenoexiste`).send({
-                      activities : "cycling",
+                      activity : "cycling",
                     }).expect(400);
   });
 });
@@ -169,7 +169,7 @@ describe('DELETE /tracks', () => {
       name: "Ruta del pescado",
       length: 44,
       grade: 6,
-      activities: "running",
+      activity: "running",
       rating: 4.3
     });
     const secondTrack = await Track.findById(response.body._id);
@@ -189,7 +189,7 @@ describe('DELETE /tracks/:id', () => {
       name: "Tetir",
       length: 60,
       grade: 8,
-      activities: "running",
+      activity: "running",
       rating: 5
     });
   });

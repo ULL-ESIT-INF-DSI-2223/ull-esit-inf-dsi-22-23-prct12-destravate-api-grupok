@@ -9,7 +9,7 @@
 //   endCoordinates: [23,25],
 //   length: 44,
 //   grade: 6,
-//   activities: "running",
+//   activity: "running",
 //   rating: 4.3
 // }
 
@@ -19,7 +19,7 @@
 //   endCoordinates: [22,30],
 //   length: 60,
 //   grade: 8,
-//   activities: "running",
+//   activity: "running",
 //   rating: 5
 // }
 
@@ -35,7 +35,7 @@
 //       name: "Decathlon",
 //       length: 60,
 //       grade: 8,
-//       activities: "running",
+//       activity: "running",
 //       rating: 5
 //     });
 //     expect (response.body.startCoordinates).to.eql([10,10]);
@@ -59,7 +59,7 @@
 //       name: "Ironman",
 //       length: 44,
 //       grade: 6,
-//       activities: "running",
+//       activity: "running",
 //       rating: 4.3
 //     });
 //     expect (response.body[0].startCoordinates).to.eql([12,12]);
@@ -81,7 +81,7 @@
 //       name: "Decathlon",
 //       length: 60,
 //       grade: 8,
-//       activities: "running",
+//       activity: "running",
 //       rating: 5
 //     });
 //     expect (response.body.startCoordinates).to.eql([10,10]);
@@ -102,13 +102,13 @@
 // describe('PATCH /groups', () => {
 //   it('Should update a group by query', async () => {
 //     const response = await request(app).patch(`/groups?name=Ironman`).send({
-//                       activities : "cycling",
+//                       activity : "cycling",
 //                     }).expect(200);
 //     expect(response.body).to.include({
 //       name: "Ironman",
 //       length: 44,
 //       grade: 6,
-//       activities: "cycling",
+//       activity: "cycling",
 //       rating: 4.3
 //     });
 //     expect (response.body.startCoordinates).to.eql([12,12]);
@@ -116,12 +116,12 @@
  
 //     const secondGroup = await Group.findById(response.body._id);
 //     expect(secondGroup).not.to.be.null;
-//     expect(secondGroup?.activities).to.equal('cycling');
+//     expect(secondGroup?.activity).to.equal('cycling');
 //   });
 
 //   it ('Should not update a group by query if does not exist', async () => {
 //     await request(app).patch(`/groups?name=NoSoyRutaDeLaBDD`).send({
-//                       activities : "cycling",
+//                       activity : "cycling",
 //                     }).expect(400);
 //   });
 // });
@@ -131,13 +131,13 @@
 //   it('Should update a group by id', async () => {
 //     const awaitgroup = await request(app).post('/groups').send(groupToAdd).expect(201);
 //     const response = await request(app).patch(`/groups/${awaitgroup.body._id}`).send({
-//                       activities : "cycling",
+//                       activity : "cycling",
 //                     }).expect(200);
 //     expect(response.body).to.include({
 //       name: "Decathlon",
 //       length: 60,
 //       grade: 8,
-//       activities: "cycling",
+//       activity: "cycling",
 //       rating: 5
 //     });
 //     expect (response.body.startCoordinates).to.eql([10,10]);
@@ -145,18 +145,18 @@
  
 //     const secondGroup = await Group.findById(response.body._id);
 //     expect(secondGroup).not.to.be.null;
-//     expect(secondGroup?.activities).to.equal('cycling');
+//     expect(secondGroup?.activity).to.equal('cycling');
 //   });
 
 //   it ('Should not update a group by id if the id does not exist', async () => {
 //     await request(app).patch(`/groups/ab5d342cf4d742296183d123`).send({
-//                       activities : "cycling",
+//                       activity : "cycling",
 //                     }).expect(404);
 //   });
 
 //   it ('Should not update a group by id if is not valid', async () => {
 //     await request(app).patch(`/groups/idquenoexiste`).send({
-//                       activities : "cycling",
+//                       activity : "cycling",
 //                     }).expect(400);
 //   });
 // });
@@ -169,7 +169,7 @@
 //       name: "Ironman",
 //       length: 44,
 //       grade: 6,
-//       activities: "running",
+//       activity: "running",
 //       rating: 4.3
 //     });
 //     const secondGroup = await Group.findById(response.body._id);
@@ -189,7 +189,7 @@
 //       name: "Decathlon",
 //       length: 60,
 //       grade: 8,
-//       activities: "running",
+//       activity: "running",
 //       rating: 5
 //     });
 //   });

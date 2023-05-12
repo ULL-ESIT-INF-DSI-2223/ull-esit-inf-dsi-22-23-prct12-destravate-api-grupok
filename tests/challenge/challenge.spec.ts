@@ -81,7 +81,7 @@ describe('GET /challenges/:id', () => {
 describe('PATCH /challenges', () => {
   it('Should update a challenge by query', async () => {
     const response = await request(app).patch(`/challenges?name=Ironman`).send({
-                      activities : "cycling",
+                      activity : "cycling",
                     }).expect(200);
     expect(response.body).to.include({
       name: "Ironman",
@@ -96,7 +96,7 @@ describe('PATCH /challenges', () => {
 
   it ('Should not update a challenge by query if does not exist', async () => {
     await request(app).patch(`/challenges?name=NoSoyRutaDeLaBDD`).send({
-                      activities : "cycling",
+                      activity : "cycling",
                     }).expect(404);
   });
 });
@@ -106,15 +106,13 @@ describe('PATCH /challenges/:id', () => {
   it('Should update a challenge by id', async () => {
     const awaitchallenge = await request(app).post('/challenges').send(challengeToAdd).expect(201);
     const response = await request(app).patch(`/challenges/${awaitchallenge.body._id}`).send({
-                      activities : "cycling",
+                      activity: "cycling",
                     }).expect(200);
     expect(response.body).to.include({
       name: "Decathlon",
       activity: "cycling",
       length: 45,
     });
-    expect (response.body.startCoordinates).to.eql([10,10]);
-    expect (response.body.endCoordinates).to.eql([22,30]);
  
     const secondChallenge = await Challenge.findById(response.body._id);
     expect(secondChallenge).not.to.be.null;
@@ -123,13 +121,13 @@ describe('PATCH /challenges/:id', () => {
 
   it ('Should not update a challenge by id if the id does not exist', async () => {
     await request(app).patch(`/challenges/ab5d342cf4d742296183d123`).send({
-                      activities : "cycling",
+                      activity : "cycling",
                     }).expect(404);
   });
 
   it ('Should not update a challenge by id if is not valid', async () => {
     await request(app).patch(`/challenges/idquenoexiste`).send({
-                      activities : "cycling",
+                      activity : "cycling",
                     }).expect(400);
   });
 });

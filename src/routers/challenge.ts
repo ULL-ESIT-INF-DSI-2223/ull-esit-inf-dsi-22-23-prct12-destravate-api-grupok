@@ -79,7 +79,7 @@ challengeRouter.patch("/challenges", async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = [
     "name",
-    "activities",
+    "activity",
     "tracks",
     "users",
     "length",
@@ -120,7 +120,7 @@ challengeRouter.patch("/challenges/:id", async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = [
     "name",
-    "activities",
+    "activity",
     "tracks",
     "users",
     "length",

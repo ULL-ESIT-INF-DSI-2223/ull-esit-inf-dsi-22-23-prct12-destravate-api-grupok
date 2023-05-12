@@ -9,7 +9,7 @@ export interface TrackDocumentInterface extends Document {
   length: number;
   grade: number;
   users: [UserDocumentInterface];
-  activities: Activity;
+  activity: Activity;
   rating: number;
 }
 
@@ -53,7 +53,7 @@ const trackSchema = new Schema<TrackDocumentInterface>({
     default: [],
     ref: 'User',
   },
-  activities: {
+  activity: {
     type : String, 
     enum : Object.values(Activity),
     required: true,
