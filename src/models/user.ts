@@ -73,8 +73,8 @@ const userSchema = new Schema<UserDocumentInterface>({
     validate: {
       validator: async function(tracksIds: TrackDocumentInterface[]) {
         const Track = model('Track');
-        // Verificar que los id de los tracks existen
-        // Verificar cada ID de track
+        // TODO: Verificar que los id de los tracks existen
+        // TODO: Verificar cada ID de track
         for (const trackId of tracksIds) {
           const track = await Track.findById(trackId);
           if (!track) {
