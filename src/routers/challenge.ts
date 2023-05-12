@@ -74,7 +74,7 @@ challengeRouter.get("/challenges/:id", async (req, res) => {
  * Patch para actualizar un challenge en específico mediante nombre usando query
  */
 challengeRouter.patch("/challenges", async (req, res) => {
-  //actualizar un usaurio por su nombre
+  //actualizar un challenge por su nombre
   const name = req.query.name;
   const updates = Object.keys(req.body);
   const allowedUpdates = [
