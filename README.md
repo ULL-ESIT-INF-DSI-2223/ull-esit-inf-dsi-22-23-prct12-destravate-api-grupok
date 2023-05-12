@@ -728,8 +728,8 @@ Se debe mencionar que en el `delete` se deberían borrar las referencias a la ru
 ## Ejecución y ejemplos de uso
 Para la ejecucicón de la API, hay que seguir un procedimiento, el cual es la ejecución del servidor en MongoDB, y luego la ejecución del servidor en express o la pruebas, según lo que se desee. Los comandos son:
 
-- Servidor mongodb:  `sudo /home/usuario/mongodb/bin/mongod --dbpath /home/usuario/mongodb-data/`
-- Servidor express: `npm run dev (de momento)`
+- Servidor mongodb: `sudo /home/usuario/mongodb/bin/mongod --dbpath /home/usuario/mongodb-data/`
+- Servidor express: `npm run dev`
 - Test: `npm run test`
 
 Podremos acceder al servidor mediante la dirección http `http://localhost:3000` mediante operaciones CRUD, donde se utilizan cuerpos en formato JSON. Se ofrecen distintos ejemplos usados a lo largo del desarrollo, los cuales se pueden emplear como plantillas para hacer solicitudes (Recordar eliminar los ID porque aparecerán errores si no encuentan dichos id en la base de datos):
