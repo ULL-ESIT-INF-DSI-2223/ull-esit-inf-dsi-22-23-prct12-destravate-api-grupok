@@ -181,9 +181,30 @@ describe('DELETE /users', () => {
   });
 
   it ('Should not delete a user by query if the user does not exist', async () => {
-    await request(app).delete(`/users?name=NoSoyUsuarioDeLaBDD`).expect(400);
+    await request(app).delete(`/users?name=NoSoyUsuarioDeLaBDD`).expect(404);
   });
 });
+
+/// Borramos un usuario mediante id
+describe('DELETE /users/:id', () => {
+  it('Should delete a user by id', async () => {
+    const awaitUser = await request(app).post('/users').send(userToAdd).expect(201);
+    const response = await request(app).delete(`/users/${awaitUser.body._id}`).expect(200);
+    expect(response.body).to.include({
+      name: 'Aday',
+      activities : 'running',
+    });
+  });
+
+  it ('Should not delete a user by id if the id does not exist', async () => {
+    await request(app).delete(`/users/ab5d342cf4d742296183d123`).expect(404);
+  });
+
+  it ('Should not delete a user by id if is not valid', async () => {
+    await request(app).delete(`/users/idquenoexiste`).expect(500);
+  });
+});
+  
 
 /// Borramos todos los usuarios
 after(async () => {
