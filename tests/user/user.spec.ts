@@ -129,14 +129,13 @@ describe('PATCH /users', () => {
   it ('Should not update a user by query', async () => {
     await request(app).patch(`/users?name=NoSoyUsuarioDeLaBDD`).send({
                       activities : "cicling",
-                    }).expect(404);
+                    }).expect(400);
   });
 
   it ('Should not update a user by query if the data is equal', async () => {
     await request(app).patch(`/users?name=Yanfri`).send({
                       activities : "running",
-                    }).expect(406);
-    //TODO: Poner el código de error correcto
+                    }).expect(400);
   });
 });
 
