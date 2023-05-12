@@ -625,7 +625,8 @@ El código de la implementación de esta operación es el siguiente:
 
 
 
-- Link bdd mongdbatlas: mongodb+srv://tracks-rest-api:<password>@cluster0.owwhfgp.mongodb.net/
+- Link bdd mongodbatlas: mongodb+srv://tracks-rest-api:tracksDSI@cluster0.owwhfgp.mongodb.net/
+- Cyclic link: https://wide-eyed-plum-dungarees.cyclic.app
 - levantar servidor mongodb:  sudo /home/usuario/mongodb/bin/mongod --dbpath /home/usuario/mongodb-data/
 - levantar servidor express: npm run dev (de momento)
 - Para los test: npm run test
