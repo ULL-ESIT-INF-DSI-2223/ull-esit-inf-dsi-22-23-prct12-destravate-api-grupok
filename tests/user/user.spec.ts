@@ -106,7 +106,7 @@ describe('GET /users/:id', () => {
     });
   });
   
-  it ('Should not get a user by id', async () => {
+  it ('Should not get a user by id if the id does not exist', async () => {
     await request(app).get(`/users/idquenoexiste`).expect(404);
   });
 });
@@ -125,17 +125,24 @@ describe('PATCH /users', () => {
     expect(secondUser).not.to.be.null;
     expect(secondUser?.activities).to.equal('cycling');
   });
-  // TODO: Poner el caso en el que no se ponga un name que exista
-  // TODO: Poner que no se actualice en caso de que el parámetro no cambie
+
+  it ('Should not update a user by query', async () => {
+    await request(app).patch(`/users?name=NoSoyUsuarioDeLaBDD`).send({
+                      activities : "cicling",
+                    }).expect(400);
+  });
+
+  it ('Should not update a user by query if the data is equal', async () => {
+    await request(app).patch(`/users?name=Yanfri`).send({
+                      activities : "running",
+                    }).expect(400);
+  });
 });
 
 /// Patch mediante id
 describe('PATCH /users/:id', () => {
   it('Should update a user by id', async () => {
     const awaitUser = await request(app).post('/users').send(userToAdd).expect(201);
-    /// hacemos un get all para ver los usuarios que están dentro ya
-    const getresponse = await request(app).get('/users').expect(200);
-    console.log(getresponse.body);
     const response = await request(app).patch(`/users/${awaitUser.body._id}`).send({
                       activities : "cycling",
                     }).expect(200);
@@ -145,9 +152,22 @@ describe('PATCH /users/:id', () => {
       activities : 'cycling',
     });
   });
+
+  it ('Should not update a user by id if the id does not exist', async () => {
+    await request(app).patch(`/users/idquenoexiste`).send({
+                      activities : "cicling",
+                    }).expect(400);
+  });
+
+  it ('Should not update a user by id if the data is equal', async () => {
+    const awaitUser = await request(app).post('/users').send(userToAdd).expect(201);
+    await request(app).patch(`/users/${awaitUser.body._id}`).send({
+                      activities : "running",
+                    }).expect(400);
+  });
 });
 
-// /// Borramos todos los usuarios
-// after(async () => {
-//   await User.deleteMany();
-// });
+/// Borramos todos los usuarios
+after(async () => {
+  await User.deleteMany();
+});
