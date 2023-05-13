@@ -2,7 +2,26 @@ import { expect } from "chai";
 import request from "supertest";
 import { app } from "../../src/app.js";
 import { Group } from "../../src/models/group.js";
+import { User } from "../../src/models/user.js";
+const firstUser = {
+  name: "Yanfri",
+  activity: "running",
+  trainingStatistics: {
+    week: { km: 10, elevationGain: 100 },
+    month: { km: 0, elevationGain: 0 },
+    year: { km: 0, elevationGain: 0 },
+  },
+};
 
+const userToAdd = {
+  name: "Aday",
+  activity: "running",
+  trainingStatistics: {
+    week: { km: 2, elevationGain: 1300 },
+    month: { km: 4, elevationGain: 6 },
+    year: { km: 6, elevationGain: 6 },
+  },
+};
 const firstGroup = {
   name: "GrupoAday",
   groupStatistics: {
@@ -171,6 +190,33 @@ describe("PATCH /groups", () => {
         name: "GrupoCambiado",
       })
       .expect(404);
+  });
+
+  it ("Should not update a group by query if is not valid", async () => {
+    await request(app)
+      .patch(`/groups?name=GrupoAday`)
+      .send({
+        falafel: "GrupoCambiado",
+      })
+      .expect(400);
+  });
+
+  it("Should update members field ", async () => {
+    /// Creamos un usuario
+    const response = await request(app).post("/users").send(userToAdd).expect(201);
+    /// Creamos un grupo
+    const response2 = await request(app).post("/groups").send(groupToAdd).expect(201);
+    /// Añadimos el usuario al grupo
+    const response3 = await request(app).patch(`/groups?name=GrupoYanfri`).send({
+      members: [response.body._id]
+    }).expect(200);
+    /// Comprobamos que el usuario está en el grupo
+    expect(response3.body.members).to.include(response.body._id);
+    /// Borramos el usuario
+    await request(app).delete(`/users/${response.body._id}`).expect(200);
+    /// Comprobamos que el usuario ya no está en el grupo
+    const response4 = await request(app).get(`/groups/${response2.body._id}`).expect(200);
+    expect(response4.body.members).not.to.include(response.body._id);
   });
 });
 
