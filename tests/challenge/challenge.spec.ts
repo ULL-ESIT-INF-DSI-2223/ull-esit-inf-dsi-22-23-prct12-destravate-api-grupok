@@ -41,6 +41,7 @@ describe("POST /challenges", () => {
   it("Should get an error if try to insert a challenge that is already in DB", async () => {
     await request(app).post("/challenges").send(firstChallenge).expect(400);
   });
+
 });
 
 describe("GET /challenges", () => {
@@ -114,6 +115,16 @@ describe("PATCH /challenges", () => {
       })
       .expect(404);
   });
+
+  it("Should not update a challenge by query if is not valid", async () => {
+    await request(app)
+    .patch(`/challenges?name=Ironman`)
+    .send({
+      flaka: "jaka",
+    })
+    .expect(400);
+  });
+
 });
 
 describe("PATCH /challenges/:id", () => {
@@ -156,6 +167,16 @@ describe("PATCH /challenges/:id", () => {
       })
       .expect(400);
   });
+
+  it ("Should not update a challenge by id if the field is not valid", async () => {
+    await request(app)
+      .patch(`/challenges/idquenoexiste`)
+      .send({
+        flaka: "jaka",
+      })
+      .expect(400);
+  });
+
 });
 
 describe("DELETE /challenges", () => {

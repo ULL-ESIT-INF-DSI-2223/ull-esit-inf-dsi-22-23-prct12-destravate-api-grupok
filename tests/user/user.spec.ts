@@ -69,6 +69,26 @@ describe("POST /users", () => {
       })
       .expect(400);
   });
+  // for (const groupID of user.groups) {
+  //   await Group.findByIdAndUpdate(
+  //     groupID,
+  //     { $push: { members: user._id } },
+  //     { new: true, runValidators: true }
+  //   );
+  // }
+  it ("Should update the groups of the user", async () => {
+    const response = await request(app)
+      .post("/users")
+      .send(userToAdd)
+      .expect(201);
+    const secondResponse = await request(app)
+      .patch(`/users/${response.body._id}`)
+      .send({
+        groups: ["5f9d342cf4d742296183ddb0"],
+      })
+      .expect(200);
+    expect(secondResponse.body.groups[0]).to.be.eql("5f9d342cf4d742296183ddb0");
+  });
 });
 
 describe("GET /users", () => {
@@ -89,6 +109,7 @@ describe("GET /users", () => {
   it("Should not find a user by username", async () => {
     await request(app).get("/users?name=NoSoyUsuarioDeLaBDD").expect(404);
   });
+
 });
 
 describe("GET /users/:id", () => {
@@ -225,6 +246,23 @@ describe("DELETE /users/:id", () => {
   });
 });
 
+/// Comprobamos si metemos usuarios como amigos existentes
+describe("FRIENDSHIP", () => {
+  it("Should add a friend to a user", async () => {
+    const awaitUser = await request(app)
+      .post("/users")
+      .send(userToAdd)
+      .expect(201);
+    const response = await request(app)
+      .patch(`/users?name=Aday`)
+      .send({
+        friends: [awaitUser.body._id],
+      })
+      .expect(200);
+    expect(response.body.friends[0]).to.be.eql(awaitUser.body._id);
+  });
+});
+    
 afterEach(async () => {
   await User.deleteMany();
 });
