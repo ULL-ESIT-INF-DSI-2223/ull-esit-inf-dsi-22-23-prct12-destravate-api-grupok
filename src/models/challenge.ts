@@ -1,7 +1,7 @@
-import { Document, Schema, model } from 'mongoose';
-import { Activity } from '../enums/activityEnum.js';
-import { TrackDocumentInterface } from './track.js';
-import { UserDocumentInterface } from './user.js';
+import { Document, Schema, model } from "mongoose";
+import { Activity } from "../enums/activityEnum.js";
+import { TrackDocumentInterface } from "./track.js";
+import { UserDocumentInterface } from "./user.js";
 
 /**
  * Interfaz que define el formato de un challenge, se usa en mongoose
@@ -28,31 +28,33 @@ const challengeSchema = new Schema<ChallengeDocumentInterface>({
     type: Number,
     required: true,
     validate: {
-      validator: function(val: number) {
+      validator: function (val: number) {
         return val > 0;
       },
-      message: props => `Invalid length: ${props.value}`
-    }
+      message: (props) => `Invalid length: ${props.value}`,
+    },
   },
   users: {
     type: [Schema.Types.ObjectId],
     required: false,
-    ref: 'User',
+    ref: "User",
   },
   tracks: {
     type: [Schema.Types.ObjectId],
     required: false,
-    ref: 'Track',
+    ref: "Track",
   },
   activity: {
-    type : String, 
-    enum : Object.values(Activity),
+    type: String,
+    enum: Object.values(Activity),
     required: true,
   },
-
 });
 
 /**
  * Modelo de mongoose para challenge, exportado pues se usa en la implementación de los routers
  */
-export const Challenge = model<ChallengeDocumentInterface>('Challenge', challengeSchema);
+export const Challenge = model<ChallengeDocumentInterface>(
+  "Challenge",
+  challengeSchema
+);

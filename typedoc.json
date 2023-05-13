@@ -1,11 +1,12 @@
 {
   "entryPoints": [
-    "./src/*",
-    "./db/*",
-    "./enums/*",
-    "./interfaces/*",
-    "./models/*",
-    "./routers/*",
+    "./src/index.ts",
+    "./src/app.ts",
+    "./src/db/*",
+    "./src/enums/*",
+    "./src/interfaces/*",
+    "./src/models/*",
+    "./src/routers/*",
   ],
   "out": "./docs"
 }

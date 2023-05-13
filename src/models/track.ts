@@ -1,6 +1,6 @@
-import { Document, Schema, model } from 'mongoose';
-import { Activity } from '../enums/activityEnum.js';
-import { UserDocumentInterface } from './user.js';
+import { Document, Schema, model } from "mongoose";
+import { Activity } from "../enums/activityEnum.js";
+import { UserDocumentInterface } from "./user.js";
 
 /**
  * Interfaz que define el formato de un track, se usa en mongoose
@@ -38,45 +38,45 @@ const trackSchema = new Schema<TrackDocumentInterface>({
     type: Number,
     required: true,
     validate: {
-      validator: function(val: number) {
+      validator: function (val: number) {
         return val > 0;
       },
-      message: props => `Invalid length: ${props.value}`
-    }
+      message: (props) => `Invalid length: ${props.value}`,
+    },
   },
   grade: {
     type: Number,
     required: true,
     validate: {
-      validator: function(val: number) {
+      validator: function (val: number) {
         return val >= 0;
       },
-      message: props => `Invalid grade: ${props.value}`
-    }
+      message: (props) => `Invalid grade: ${props.value}`,
+    },
   },
   users: {
     type: [Schema.Types.ObjectId],
     default: [],
-    ref: 'User',
+    ref: "User",
   },
   activity: {
-    type : String, 
-    enum : Object.values(Activity),
+    type: String,
+    enum: Object.values(Activity),
     required: true,
   },
   rating: {
     type: Number,
     required: false,
     validate: {
-      validator: function(val: number) {
+      validator: function (val: number) {
         return val >= 0 && val <= 5;
       },
-      message: props => `Invalid rating: ${props.value}`
-    }
+      message: (props) => `Invalid rating: ${props.value}`,
+    },
   },
 });
 
 /**
  * Modelo de mongoose para track, exportado pues se usa en la implementación de los routers
  */
-export const Track = model<TrackDocumentInterface>('Track', trackSchema);
+export const Track = model<TrackDocumentInterface>("Track", trackSchema);

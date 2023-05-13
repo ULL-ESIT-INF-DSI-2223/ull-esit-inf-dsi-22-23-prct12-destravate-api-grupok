@@ -17,22 +17,34 @@ userRouter.use(express.json());
 /**
  * Post para crear un usuario
  */
-userRouter.post('/users', async (req, res) => {
+userRouter.post("/users", async (req, res) => {
   const user = new User(req.body);
   try {
     // actualizar los grupos de los que forme parte el usuario
     for (const groupID of user.groups) {
-      await Group.findByIdAndUpdate(groupID, { $push: { members: user._id }}, { new: true, runValidators: true, });
+      await Group.findByIdAndUpdate(
+        groupID,
+        { $push: { members: user._id } },
+        { new: true, runValidators: true }
+      );
     }
     // actualizar los usuarios de los challenge que tiene activos
     for (const challengeID of user.activeChallenges) {
-      await Challenge.findByIdAndUpdate(challengeID, { $push: { users: user._id }}, { new: true, runValidators: true, });
+      await Challenge.findByIdAndUpdate(
+        challengeID,
+        { $push: { users: user._id } },
+        { new: true, runValidators: true }
+      );
     }
-    // actualizar las rutas realizadas, añadiendo el usuario a cada una
+    // Actualizar las rutas realizadas, añadiendo el usuario a cada una
     for (const trackID of user.tracksHistory) {
-      await Track.findByIdAndUpdate(trackID.track, { $push: { users: user._id }}, { new: true, runValidators: true, });
+      await Track.findByIdAndUpdate(
+        trackID.track,
+        { $push: { users: user._id } },
+        { new: true, runValidators: true }
+      );
     }
-    await user.save()
+    await user.save();
     return res.status(201).send(user);
   } catch (err) {
     return res.status(400).send(err);
@@ -48,29 +60,20 @@ userRouter.get("/users", async (req, res) => {
     let users;
     if (name) {
       // Find all users that match the name
-      users = await User.find({ name }).populate(
-        { path: "friends", select: "name"}
-      ).populate(
-        { path: "groups", select: "name"}
-      ).populate(
-        { path: "activeChallenges", select: "name"}
-      ).populate(
-        { path: "favouriteTracks", select: "name"}
-      ).populate(
-        { path: "tracksHistory.track", select: "name"}
-      );
+      users = await User.find({ name })
+        .populate({ path: "friends", select: "name" })
+        .populate({ path: "groups", select: "name" })
+        .populate({ path: "activeChallenges", select: "name" })
+        .populate({ path: "favouriteTracks", select: "name" })
+        .populate({ path: "tracksHistory.track", select: "name" });
     } else {
       // Find all users
-      users = await User.find().populate({ path: "friends", select: "name"}
-      ).populate(
-        { path: "groups", select: "name"}
-      ).populate(
-        { path: "activeChallenges", select: "name"}
-      ).populate(
-        { path: "favouriteTracks", select: "name"}
-      ).populate(
-        { path: "tracksHistory.track", select: "name"}
-      );
+      users = await User.find()
+        .populate({ path: "friends", select: "name" })
+        .populate({ path: "groups", select: "name" })
+        .populate({ path: "activeChallenges", select: "name" })
+        .populate({ path: "favouriteTracks", select: "name" })
+        .populate({ path: "tracksHistory.track", select: "name" });
     }
     if (users.length === 0) {
       return res.status(404).send();
@@ -87,17 +90,12 @@ userRouter.get("/users", async (req, res) => {
 userRouter.get("/users/:id", async (req, res) => {
   const userID = req.params.id;
   try {
-    const user = await User.findById(userID).populate(
-      { path: "friends", select: "name"}
-    ).populate(
-      { path: "groups", select: "name"}
-    ).populate(
-      { path: "activeChallenges", select: "name"}
-    ).populate(
-      { path: "favouriteTracks", select: "name"}
-    ).populate(
-      { path: "tracksHistory.track", select: "name"}
-    );
+    const user = await User.findById(userID)
+      .populate({ path: "friends", select: "name" })
+      .populate({ path: "groups", select: "name" })
+      .populate({ path: "activeChallenges", select: "name" })
+      .populate({ path: "favouriteTracks", select: "name" })
+      .populate({ path: "tracksHistory.track", select: "name" });
     if (!user) {
       return res.status(404).send();
     }
@@ -130,7 +128,7 @@ userRouter.patch("/users", async (req, res) => {
   if (!isValidOperation) {
     return res.status(400).send({ error: "Invalid updates!" });
   }
-  try {            
+  try {
     const user = await User.findOneAndUpdate({ name }, req.body, {
       new: true,
       runValidators: true,
@@ -143,28 +141,49 @@ userRouter.patch("/users", async (req, res) => {
       switch (update) {
         case "groups":
           // borrar de los grupos en los que es participante
-          await Group.updateMany({ members: user._id },{ $pull: { members: user._id }});
-          for(const groupID of req.body.groups) {
-            await Group.findByIdAndUpdate(groupID, { $push: { members: user._id }}, { new: true, runValidators: true, });
+          await Group.updateMany(
+            { members: user._id },
+            { $pull: { members: user._id } }
+          );
+          for (const groupID of req.body.groups) {
+            await Group.findByIdAndUpdate(
+              groupID,
+              { $push: { members: user._id } },
+              { new: true, runValidators: true }
+            );
           }
-        break;
+          break;
         case "activeChallenges":
           // borrar de los challenge en los que es participante
-          await Challenge.updateMany({ users: user._id },{ $pull: { users: user._id }});
-          for(const challengeID of req.body.activeChallenges) {
-            await Challenge.findByIdAndUpdate(challengeID, { $push: { users: user._id }}, { new: true, runValidators: true, });
+          await Challenge.updateMany(
+            { users: user._id },
+            { $pull: { users: user._id } }
+          );
+          for (const challengeID of req.body.activeChallenges) {
+            await Challenge.findByIdAndUpdate(
+              challengeID,
+              { $push: { users: user._id } },
+              { new: true, runValidators: true }
+            );
           }
-        break;
+          break;
         case "tracksHistory":
           // borrar de los tracks en los que es participante
-          await Track.updateMany({ users: user._id },{ $pull: { users: user._id }});
-          for(const track of req.body.tracksHistory) {
+          await Track.updateMany(
+            { users: user._id },
+            { $pull: { users: user._id } }
+          );
+          for (const track of req.body.tracksHistory) {
             const trackID = track.track;
-            await Track.findByIdAndUpdate(trackID, { $push: { users: user._id }}, { new: true, runValidators: true, });
+            await Track.findByIdAndUpdate(
+              trackID,
+              { $push: { users: user._id } },
+              { new: true, runValidators: true }
+            );
           }
-        break;
+          break;
         default:
-        break;
+          break;
       }
     }
     return res.status(200).send(user);
@@ -197,11 +216,10 @@ userRouter.patch("/users/:id", async (req, res) => {
     return res.status(400).send({ error: "Invalid updates!" });
   }
   try {
-    const user = await User.findByIdAndUpdate(
-      userID, 
-      req.body, 
-      { new: true, runValidators: true, }
-    );
+    const user = await User.findByIdAndUpdate(userID, req.body, {
+      new: true,
+      runValidators: true,
+    });
     if (!user) {
       return res.status(404).send();
     }
@@ -210,28 +228,49 @@ userRouter.patch("/users/:id", async (req, res) => {
       switch (update) {
         case "groups":
           // borrar de los grupos en los que es participante
-          await Group.updateMany({ members: user._id },{ $pull: { members: user._id }});
-          for(const groupID of req.body.groups) {
-            await Group.findByIdAndUpdate(groupID, { $push: { members: user._id }}, { new: true, runValidators: true, });
+          await Group.updateMany(
+            { members: user._id },
+            { $pull: { members: user._id } }
+          );
+          for (const groupID of req.body.groups) {
+            await Group.findByIdAndUpdate(
+              groupID,
+              { $push: { members: user._id } },
+              { new: true, runValidators: true }
+            );
           }
-        break;
+          break;
         case "activeChallenges":
           // borrar de los challenge en los que es participante
-          await Challenge.updateMany({ users: user._id },{ $pull: { users: user._id }});
-          for(const challengeID of req.body.activeChallenges) {
-            await Challenge.findByIdAndUpdate(challengeID, { $push: { users: user._id }}, { new: true, runValidators: true, });
+          await Challenge.updateMany(
+            { users: user._id },
+            { $pull: { users: user._id } }
+          );
+          for (const challengeID of req.body.activeChallenges) {
+            await Challenge.findByIdAndUpdate(
+              challengeID,
+              { $push: { users: user._id } },
+              { new: true, runValidators: true }
+            );
           }
-        break;
+          break;
         case "tracksHistory":
           // borrar de los tracks en los que es participante
-          await Track.updateMany({ users: user._id },{ $pull: { users: user._id }},);
-          for(const track of req.body.tracksHistory) {
+          await Track.updateMany(
+            { users: user._id },
+            { $pull: { users: user._id } }
+          );
+          for (const track of req.body.tracksHistory) {
             const trackID = track.track;
-            await Track.findByIdAndUpdate(trackID, { $push: { users: user._id }}, { new: true, runValidators: true, });
+            await Track.findByIdAndUpdate(
+              trackID,
+              { $push: { users: user._id } },
+              { new: true, runValidators: true }
+            );
           }
-        break;
+          break;
         default:
-        break;
+          break;
       }
     }
     return res.status(200).send(user);
