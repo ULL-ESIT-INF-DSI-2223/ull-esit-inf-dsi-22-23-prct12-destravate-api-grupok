@@ -36,7 +36,7 @@ userRouter.post("/users", async (req, res) => {
         { new: true, runValidators: true }
       );
     }
-    // actualizar las rutas realizadas, añadiendo el usuario a cada una
+    // Actualizar las rutas realizadas, añadiendo el usuario a cada una
     for (const trackID of user.tracksHistory) {
       await Track.findByIdAndUpdate(
         trackID.track,
