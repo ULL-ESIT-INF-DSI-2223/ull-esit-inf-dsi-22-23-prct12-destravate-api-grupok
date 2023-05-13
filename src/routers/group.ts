@@ -108,7 +108,7 @@ groupRouter.patch("/groups", async (req, res) => {
       );
       for (const userID of req.body.members) {
         await User.findByIdAndUpdate(
-          { userID },
+          userID,
           { $push: { groups: group._id } },
           { new: true, runValidators: true }
         );
