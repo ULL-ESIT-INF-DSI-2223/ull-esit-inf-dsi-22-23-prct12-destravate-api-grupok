@@ -189,6 +189,15 @@ describe("PATCH /users", () => {
     expect(secondUser?.activity).to.equal("cycling");
   });
 
+  it("Should not update a invalid option", async () => {
+    await request(app)
+      .patch(`/users?name=Yanfri`)
+      .send({
+        _id: "ab5d342cf4d742296183d123",
+      })
+      .expect(400);
+  });
+
   it("Should not update a user by query if does not exist", async () => {
     await request(app)
       .patch(`/users?name=NoSoyUsuarioDeLaBDD`)
