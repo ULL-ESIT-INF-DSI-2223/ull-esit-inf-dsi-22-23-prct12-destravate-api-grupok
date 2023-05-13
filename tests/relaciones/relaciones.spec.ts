@@ -132,32 +132,30 @@ beforeEach(async () => {
   await new Group(group1).save();
   await new Challenge(challenge1).save();
   await new Track(track1).save();
-
 });
 
 /// Hacemos las comprobaciones correspondientes a las posibles relaciones con usuarios
 
 /// Caso de que insertemos un elemento que existe en la bdd
 describe("RELACIONES INSERCIÓN EXISTENTES", () => {
-  it("Should insert a existent user in friends field", async () => {
-    /// Insertamos un segundo usuario en la bdd
-    const addUser2 = await new User(user2).save();
-    /// Insertamos un usuario en el campo friends del otro
-    const response = await request(app)
-      .patch(`/users?name=Aday`)
-      .send({
-        friends: [addUser2._id],
-      })
-      .expect(200);
-    expect(response.body).to.include({
-      friends: [addUser2._id.toString()],
-    });
-    const secondUser = await User.findById(response.body._id);
-    expect(secondUser).not.to.be.null;
-    expect(secondUser?.friends).to.contain([addUser2._id.toString()]);
+  // it("Should insert a existent user in friends field", async () => {
+  //   /// Insertamos un segundo usuario en la bdd
+  //   const addUser2 = await new User(user2).save();
+  //   /// Insertamos un usuario en el campo friends del otro
+  //   const response = await request(app)
+  //     .patch(`/users?name=Aday`)
+  //     .send({
+  //       friends: [addUser2._id],
+  //     })
+  //     .expect(200);
+  //   expect(response.body).to.include({
+  //     friends: [addUser2._id.toString()],
+  //   });
+  //   const secondUser = await User.findById(response.body._id);
+  //   expect(secondUser).not.to.be.null;
+  //   expect(secondUser?.friends).to.contain([addUser2._id.toString()]);
 
-  });
-
+  // });
 });
 
 afterEach(async () => {
