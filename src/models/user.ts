@@ -39,20 +39,6 @@ const userSchema = new Schema<UserDocumentInterface>({
     type: [Schema.Types.ObjectId],
     default: [],
     ref: 'User',
-    validate: {
-      validator: async function() {
-        // Verificar que no haya usuarios repetidos en el array
-        const existingFriends = await this.$model('User').countDocuments({
-          _id: { $in: this.friends },
-        });
-      
-        if (existingFriends !== this.friends.length) {
-          return false;
-        }
-        return true;
-      },
-      message: props => `Invalid friends, some duplicated id: ${JSON.stringify(props.value)}`
-    }  
   },
   groups: {
     type: [Schema.Types.ObjectId],
