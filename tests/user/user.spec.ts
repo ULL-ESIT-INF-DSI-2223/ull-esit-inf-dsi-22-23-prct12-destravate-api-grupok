@@ -303,6 +303,7 @@ describe("FRIENDSHIP and relations", () => {
     await Group.deleteMany();
     await Challenge.deleteMany();
     await Track.deleteMany();
+
     const challenge = await request(app)
       .post("/challenges")
       .send(firstChallenge)
@@ -315,7 +316,7 @@ describe("FRIENDSHIP and relations", () => {
       .post("/groups")
       .send(firstGroup)
       .expect(201);
-    const awaitUser = await request(app)
+    await request(app)
       .post("/users")
       .send(
       {
