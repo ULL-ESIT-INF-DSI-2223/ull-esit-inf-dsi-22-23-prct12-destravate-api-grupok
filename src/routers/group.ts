@@ -101,7 +101,6 @@ groupRouter.patch("/groups", async (req, res) => {
     if (!group) {
       return res.status(404).send();
     }
-    // si en el body se ha cambiado members, actualizar los grupos de los usuarios
     if (updates.includes("members")) {
       await User.updateMany(
         { groups: group._id },
