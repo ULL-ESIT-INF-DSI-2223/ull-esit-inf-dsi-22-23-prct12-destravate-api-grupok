@@ -323,7 +323,7 @@ describe("FRIENDSHIP and relations", () => {
         groups: [group.body._id],
         tracksHistory: [ 
           {
-            track: challenge.body._id,
+            track: track.body._id,
             date: "1987-09-28"
           }],
         activeChallenges: [challenge.body._id]
