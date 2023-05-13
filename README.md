@@ -252,20 +252,6 @@ const userSchema = new Schema<UserDocumentInterface>({
     type: [Schema.Types.ObjectId],
     default: [],
     ref: 'User',
-    validate: {
-      validator: async function() {
-        // Verificar que no haya usuarios repetidos en el array
-        const existingFriends = await this.$model('User').countDocuments({
-          _id: { $in: this.friends },
-        });
-      
-        if (existingFriends !== this.friends.length) {
-          return false;
-        }
-        return true;
-      },
-      message: props => `Invalid friends, some duplicated id: ${JSON.stringify(props.value)}`
-    }  
   },
   groups: {
     type: [Schema.Types.ObjectId],
@@ -321,7 +307,7 @@ Viendo punto por punto, comenzando por el atributo `name`, vemos que es de tipo 
 
 El atributo `activity` es de tipo `String`, es requerido y se le aplica una validación para que el valor sea uno de los valores del enumerado `Activity`. 
 
-El atributo `friends` es un array de tipo `Schema.Types.ObjectId`, es decir, es un array de ids de usuarios, es requerido, por defecto es un array vacío y se le aplica una validación para que no haya ids repetidos en el array y a la vez que todos los ids de usuarios existan en la base de datos.
+El atributo `friends` es un array de tipo `Schema.Types.ObjectId`, es decir, es un array de ids de usuarios, es requerido, por defecto es un array vacío.
 
 El atributo `groups` es un array de tipo `Schema.Types.ObjectId`, es decir, es un array de ids de grupos, es requerido, por defecto es un array vacío. 
 
