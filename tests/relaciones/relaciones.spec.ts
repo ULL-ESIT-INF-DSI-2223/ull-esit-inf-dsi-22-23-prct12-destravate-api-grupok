@@ -138,7 +138,7 @@ beforeEach(async () => {
 
 /// Caso de que insertemos un elemento que existe en la bdd
 describe("RELACIONES INSERCIÓN EXISTENTES", () => {
-  // it("Should insert a existent user in friends field", async () => {
+  it("Should insert a existent user in friends field", async () => {
   //   /// Insertamos un segundo usuario en la bdd
   //   const addUser2 = await new User(user2).save();
   //   /// Insertamos un usuario en el campo friends del otro
@@ -155,7 +155,7 @@ describe("RELACIONES INSERCIÓN EXISTENTES", () => {
   //   expect(secondUser).not.to.be.null;
   //   expect(secondUser?.friends).to.contain([addUser2._id.toString()]);
 
-  // });
+  });
 });
 
 afterEach(async () => {
