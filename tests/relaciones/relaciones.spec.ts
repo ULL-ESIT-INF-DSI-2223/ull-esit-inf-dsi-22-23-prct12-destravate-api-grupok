@@ -9,31 +9,31 @@ import { User } from "../../src/models/user.js";
 const user1 = {
   name: "Aday",
   activity: "running",
-  friends: [],
-  groups: [],
+  friends: [] as string[],
+  groups: [] as string[],
   trainingStatistics: {
     week: { km: 10, elevationGain: 100 },
     month: { km: 20, elevationGain: 200 },
     year: { km: 50, elevationGain: 500 },
   },
-  favouriteTracks: [],
-  tracksHistory: [],
-  activeChallenges: [],
+  favouriteTracks: [] as string[],
+  tracksHistory: [] as string[],
+  activeChallenges: [] as string[],
 };
 
 const user2 = {
   name: "Yanfri",
   activity: "cycling",
-  friends: [],
-  groups: [],
+  friends: [] as string[],
+  groups: [] as string[],
   trainingStatistics: {
     week: { km: 30, elevationGain: 101 },
     month: { km: 220, elevationGain: 210 },
     year: { km: 51, elevationGain: 444 },
   },
-  favouriteTracks: [],
-  tracksHistory: [],
-  activeChallenges: [],
+  favouriteTracks: [] as string[],
+  tracksHistory: [] as string[],
+  activeChallenges: [] as string[],
 };
 
 const group1 = {
@@ -52,9 +52,9 @@ const group1 = {
       elevationGain: 500,
     },
   },
-  members: [],
-  favouriteTracks: [],
-  tracksHistory: [],
+  members: [] as string[],
+  favouriteTracks: [] as string[],
+  tracksHistory: [] as string[],
 };
 
 const group2 = {
@@ -73,25 +73,25 @@ const group2 = {
       elevationGain: 42,
     },
   },
-  members: [],
-  favouriteTracks: [],
-  tracksHistory: [],
+  members: [] as string[],
+  favouriteTracks: [] as string[],
+  tracksHistory: [] as string[],
 };
 
 const challenge1 = {
   name: "AdayChallenge",
-  tracks: [],
+  tracks: [] as string[],
   activity: "running",
   length: 45,
-  users: [],
+  users: [] as string[],
 };
 
 const challenge2 = {
   name: "YanfriChallenge",
-  tracks: [],
+  tracks: [] as string[],
   activity: "cycling",
   length: 45,
-  users: [],
+  users: [] as string[],
 };
 
 const track1 = {
@@ -100,7 +100,7 @@ const track1 = {
   endCoordinates: [23, 25],
   length: 44,
   grade: 6,
-  users: [],
+  users: [] as string[],
   activity: "running",
   rating: 4.3,
 };
@@ -111,7 +111,7 @@ const track2 = {
   endCoordinates: [23, 25],
   length: 44,
   grade: 6,
-  users: [],
+  users: [] as string[],
   activity: "running",
   rating: 4.3,
 };
