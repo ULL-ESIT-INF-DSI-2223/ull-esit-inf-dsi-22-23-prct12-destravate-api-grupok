@@ -348,24 +348,17 @@ describe("FRIENDSHIP and relations", () => {
 
       expect(response1.body.groups[0]).to.be.eql(group.body._id);
 
-      await request(app)
-      .post("/users")
+      const response2 = await request(app)
+      .patch("/users?name=Sergio")
       .send(
       {
-        name: "Sergio",
-        activity: "running",
-        trainingStatistics: {
-          week: { km: 2, elevationGain: 1300 },
-          month: { km: 4, elevationGain: 6 },
-          year: { km: 6, elevationGain: 6 },
-        },
         groups: [],
         tracksHistory: [],
         activeChallenges: []
       })
-      .expect(201);
+      .expect(200);
 
-      expect(response1.body.groups.length).to.be.eql(0);
+      expect(response2.body.groups.length).to.be.eql(0);
     
   });
 });
