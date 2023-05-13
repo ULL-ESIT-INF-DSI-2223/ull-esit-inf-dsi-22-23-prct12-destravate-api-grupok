@@ -155,10 +155,7 @@ trackRouter.delete("/tracks", async (req, res) => {
     if (!track) {
       return res.status(404).send();
     }
-    // No funciona el find
-    //await User.updateMany({ "tracksHistory.track": {} }, { $pull: { tracksHistory: { track: track._id, date: "1987-09-28" }} });
-    //await Group.updateMany({ tracksHistory: { track: track._id, date: {}  } }, { $pull: { tracksHistory: { track: track._id, date: {}  }} });
-
+    
     await Track.findOneAndDelete({ name });
     return res.status(200).send(track);
   } catch (error) {

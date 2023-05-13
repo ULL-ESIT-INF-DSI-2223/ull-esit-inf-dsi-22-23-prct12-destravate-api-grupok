@@ -9,18 +9,18 @@ import { defaultRouter } from "./routers/default.js";
 /**
  * Definición de la aplicación express
  */
-export const expressApp = express();
+export const app = express();
 
 /**
  * Se define que el formato de los datos que se reciben y envían es JSON
  */
-expressApp.use(express.json());
+app.use(express.json());
 
 /**
  * Se definen los routers que se van a usar en la aplicación
  */
-expressApp.use(userRouter);
-expressApp.use(groupRouter);
-expressApp.use(trackRouter);
-expressApp.use(challengeRouter);
-expressApp.use(defaultRouter);
+app.use(userRouter);
+app.use(groupRouter);
+app.use(trackRouter);
+app.use(challengeRouter);
+app.use(defaultRouter);
