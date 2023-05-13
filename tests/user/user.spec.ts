@@ -2,18 +2,41 @@ import { expect } from "chai";
 import request from "supertest";
 import { app } from "../../src/app.js";
 import { User } from "../../src/models/user.js";
-import { Challenge } from "../../src/models/challenge.js";
+
 const firstChallenge = {
   name: "Ironman",
   activity: "running",
   length: 45,
 };
 
-const challengeToAdd = {
-  name: "Decathlon",
-  activity: "running",
-  length: 45,
+const firstGroup = {
+  name: "GrupoAday",
+  groupStatistics: {
+    week: {
+      km: 10,
+      elevationGain: 100,
+    },
+    month: {
+      km: 20,
+      elevationGain: 200,
+    },
+    year: {
+      km: 50,
+      elevationGain: 500,
+    },
+  },
 };
+
+const firstTrack = {
+  name: "Ruta del pescado",
+  startCoordinates: [12, 12],
+  endCoordinates: [23, 25],
+  length: 44,
+  grade: 6,
+  activity: "running",
+  rating: 4.3,
+};
+
 const firstUser = {
   name: "Yanfri",
   activity: "running",
@@ -97,6 +120,11 @@ describe("POST /users", () => {
 });
 
 describe("GET /users", () => {
+  it("Should get all users", async () => {
+    const response = await request(app).get("/users").expect(200);
+    expect(response.body.length).to.be.eql(1);
+  });
+
   it("Should get a user by username", async () => {
     const response = await request(app).get("/users?name=Yanfri").expect(200);
     expect(response.body[0]).to.include({
@@ -253,11 +281,53 @@ describe("DELETE /users/:id", () => {
 });
 
 /// Comprobamos si metemos usuarios como amigos existentes
-describe("FRIENDSHIP", () => {
+describe("FRIENDSHIP and relations", () => {
   it("Should add a friend to a user", async () => {
     const awaitUser = await request(app)
       .post("/users")
       .send(userToAdd)
+      .expect(201);
+    const response = await request(app)
+      .patch(`/users?name=Aday`)
+      .send({
+        friends: [awaitUser.body._id],
+      })
+      .expect(200);
+    expect(response.body.friends[0]).to.be.eql(awaitUser.body._id);
+  });
+
+  it("Should add tracks, challenges and groups", async () => {
+    const challenge = await request(app)
+      .post("/challenges")
+      .send(firstChallenge)
+      .expect(201);
+    const track = await request(app)
+      .post("/tracks")
+      .send(firstTrack)
+      .expect(201);
+    const group = await request(app)
+      .post("/groups")
+      .send(firstGroup)
+      .expect(201);
+    const awaitUser = await request(app)
+      .post("/users")
+      .send(
+      {
+        name: "Sergio",
+        activity: "running",
+        trainingStatistics: {
+          week: { km: 2, elevationGain: 1300 },
+          month: { km: 4, elevationGain: 6 },
+          year: { km: 6, elevationGain: 6 },
+        },
+        groups: [group.body._id],
+        tracksHistory: [ 
+          {
+            track: challenge.body._id,
+            date: "1987-09-28"
+          }],
+        activeChallenges: [challenge.body._id]
+      })
       .expect(201);
     const response = await request(app)
       .patch(`/users?name=Aday`)
