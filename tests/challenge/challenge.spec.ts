@@ -124,7 +124,37 @@ describe("PATCH /challenges", () => {
     })
     .expect(400);
   });
+  // if (updates.includes("users")) {
+  //   await User.updateMany(
+  //     { activeChallenges: challenge._id },
+  //     { $pull: { activeChallenges: challenge._id } }
+  //   );
+  //   for (const userID of challenge.users) {
+  //     await User.findByIdAndUpdate(
+  //       userID,
+  //       { $push: { activeChallenges: challenge._id } },
+  //       { new: true, runValidators: true }
+  //     );
+  //   }
+  // }
+  /// Comprueba el updatemany
+  it("Should update a challenge by query", async () => {
+    const response = await request(app)
+      .patch(`/challenges?name=Ironman`)
+      .send({
+        users: ["60b3b2d4f1b7b84e1c9e5c7d"],
+      })
+      .expect(200);
+    expect(response.body).to.include({
+      name: "Ironman",
+      activity: "running",
+      length: 45,
+    });
 
+    const secondChallenge = await Challenge.findById(response.body._id);
+    expect(secondChallenge).not.to.be.null;
+    expect(secondChallenge?.users).to.eql(["60b3b2d4f1b7b84e1c9e5c7d"]);
+  });
 });
 
 describe("PATCH /challenges/:id", () => {
