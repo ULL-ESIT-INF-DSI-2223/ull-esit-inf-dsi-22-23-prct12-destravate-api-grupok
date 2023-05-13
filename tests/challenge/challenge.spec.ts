@@ -2,6 +2,7 @@ import { expect } from "chai";
 import request from "supertest";
 import { app } from "../../src/app.js";
 import { Challenge } from "../../src/models/challenge.js";
+import { afterEach } from "mocha";
 
 const firstChallenge = {
   name: "Ironman",
@@ -203,6 +204,8 @@ describe("DELETE /challenges/:id", () => {
   });
 });
 
-after(async () => {
+afterEach(async () => {
   await Challenge.deleteMany();
 });
+
+

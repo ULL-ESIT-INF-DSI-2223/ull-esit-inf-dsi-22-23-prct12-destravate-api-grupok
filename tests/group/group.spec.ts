@@ -254,6 +254,6 @@ describe("DELETE /groups/:id", () => {
   });
 });
 
-after(async () => {
+afterEach(async () => {
   await Group.deleteMany();
 });

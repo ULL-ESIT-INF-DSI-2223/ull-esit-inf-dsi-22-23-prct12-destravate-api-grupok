@@ -225,6 +225,6 @@ describe("DELETE /users/:id", () => {
   });
 });
 
-after(async () => {
+afterEach(async () => {
   await User.deleteMany();
 });

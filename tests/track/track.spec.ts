@@ -231,6 +231,6 @@ describe("DELETE /tracks/:id", () => {
   });
 });
 
-after(async () => {
+afterEach(async () => {
   await Track.deleteMany();
 });

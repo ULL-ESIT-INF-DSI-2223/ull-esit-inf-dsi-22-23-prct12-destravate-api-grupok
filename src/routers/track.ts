@@ -155,7 +155,7 @@ trackRouter.delete("/tracks", async (req, res) => {
     if (!track) {
       return res.status(404).send();
     }
-    
+
     await Track.findOneAndDelete({ name });
     return res.status(200).send(track);
   } catch (error) {
