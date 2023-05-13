@@ -2,7 +2,18 @@ import { expect } from "chai";
 import request from "supertest";
 import { app } from "../../src/app.js";
 import { User } from "../../src/models/user.js";
+import { Challenge } from "../../src/models/challenge.js";
+const firstChallenge = {
+  name: "Ironman",
+  activity: "running",
+  length: 45,
+};
 
+const challengeToAdd = {
+  name: "Decathlon",
+  activity: "running",
+  length: 45,
+};
 const firstUser = {
   name: "Yanfri",
   activity: "running",
@@ -69,13 +80,7 @@ describe("POST /users", () => {
       })
       .expect(400);
   });
-  // for (const groupID of user.groups) {
-  //   await Group.findByIdAndUpdate(
-  //     groupID,
-  //     { $push: { members: user._id } },
-  //     { new: true, runValidators: true }
-  //   );
-  // }
+
   it ("Should update the groups of the user", async () => {
     const response = await request(app)
       .post("/users")
@@ -161,6 +166,7 @@ describe("PATCH /users", () => {
       })
       .expect(404);
   });
+
 });
 
 describe("PATCH /users/:id", () => {

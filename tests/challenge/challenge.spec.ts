@@ -235,7 +235,7 @@ describe("PATCH /challenges/:id", () => {
     // Añadimos el usuario al challenge
     await request(app).patch(`/challenges/${awaitchallenge.body._id}`).send({
       users: [awaitUser.body._id],
-    });
+    }).expect(200);
     // Ahora borramos el usuario
     await request(app).delete(`/users/${awaitUser.body._id}`).expect(200);
     // Comprobamos que el challenge ya no tiene el usuario
