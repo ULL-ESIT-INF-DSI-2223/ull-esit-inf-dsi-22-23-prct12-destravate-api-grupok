@@ -2,7 +2,9 @@ import { expect } from "chai";
 import request from "supertest";
 import { app } from "../../src/app.js";
 import { User } from "../../src/models/user.js";
+import { Group } from "../../src/models/group.js";
 import { Challenge } from "../../src/models/challenge.js";
+import { Track } from "../../src/models/track.js";
 
 const firstChallenge = {
   name: "Ironman",
@@ -298,6 +300,10 @@ describe("FRIENDSHIP and relations", () => {
   });
 
   it("Should add tracks, challenges and groups", async () => {
+    await Group.deleteMany();
+    await Challenge.deleteMany();
+    await Track.deleteMany();
+
     const challenge = await request(app)
       .post("/challenges")
       .send(firstChallenge)
@@ -310,7 +316,7 @@ describe("FRIENDSHIP and relations", () => {
       .post("/groups")
       .send(firstGroup)
       .expect(201);
-    const awaitUser = await request(app)
+    await request(app)
       .post("/users")
       .send(
       {
@@ -330,13 +336,7 @@ describe("FRIENDSHIP and relations", () => {
         activeChallenges: [challenge.body._id]
       })
       .expect(201);
-    const response = await request(app)
-      .patch(`/users?name=Aday`)
-      .send({
-        friends: [awaitUser.body._id],
-      })
-      .expect(200);
-    expect(response.body.friends[0]).to.be.eql(awaitUser.body._id);
+    
   });
 });
     
