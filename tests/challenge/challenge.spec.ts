@@ -167,7 +167,7 @@ describe("PATCH /challenges", () => {
     // Añadimos el usuario al challenge
     await request(app).patch(`/challenges?name=Decathlon`).send({
       users: [awaitUser.body._id],
-    });
+    }).expect(200);
     // Ahora borramos el usuario
     await request(app).delete(`/users?name=Aday`).expect(200);
     // Comprobamos que el challenge ya no tiene el usuario

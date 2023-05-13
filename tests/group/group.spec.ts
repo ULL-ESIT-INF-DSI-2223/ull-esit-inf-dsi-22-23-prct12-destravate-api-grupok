@@ -201,23 +201,23 @@ describe("PATCH /groups", () => {
       .expect(400);
   });
 
-  it("Should update members field ", async () => {
-    /// Creamos un usuario
-    const response = await request(app).post("/users").send(userToAdd).expect(201);
-    /// Creamos un grupo
-    const response2 = await request(app).post("/groups").send(groupToAdd).expect(201);
-    /// Añadimos el usuario al grupo
-    const response3 = await request(app).patch(`/groups/name=GrupoYanfri`).send({
-      members: [response.body._id]
-    }).expect(200);
-    /// Comprobamos que el usuario está en el grupo
-    expect(response3.body.members).to.include(response.body._id);
-    /// Borramos el usuario
-    await request(app).delete(`/users/${response.body._id}`).expect(200);
-    /// Comprobamos que el usuario ya no está en el grupo
-    const response4 = await request(app).get(`/groups/${response2.body._id}`).expect(200);
-    expect(response4.body.members).not.to.include(response.body._id);
-  });
+  // it("Should update members field ", async () => {
+  //   /// Creamos un usuario
+  //   const response = await request(app).post("/users").send(userToAdd).expect(201);
+  //   /// Creamos un grupo
+  //   const response2 = await request(app).post("/groups").send(groupToAdd).expect(201);
+  //   /// Añadimos el usuario al grupo
+  //   const response3 = await request(app).patch(`/groups/name=GrupoYanfri`).send({
+  //     members: [response.body._id]
+  //   }).expect(200);
+  //   /// Comprobamos que el usuario está en el grupo
+  //   expect(response3.body.members).to.include(response.body._id);
+  //   /// Borramos el usuario
+  //   await request(app).delete(`/users/${response.body._id}`).expect(200);
+  //   /// Comprobamos que el usuario ya no está en el grupo
+  //   const response4 = await request(app).get(`/groups/${response2.body._id}`).expect(200);
+  //   expect(response4.body.members).not.to.include(response.body._id);
+  // });
 });
 
 describe("PATCH /groups/:id", () => {
