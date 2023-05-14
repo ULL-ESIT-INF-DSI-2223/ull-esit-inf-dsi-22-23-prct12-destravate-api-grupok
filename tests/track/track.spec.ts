@@ -127,6 +127,15 @@ describe("PATCH /tracks", () => {
     expect(secondTrack?.activity).to.equal("cycling");
   });
 
+  it("Should not update a invalid option", async () => {
+    await request(app)
+      .patch(`/tracks?name=Ruta del pescado`)
+      .send({
+        _id: "ab5d342cf4d742296183d123",
+      })
+      .expect(400);
+  });
+
   it("Should not update a track by query if does not exist", async () => {
     await request(app)
       .patch(`/tracks?name=NoSoyRutaDeLaBDD`)
@@ -162,6 +171,19 @@ describe("PATCH /tracks/:id", () => {
     const secondTrack = await Track.findById(response.body._id);
     expect(secondTrack).not.to.be.null;
     expect(secondTrack?.activity).to.equal("cycling");
+  });
+
+  it("Should not update a invalid option", async () => {
+    const awaitTrack = await request(app)
+      .post("/tracks")
+      .send(trackToAdd)
+      .expect(201);
+    await request(app)
+      .patch(`/tracks/${awaitTrack.body._id}`)
+      .send({
+        _id: "ab5d342cf4d742296183d123",
+      })
+      .expect(400);
   });
 
   it("Should not update a track by id if the id does not exist", async () => {

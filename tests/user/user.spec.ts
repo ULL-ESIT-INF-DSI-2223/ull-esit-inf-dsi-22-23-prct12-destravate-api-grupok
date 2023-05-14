@@ -231,6 +231,19 @@ describe("PATCH /users/:id", () => {
     expect(secondUser?.activity).to.equal("cycling");
   });
 
+  it("Should not update a invalid option", async () => {
+    const awaitUser = await request(app)
+      .post("/users")
+      .send(userToAdd)
+      .expect(201);
+    await request(app)
+      .patch(`/users/${awaitUser.body._id}`)
+      .send({
+        _id: "ab5d342cf4d742296183d123",
+      })
+      .expect(400);
+  });
+
   it("Should not update a user by id if the id does not exist", async () => {
     await request(app)
       .patch(`/users/ab5d342cf4d742296183d123`)
@@ -325,7 +338,7 @@ describe("FRIENDSHIP and relations", () => {
       .post("/groups")
       .send(firstGroup)
       .expect(201);
-    await request(app)
+    const response1 = await request(app)
       .post("/users")
       .send(
       {
@@ -345,6 +358,36 @@ describe("FRIENDSHIP and relations", () => {
         activeChallenges: [challenge.body._id]
       })
       .expect(201);
+
+      expect(response1.body.groups[0]).to.be.eql(group.body._id);
+
+      const response2 = await request(app)
+      .patch("/users?name=Sergio")
+      .send(
+      {
+        groups: [],
+        tracksHistory: [],
+        activeChallenges: []
+      })
+      .expect(200);
+
+      expect(response2.body.groups.length).to.be.eql(0);
+
+      await request(app)
+      .patch(`/users/${response1.body._id}`)
+      .send(
+      {
+        groups: [group.body._id],
+        tracksHistory: [ 
+          {
+            track: track.body._id,
+            date: "1987-09-28"
+          }],
+        activeChallenges: [challenge.body._id]
+      })
+      .expect(200);
+
+      expect(response1.body.activeChallenges[0]).to.be.eql(challenge.body._id);
     
   });
 });
