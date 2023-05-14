@@ -74,7 +74,7 @@ describe("POST /users", () => {
     expect(response.body).to.include({
       name: "Aday",
       activity: "running",
-    })
+    });
 
     expect(response.body.trainingStatistics).to.eql({
       week: { km: 2, elevationGain: 1300 },
