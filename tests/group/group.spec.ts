@@ -3,7 +3,7 @@ import request from "supertest";
 import { app } from "../../src/app.js";
 import { Group } from "../../src/models/group.js";
 import { User } from "../../src/models/user.js";
-const firstUser = {
+const firstUser = 
   name: "Yanfri",
   activity: "running",
   trainingStatistics: {
