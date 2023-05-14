@@ -303,7 +303,6 @@ describe("DELETE /users/:id", () => {
   });
 });
 
-/// Comprobamos si metemos usuarios como amigos existentes
 describe("FRIENDSHIP and relations", () => {
   it("Should add a friend to a user", async () => {
     const awaitUser = await request(app)
