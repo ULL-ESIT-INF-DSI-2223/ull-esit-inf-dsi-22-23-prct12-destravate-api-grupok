@@ -10,7 +10,7 @@ const firstChallenge = {
   name: "Ironman",
   activity: "running",
   length: 45,
-}
+};
 
 const firstGroup = {
   name: "GrupoAday",
