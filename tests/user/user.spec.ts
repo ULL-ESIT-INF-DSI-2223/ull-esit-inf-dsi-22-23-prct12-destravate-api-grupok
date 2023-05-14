@@ -107,7 +107,7 @@ describe("POST /users", () => {
       .expect(400);
   });
 
-  it ("Should update the groups of the user", async () => {
+  it("Should update the groups of the user", async () => {
     const response = await request(app)
       .post("/users")
       .send(userToAdd)
@@ -145,7 +145,6 @@ describe("GET /users", () => {
   it("Should not find a user by username", async () => {
     await request(app).get("/users?name=NoSoyUsuarioDeLaBDD").expect(404);
   });
-
 });
 
 describe("GET /users/:id", () => {
@@ -206,7 +205,6 @@ describe("PATCH /users", () => {
       })
       .expect(404);
   });
-
 });
 
 describe("PATCH /users/:id", () => {
@@ -340,8 +338,7 @@ describe("FRIENDSHIP and relations", () => {
       .expect(201);
     const response1 = await request(app)
       .post("/users")
-      .send(
-      {
+      .send({
         name: "Sergio",
         activity: "running",
         trainingStatistics: {
@@ -350,48 +347,47 @@ describe("FRIENDSHIP and relations", () => {
           year: { km: 6, elevationGain: 6 },
         },
         groups: [group.body._id],
-        tracksHistory: [ 
+        tracksHistory: [
           {
             track: track.body._id,
-            date: "1987-09-28"
-          }],
-        activeChallenges: [challenge.body._id]
+            date: "1987-09-28",
+          },
+        ],
+        activeChallenges: [challenge.body._id],
       })
       .expect(201);
 
-      expect(response1.body.groups[0]).to.be.eql(group.body._id);
+    expect(response1.body.groups[0]).to.be.eql(group.body._id);
 
-      const response2 = await request(app)
+    const response2 = await request(app)
       .patch("/users?name=Sergio")
-      .send(
-      {
+      .send({
         groups: [],
         tracksHistory: [],
-        activeChallenges: []
+        activeChallenges: [],
       })
       .expect(200);
 
-      expect(response2.body.groups.length).to.be.eql(0);
+    expect(response2.body.groups.length).to.be.eql(0);
 
-      await request(app)
+    await request(app)
       .patch(`/users/${response1.body._id}`)
-      .send(
-      {
+      .send({
         groups: [group.body._id],
-        tracksHistory: [ 
+        tracksHistory: [
           {
             track: track.body._id,
-            date: "1987-09-28"
-          }],
-        activeChallenges: [challenge.body._id]
+            date: "1987-09-28",
+          },
+        ],
+        activeChallenges: [challenge.body._id],
       })
       .expect(200);
 
-      expect(response1.body.activeChallenges[0]).to.be.eql(challenge.body._id);
-    
+    expect(response1.body.activeChallenges[0]).to.be.eql(challenge.body._id);
   });
 });
-    
+
 afterEach(async () => {
   await User.deleteMany();
 });

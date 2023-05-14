@@ -60,7 +60,6 @@ describe("POST /challenges", () => {
   it("Should get an error if try to insert a challenge that is already in DB", async () => {
     await request(app).post("/challenges").send(firstChallenge).expect(400);
   });
-
 });
 
 describe("GET /challenges", () => {
@@ -137,14 +136,14 @@ describe("PATCH /challenges", () => {
 
   it("Should not update a challenge by query if is not valid", async () => {
     await request(app)
-    .patch(`/challenges?name=Ironman`)
-    .send({
-      flaka: "jaka",
-    })
-    .expect(400);
+      .patch(`/challenges?name=Ironman`)
+      .send({
+        flaka: "jaka",
+      })
+      .expect(400);
   });
- 
-  it ("Should update a challenge users field by query", async () => {
+
+  it("Should update a challenge users field by query", async () => {
     // /// Insertamos un usuario
     // const awaitUser = await request(app).post("/users").send(userToAdd).expect(201);
     // /// Insertamos un challenge
@@ -161,18 +160,29 @@ describe("PATCH /challenges", () => {
     // expect(response.body.activeChallenges).to.be.eql([]);
 
     // Insertamos un usuario
-    const awaitUser = await request(app).post("/users").send(userToAdd).expect(201);
+    const awaitUser = await request(app)
+      .post("/users")
+      .send(userToAdd)
+      .expect(201);
     // Insertamos un challenge
-    const awaitchallenge = await request(app).post("/challenges").send(challengeToAdd).expect(201);
+    const awaitchallenge = await request(app)
+      .post("/challenges")
+      .send(challengeToAdd)
+      .expect(201);
     // Añadimos el usuario al challenge
-    await request(app).patch(`/challenges?name=Decathlon`).send({
-      users: [awaitUser.body._id],
-    }).expect(200);
+    await request(app)
+      .patch(`/challenges?name=Decathlon`)
+      .send({
+        users: [awaitUser.body._id],
+      })
+      .expect(200);
     // Ahora borramos el usuario
     await request(app).delete(`/users?name=Aday`).expect(200);
     // Comprobamos que el challenge ya no tiene el usuario
     // Hacemos un get del challenge y comprobamos que el campo users está vacío
-    const response = await request(app).get(`/challenges/${awaitchallenge.body._id}`).expect(200);
+    const response = await request(app)
+      .get(`/challenges/${awaitchallenge.body._id}`)
+      .expect(200);
     expect(response.body.users).to.be.eql([]);
   });
 });
@@ -218,7 +228,7 @@ describe("PATCH /challenges/:id", () => {
       .expect(400);
   });
 
-  it ("Should not update a challenge by id if the field is not valid", async () => {
+  it("Should not update a challenge by id if the field is not valid", async () => {
     await request(app)
       .patch(`/challenges/idquenoexiste`)
       .send({
@@ -226,21 +236,32 @@ describe("PATCH /challenges/:id", () => {
       })
       .expect(400);
   });
-  
-  it ("Should update a challenge users field by query", async () => {
+
+  it("Should update a challenge users field by query", async () => {
     // Insertamos un usuario
-    const awaitUser = await request(app).post("/users").send(userToAdd).expect(201);
+    const awaitUser = await request(app)
+      .post("/users")
+      .send(userToAdd)
+      .expect(201);
     // Insertamos un challenge
-    const awaitchallenge = await request(app).post("/challenges").send(challengeToAdd).expect(201);
+    const awaitchallenge = await request(app)
+      .post("/challenges")
+      .send(challengeToAdd)
+      .expect(201);
     // Añadimos el usuario al challenge
-    await request(app).patch(`/challenges/${awaitchallenge.body._id}`).send({
-      users: [awaitUser.body._id],
-    }).expect(200);
+    await request(app)
+      .patch(`/challenges/${awaitchallenge.body._id}`)
+      .send({
+        users: [awaitUser.body._id],
+      })
+      .expect(200);
     // Ahora borramos el usuario
     await request(app).delete(`/users/${awaitUser.body._id}`).expect(200);
     // Comprobamos que el challenge ya no tiene el usuario
     // Hacemos un get del challenge y comprobamos que el campo users está vacío
-    const response = await request(app).get(`/challenges/${awaitchallenge.body._id}`).expect(200);
+    const response = await request(app)
+      .get(`/challenges/${awaitchallenge.body._id}`)
+      .expect(200);
     expect(response.body.users).to.be.eql([]);
   });
 });
@@ -294,5 +315,3 @@ describe("DELETE /challenges/:id", () => {
 afterEach(async () => {
   await Challenge.deleteMany();
 });
-
-

@@ -38,7 +38,7 @@ const userSchema = new Schema<UserDocumentInterface>({
   friends: {
     type: [Schema.Types.ObjectId],
     default: [],
-    ref: 'User',
+    ref: "User",
   },
   groups: {
     type: [Schema.Types.ObjectId],
